@@ -1,9 +1,9 @@
 var config = {
-   entry: './main.js',
+   entry:__dirname + '/main.js',
 	
    output: {
-      path:'C:\\Users\\Henry\\Documents\\reactProj',
-      filename: 'index.js',
+       filename:'index.js',
+       path:__dirname + '/'
    },
 	
    devServer: {

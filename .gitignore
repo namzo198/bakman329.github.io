@@ -1,3 +1,3 @@
 config/*
-controller/*
+controller/eventController.php
 model/*

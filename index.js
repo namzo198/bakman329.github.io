@@ -9796,39 +9796,79 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Post = function (_React$Component) {
-   _inherits(Post, _React$Component);
+var Button = function (_React$Component) {
+   _inherits(Button, _React$Component);
+
+   function Button(props) {
+      _classCallCheck(this, Button);
+
+      var _this = _possibleConstructorReturn(this, (Button.__proto__ || Object.getPrototypeOf(Button)).call(this, props));
+
+      _this.onClick = _this.onClick.bind(_this);
+      return _this;
+   }
+
+   _createClass(Button, [{
+      key: 'onClick',
+      value: function onClick() {
+         var state = this.props.onClick();
+         var event = { action: state.action,
+            details: state.context,
+            object: state.name };
+         (0, _databaseFunctions.CreateEvent)(event);
+      }
+   }, {
+      key: 'render',
+      value: function render() {
+         return _react2.default.createElement(
+            'a',
+            { href: this.props.href, onClick: this.onClick },
+            this.props.children
+         );
+      }
+   }]);
+
+   return Button;
+}(_react2.default.Component);
+
+var Post = function (_React$Component2) {
+   _inherits(Post, _React$Component2);
 
    function Post(props) {
       _classCallCheck(this, Post);
 
-      var _this = _possibleConstructorReturn(this, (Post.__proto__ || Object.getPrototypeOf(Post)).call(this, props));
+      var _this2 = _possibleConstructorReturn(this, (Post.__proto__ || Object.getPrototypeOf(Post)).call(this, props));
 
-      _this.state = {
+      _this2.state = {
          render: true,
          name: "",
          context: "From NewsFeed",
          action: "" };
-      _this.clickDelete = _this.clickDelete.bind(_this);
-      return _this;
+      _this2.clickDelete = _this2.clickDelete.bind(_this2);
+      return _this2;
    }
 
    _createClass(Post, [{
       key: 'clickDelete',
       value: function clickDelete() {
-
-         this.setState({
+         var event = {
             render: false,
             action: 'Deleted',
-            name: 'John Doe\'s Post' //This needs to always be updated based on Post Id
-         });
+            context: this.state.context,
+            name: this.props.name + '\'s Post'
+         };
+         this.setState(event);
+         var posts = localStorage.getItem("posts").split('');
+         posts[Number(this.props.postid) * 2] = 0;
+         localStorage.setItem("posts", posts.join(''));
+
+         return event;
       }
    }, {
       key: 'actions',
       value: function actions() {
 
          if (this.props.name == "John Doe") {
-
             return _react2.default.createElement(
                'div',
                { id: 'actions' },
@@ -9843,7 +9883,7 @@ var Post = function (_React$Component) {
                   'Comment'
                ),
                _react2.default.createElement(
-                  'a',
+                  Button,
                   { href: 'javascript:void(0);', onClick: this.clickDelete },
                   'Delete'
                )
@@ -9873,41 +9913,32 @@ var Post = function (_React$Component) {
    }, {
       key: 'render',
       value: function render() {
-
-         if (!this.state.render) {
-
-            //Create event variable
-            var event = {
-               action: this.state.action,
-               details: this.state.context, object: this.state.name
-            };
-            //Call CreateEvent function
-            (0, _databaseFunctions.CreateEvent)(event);
-
+         // Multiply index by two to skip commas in string
+         if (localStorage.getItem('posts')[this.props.postid * 2] == 0) {
             return null;
          }
 
          return _react2.default.createElement(
             'div',
-            { id: 'test-post' },
+            { id: 'post' },
             _react2.default.createElement(
                'div',
-               { id: 'test-content' },
+               { id: 'post-content' },
                _react2.default.createElement(
                   'div',
-                  { id: 'test-info' },
-                  _react2.default.createElement('img', { id: 'test-pic', src: this.props.img }),
+                  { id: 'post-info' },
+                  _react2.default.createElement('img', { id: 'post-pic', src: this.props.img }),
                   _react2.default.createElement(
                      'div',
-                     { id: 'test-text' },
+                     { id: 'post-text' },
                      _react2.default.createElement(
                         'a',
-                        { href: '#', id: 'test-name' },
+                        { href: '#', id: 'post-name' },
                         this.props.name
                      ),
                      _react2.default.createElement(
                         'p',
-                        { id: 'test-time' },
+                        { id: 'post-time' },
                         '1 hr'
                      )
                   )
@@ -9927,8 +9958,38 @@ var Post = function (_React$Component) {
    return Post;
 }(_react2.default.Component);
 
-var App = function (_React$Component2) {
-   _inherits(App, _React$Component2);
+var PostArea = function (_React$Component3) {
+   _inherits(PostArea, _React$Component3);
+
+   function PostArea(props) {
+      _classCallCheck(this, PostArea);
+
+      var _this3 = _possibleConstructorReturn(this, (PostArea.__proto__ || Object.getPrototypeOf(PostArea)).call(this, props));
+
+      _this3.count = _react2.default.Children.count(_this3.props.children);
+      // If null, init to 1's
+      if (localStorage.getItem("posts") == null) {
+         localStorage.setItem("posts", new Array(_this3.count).fill(1, 0, _this3.count));
+      }
+      return _this3;
+   }
+
+   _createClass(PostArea, [{
+      key: 'render',
+      value: function render() {
+         return _react2.default.createElement(
+            'div',
+            { id: 'post-area' },
+            this.props.children
+         );
+      }
+   }]);
+
+   return PostArea;
+}(_react2.default.Component);
+
+var App = function (_React$Component4) {
+   _inherits(App, _React$Component4);
 
    function App() {
       _classCallCheck(this, App);
@@ -10000,19 +10061,30 @@ var App = function (_React$Component2) {
                         { href: '#' },
                         'News Feed'
                      )
+                  ),
+                  _react2.default.createElement(
+                     'li',
+                     null,
+                     _react2.default.createElement(
+                        'a',
+                        { href: 'javascript:void(0)', onClick: function onClick() {
+                              localStorage.setItem("posts", null);location.reload();
+                           } },
+                        'Reset Posts(DEBUG)'
+                     )
                   )
                ),
                _react2.default.createElement(
-                  'div',
-                  { id: 'post-area' },
+                  PostArea,
+                  null,
                   _react2.default.createElement(
                      Post,
-                     { name: 'John Doe', img: './assets/profile_img.jpg' },
+                     { name: 'John Doe', img: './assets/profile_img.jpg', postid: '0' },
                      'Hi, I\'m John.'
                   ),
                   _react2.default.createElement(
                      Post,
-                     { name: 'Jack Roe', img: './assets/profile_img.jpg' },
+                     { name: 'Jack Roe', img: './assets/profile_img.jpg', postid: '1' },
                      'There is a party at my house tommorow.'
                   )
                )

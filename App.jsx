@@ -1,19 +1,39 @@
 import React from 'react';
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom';
+import {CreateEvent} from './controller/databaseFunctions.js';
 
 class Post extends React.Component {
+    
+    
+    
    constructor(props){
       super(props);
-      this.state = {render: true};
+      this.state = {
+          render: true,
+          name:"",
+          context:"From NewsFeed",
+          action:""};
       this.clickDelete = this.clickDelete.bind(this);
    }
+    
+    
+    
 
-   clickDelete() {
-      this.setState({render: false});
+   clickDelete(){
+       
+     this.setState({
+         render:false,
+         action:'Deleted',
+         name:'John Doe\'s Post' //This needs to always be updated based on Post Id
+     });
+       
+       
    }
 
    actions() {
+       
       if (this.props.name == "John Doe") {
+          
          return(
          <div id="actions">
             <a href="#">Like</a>
@@ -32,7 +52,17 @@ class Post extends React.Component {
    }
 
    render() {
-      if (!this.state.render) {
+      
+      if (!this.state.render) {  
+          
+          //Create event variable
+      var event = {
+          action : this.state.action,
+          details : this.state.context, object  : this.state.name
+         };
+          //Call CreateEvent function
+         CreateEvent(event);
+          
          return null;
       }
 
@@ -55,6 +85,7 @@ class Post extends React.Component {
 }
 
 class App extends React.Component {
+    
    render() {
       return (
          <div>

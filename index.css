@@ -90,7 +90,7 @@ a {
 	padding-top: 12px;
 }
 
-#test-post {
+#post {
 	display: block;
 	width: 500px;
 	background-color: #fff;
@@ -99,31 +99,31 @@ a {
 	margin-bottom: 12px;
 }
 
-#test-content {
+#post-content {
 	padding: 12px 12px 0;
 }
 
-#test-info {
+#post-info {
 	height: 46px;
 }
 
-#test-pic {
+#post-pic {
 	width: 40px;
 	height: 40px;
 	margin-right: 8px;
 }
 
-#test-text {
+#post-text {
 	display: inline-block;
 	vertical-align: top;
 }
 
-#test-name {	
+#post-name {	
 	vertical-align: top;
 	display: block;
 }
 
-#test-time {
+#post-time {
 	display: block;
 	margin: 0px;
 }

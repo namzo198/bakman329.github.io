@@ -272,6 +272,14 @@ class NewPostArea extends React.Component {
 }
 
 class App extends React.Component {
+   constructor(props) {
+      super(props);
+      if (!localStorage.posts) {
+         resetPosts();
+         location.reload();
+      }
+   }
+
    render() {
       return (
          <div>

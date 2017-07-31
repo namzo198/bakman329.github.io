@@ -10185,10 +10185,16 @@ var NewPostArea = function (_React$Component4) {
 var App = function (_React$Component5) {
    _inherits(App, _React$Component5);
 
-   function App() {
+   function App(props) {
       _classCallCheck(this, App);
 
-      return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+      var _this8 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+      if (!localStorage.posts) {
+         resetPosts();
+         location.reload();
+      }
+      return _this8;
    }
 
    _createClass(App, [{

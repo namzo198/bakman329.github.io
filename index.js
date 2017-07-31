@@ -9771,6 +9771,7 @@ module.exports = getIteratorFn;
 
 "use strict";
 
+
 Object.defineProperty(exports, "__esModule", {
    value: true
 });
@@ -9811,6 +9812,10 @@ var Button = function (_React$Component) {
       key: 'onClick',
       value: function onClick() {
          var state = this.props.onClick();
+         if (state == null) {
+            return;
+         }
+
          var event = { action: state.action,
             details: state.context,
             object: state.name };
@@ -9830,6 +9835,14 @@ var Button = function (_React$Component) {
    return Button;
 }(_react2.default.Component);
 
+function indexPosts() {
+   var posts = JSON.parse(localStorage.getItem('posts'));
+   JSON.parse(localStorage.getItem('posts')).forEach(function (post, index, array) {
+      posts[index].key = posts.length - (index + 1);
+   });
+   localStorage.setItem('posts', JSON.stringify(posts));
+}
+
 var Post = function (_React$Component2) {
    _inherits(Post, _React$Component2);
 
@@ -9844,37 +9857,111 @@ var Post = function (_React$Component2) {
          context: "From NewsFeed",
          action: "" };
       _this2.clickDelete = _this2.clickDelete.bind(_this2);
+      _this2.clickShare = _this2.clickShare.bind(_this2);
+      _this2.clickLike = _this2.clickLike.bind(_this2);
       return _this2;
    }
 
    _createClass(Post, [{
       key: 'clickDelete',
       value: function clickDelete() {
+         var _this3 = this;
+
          var event = {
             render: false,
             action: 'Deleted',
             context: this.state.context,
             name: this.props.name + '\'s Post'
          };
+
          this.setState(event);
-         var posts = localStorage.getItem("posts").split('');
-         posts[Number(this.props.postid) * 2] = 0;
-         localStorage.setItem("posts", posts.join(''));
+         var posts = JSON.parse(localStorage.getItem("posts"));
+         posts.some(function (post, index, array) {
+            if (post.key == _this3.props.index) {
+               posts.splice(index, 1);
+               return true;
+            }
+         });
+         localStorage.setItem("posts", JSON.stringify(posts));
+         indexPosts();
+
+         return event;
+      }
+   }, {
+      key: 'clickShare',
+      value: function clickShare() {
+         var event = {
+            action: 'Shared',
+            context: this.state.context,
+            name: this.props.name + '\'s Post'
+         };
+
+         var posts = JSON.parse(localStorage.getItem("posts"));
+         var post = { name: 'John Doe',
+            original_poster: this.props.name,
+            img: './assets/profile_img.jpg',
+            content: this.props.children,
+            key: posts.length };
+         localStorage.setItem("posts", JSON.stringify([post].concat(posts)));
+         indexPosts();
+         PostArea.update();
+
+         return event;
+      }
+   }, {
+      key: 'clickLike',
+      value: function clickLike() {
+         var _this4 = this;
+
+         var posts = JSON.parse(localStorage.getItem("posts"));
+         var new_state = false;
+         posts.some(function (post, index, array) {
+            if (post.key == _this4.props.index) {
+               new_state = !post.liked;
+               return true;
+            }
+         });
+         var event = {
+            action: new_state ? 'Liked' : 'Unliked',
+            context: this.state.context,
+            name: this.props.name + '\'s Post'
+         };
+
+         var posts = JSON.parse(localStorage.getItem("posts"));
+         posts.some(function (post, index, array) {
+            if (post.key == _this4.props.index) {
+               post.liked = new_state;
+               return true;
+            }
+         });
+         localStorage.setItem("posts", JSON.stringify(posts));
+         indexPosts();
+         PostArea.update();
 
          return event;
       }
    }, {
       key: 'actions',
       value: function actions() {
+         var _this5 = this;
 
+         var posts = JSON.parse(localStorage.getItem("posts"));
+         var liked = false;
+         posts.some(function (post, index, array) {
+            if (post.key == _this5.props.index) {
+               liked = post.liked;
+               return true;
+            }
+         });
+         var like_text = liked ? "Unlike" : "Like";
          if (this.props.name == "John Doe") {
             return _react2.default.createElement(
                'div',
                { id: 'actions' },
                _react2.default.createElement(
-                  'a',
-                  { href: '#' },
-                  'Like'
+                  Button,
+                  { href: 'javascript:void(0);', onClick: this.clickLike },
+                  like_text
                ),
                _react2.default.createElement(
                   'a',
@@ -9902,8 +9989,8 @@ var Post = function (_React$Component2) {
                   'Comment'
                ),
                _react2.default.createElement(
-                  'a',
-                  { href: '#' },
+                  Button,
+                  { href: 'javascript:void(0);', onClick: this.clickShare },
                   'Share'
                )
             );
@@ -9912,11 +9999,14 @@ var Post = function (_React$Component2) {
    }, {
       key: 'render',
       value: function render() {
-         // Multiply index by two to skip commas in string
-         if (localStorage.getItem('posts')[this.props.postid * 2] == 0) {
+         if (!this.state.render) {
             return null;
          }
 
+         var post_title = this.props.name;
+         if (this.props.original_poster) {
+            post_title += " shared " + this.props.original_poster + "\'s post";
+         }
          return _react2.default.createElement(
             'div',
             { id: 'post' },
@@ -9933,7 +10023,7 @@ var Post = function (_React$Component2) {
                      _react2.default.createElement(
                         'a',
                         { href: '#', id: 'post-name' },
-                        this.props.name
+                        post_title
                      ),
                      _react2.default.createElement(
                         'p',
@@ -9957,38 +10047,143 @@ var Post = function (_React$Component2) {
    return Post;
 }(_react2.default.Component);
 
+// Debug, move into PostArea when stable
+
+
+function resetPosts() {
+   localStorage.setItem("posts", JSON.stringify([{ name: 'John Doe',
+      img: './assets/profile_img.jpg',
+      content: 'Hi, I\'m John',
+      key: 1 }, { name: 'Jack Roe',
+      img: './assets/profile_img.jpg',
+      content: 'There is a party at my house tommorow',
+      key: 0 }]));
+}
+
 var PostArea = function (_React$Component3) {
    _inherits(PostArea, _React$Component3);
 
    function PostArea(props) {
       _classCallCheck(this, PostArea);
 
-      var _this3 = _possibleConstructorReturn(this, (PostArea.__proto__ || Object.getPrototypeOf(PostArea)).call(this, props));
-
-      _this3.count = _react2.default.Children.count(_this3.props.children);
       // If null, init to 1's
-      if (localStorage.getItem("posts") == null) {
-         localStorage.setItem("posts", new Array(_this3.count).fill(1, 0, _this3.count));
+      var _this6 = _possibleConstructorReturn(this, (PostArea.__proto__ || Object.getPrototypeOf(PostArea)).call(this, props));
+
+      if (localStorage.getItem("posts") == 'null') {
+         resetPosts();
       }
-      return _this3;
+
+      PostArea.update = PostArea.update.bind(_this6);
+      return _this6;
    }
 
    _createClass(PostArea, [{
+      key: 'getPosts',
+      value: function getPosts() {
+         var out = [];
+
+         var count = JSON.parse(localStorage.posts).length;
+         JSON.parse(localStorage.getItem("posts")).forEach(function (post, index, array) {
+            // Create posts for rendering
+            // Key and count are in reverse order, hence subtracting from count
+            out[index] = _react2.default.createElement(Post, { name: post.name, img: post.img, key: count - index - 1, index: count - index - 1, original_poster: post.original_poster }, post.content);
+         });
+
+         return out;
+      }
+   }, {
       key: 'render',
       value: function render() {
          return _react2.default.createElement(
             'div',
             { id: 'post-area' },
-            this.props.children
+            _react2.default.createElement(NewPostArea, { postarea: this }),
+            this.getPosts()
          );
+      }
+   }], [{
+      key: 'update',
+      value: function update() {
+         this.forceUpdate();
       }
    }]);
 
    return PostArea;
 }(_react2.default.Component);
 
-var App = function (_React$Component4) {
-   _inherits(App, _React$Component4);
+var NewPostArea = function (_React$Component4) {
+   _inherits(NewPostArea, _React$Component4);
+
+   function NewPostArea(props) {
+      _classCallCheck(this, NewPostArea);
+
+      var _this7 = _possibleConstructorReturn(this, (NewPostArea.__proto__ || Object.getPrototypeOf(NewPostArea)).call(this, props));
+
+      _this7.state = { value: '' };
+      _this7.onChange = _this7.onChange.bind(_this7);
+      _this7.onClick = _this7.onClick.bind(_this7);
+      return _this7;
+   }
+
+   _createClass(NewPostArea, [{
+      key: 'onClick',
+      value: function onClick() {
+         var event = {
+            action: 'Post Created',
+            context: 'From NewsFeed',
+            name: 'John Doe'
+         };
+
+         if (this.state.value == '') {
+            return null;
+         }
+
+         var posts = JSON.parse(localStorage.getItem("posts"));
+         var post = { name: 'John Doe',
+            img: './assets/profile_img.jpg',
+            content: this.state.value,
+            key: posts.length };
+         localStorage.setItem("posts", JSON.stringify([post].concat(posts)));
+         indexPosts();
+         PostArea.update();
+
+         return event;
+      }
+   }, {
+      key: 'onChange',
+      value: function onChange(e) {
+         this.setState({ value: e.target.value });
+      }
+   }, {
+      key: 'render',
+      value: function render() {
+         return _react2.default.createElement(
+            'div',
+            { id: 'new-post-area' },
+            _react2.default.createElement(
+               'div',
+               { id: 'new-post-area-content' },
+               _react2.default.createElement('textarea', { rows: '6', cols: '65', placeholder: 'What\'s on your mind?', value: this.state.value, onChange: this.onChange }),
+               _react2.default.createElement('hr', null),
+               _react2.default.createElement(
+                  'div',
+                  { id: 'actions' },
+                  _react2.default.createElement(
+                     Button,
+                     { href: 'javascript:void(0);', onClick: this.onClick },
+                     'Post'
+                  )
+               )
+            )
+         );
+      }
+   }]);
+
+   return NewPostArea;
+}(_react2.default.Component);
+
+var App = function (_React$Component5) {
+   _inherits(App, _React$Component5);
 
    function App() {
       _classCallCheck(this, App);
@@ -10067,26 +10262,13 @@ var App = function (_React$Component4) {
                      _react2.default.createElement(
                         'a',
                         { href: 'javascript:void(0)', onClick: function onClick() {
-                              localStorage.setItem("posts", null);location.reload();
+                              resetPosts();location.reload();
                            } },
                         'Reset Posts(DEBUG)'
                      )
                   )
                ),
-               _react2.default.createElement(
-                  PostArea,
-                  null,
-                  _react2.default.createElement(
-                     Post,
-                     { name: 'John Doe', img: './assets/profile_img.jpg', postid: '0' },
-                     'Hi, I\'m John.'
-                  ),
-                  _react2.default.createElement(
-                     Post,
-                     { name: 'Jack Roe', img: './assets/profile_img.jpg', postid: '1' },
-                     'There is a party at my house tommorow.'
-                  )
-               )
+               _react2.default.createElement(PostArea, null)
             )
          );
       }

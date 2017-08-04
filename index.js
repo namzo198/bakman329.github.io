@@ -9979,9 +9979,9 @@ var Post = function (_React$Component2) {
                'div',
                { id: 'actions' },
                _react2.default.createElement(
-                  'a',
-                  { href: '#' },
-                  'Like'
+                  Button,
+                  { href: 'javascript:void(0);', onClick: this.clickLike },
+                  like_text
                ),
                _react2.default.createElement(
                   'a',

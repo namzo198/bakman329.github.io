@@ -138,7 +138,7 @@ class Post extends React.Component {
       else {
          return(
          <div id="actions">
-            <a href="#">Like</a>
+            <Button href="javascript:void(0);" onClick={this.clickLike}>{like_text}</Button>
             <a href="#">Comment</a>
             <Button href="javascript:void(0);" onClick={this.clickShare}>Share</Button>
          </div>);

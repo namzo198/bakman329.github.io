@@ -2,6 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {CreateEvent} from './controller/databaseFunctions.js';
 
+//Get the hashId session index.htm/:sessionid=theidisthisone
+
+/**http://fakebook.usabart.nl/?session=a09eb84d555bb8d55510ef28a56a6f3d&changesub=auto&unsubstatus=auto&reportspam=auto&requestphoto=auto&timelinevisibility=auto&restrictuser=auto&blockevent=auto&chatoffline=auto&withholdcellphone=auto&withholdotherphone=auto&withholdim=auto&withholdstreet=auto&withholdinterest=auto&withholdreligion=auto&withholdpolitical=auto
+*/
+
 class Button extends React.Component {
    constructor(props) {
       super(props);
@@ -184,6 +189,10 @@ function resetPosts() {
                                             key: 0}]));
 }
 
+
+
+
+
 class PostArea extends React.Component {
    constructor(props) {
       super(props);
@@ -279,8 +288,26 @@ class App extends React.Component {
          location.reload();
       }
    }
+    
+//Turn the querystring into a JSON object
+  urlqueryStringToJSON() {
+            const {search} = this.props.location;
+            var pairs= search.slice(1).split('&');
+            var result = {};
 
-   render() {
+            pairs.forEach(function(pair){
+                    pair = pair.split('=');
+                    result[pair[0]] = decodeURIComponent(pair[1] || '');
+                });
+      
+               return JSON.parse(JSON.stringify(result));
+  }
+    
+     
+   render() {  
+        //Get the url parameters 
+   const {session} = this.urlqueryStringToJSON();
+
       return (
          <div>
             <header>
@@ -307,6 +334,9 @@ class App extends React.Component {
                   <li>
                      <a href="javascript:void(0)" onClick={() => { resetPosts(); location.reload(); }}>Reset Posts(DEBUG)</a>
                   </li>
+                   <li>
+                       <h3>Session_id: {session}</h3>
+                   </li>
                </ul>
                <PostArea />
             </div>

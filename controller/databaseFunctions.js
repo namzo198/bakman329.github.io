@@ -8,6 +8,7 @@ export const CreateEvent = (event_data)=>{
     let action = event_data.action;
     let details = event_data.details;
     let object = event_data.object;
+    //let session_number = "FROM COOKIE:MOSES AS PER NOW"; //Remember to change session id based on cookie.
     
     console.log("Action "+action+", Details "+details+" Object"+object);
     

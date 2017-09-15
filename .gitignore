@@ -1,3 +1,4 @@
 config/*
 controller/eventController.php
 model/*
+Pages/*

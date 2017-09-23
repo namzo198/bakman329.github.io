@@ -9826,7 +9826,7 @@ var Button = function (_React$Component) {
       value: function render() {
          return _react2.default.createElement(
             'a',
-            { href: this.props.href, onClick: this.onClick },
+            { id: this.props.id, href: this.props.href, onClick: this.onClick },
             this.props.children
          );
       }
@@ -9843,16 +9843,72 @@ var Comment = function (_React$Component2) {
 
       var _this2 = _possibleConstructorReturn(this, (Comment.__proto__ || Object.getPrototypeOf(Comment)).call(this, props));
 
-      _this2.state = { render_reply_area: false };
+      _this2.state = { render_reply_area: false, liked: _this2.getLiked() };
+
+      _this2.getLiked = _this2.getLiked.bind(_this2);
       _this2.onClickLike = _this2.onClickLike.bind(_this2);
       _this2.onClickReply = _this2.onClickReply.bind(_this2);
+      _this2.onClickDelete = _this2.onClickDelete.bind(_this2);
       _this2.actions = _this2.actions.bind(_this2);
       return _this2;
    }
 
    _createClass(Comment, [{
+      key: 'getLiked',
+      value: function getLiked() {
+         var _this3 = this;
+
+         var posts = JSON.parse(localStorage.getItem('posts'));
+         var post_index;
+
+         posts.some(function (post, index, array) {
+            if (post.key == _this3.props.index) {
+               post_index = index;
+               return true;
+            }
+         });
+
+         var result = posts[post_index].comments[this.props.commentindex].liked;
+
+         if (result != undefined) {
+            return result;
+         } else {
+            return false;
+         }
+      }
+   }, {
       key: 'onClickLike',
-      value: function onClickLike() {}
+      value: function onClickLike() {
+         var _this4 = this;
+
+         var posts = JSON.parse(localStorage.getItem('posts'));
+         var new_state = !this.state.liked;
+
+         var event = {
+            action: new_state ? 'Liked' : 'Unliked',
+            context: this.state.context,
+            name: this.props.name + '\'s Comment'
+         };
+
+         var post_index;
+
+         posts.some(function (post, index, array) {
+            if (post.key == _this4.props.index) {
+               post_index = index;
+               return true;
+            }
+         });
+
+         if (posts[post_index]) {
+            posts[post_index].comments[this.props.commentindex].liked = new_state;
+            localStorage.posts = JSON.stringify(posts);
+         }
+
+         this.setState({ 'liked': new_state });
+         this.props.post.forceUpdate();
+
+         return event;
+      }
    }, {
       key: 'onClickReply',
       value: function onClickReply() {
@@ -9866,18 +9922,53 @@ var Comment = function (_React$Component2) {
             return;
          }
 
-         return _react2.default.createElement(NewCommentArea, { type: 'reply', index: this.props.index, parent: this, post: this.props.post });
+         return _react2.default.createElement(NewCommentArea, { type: 'reply', replyto: this.props.name, index: this.props.index, parent: this, post: this.props.post });
+      }
+   }, {
+      key: 'onClickDelete',
+      value: function onClickDelete() {
+         var _this5 = this;
+
+         var posts = JSON.parse(localStorage.getItem('posts'));
+
+         var event = {
+            action: 'Deleted',
+            context: 'From NewsFeed', // this.state.context,
+            name: this.props.name + '\'s Comment'
+         };
+
+         posts.some(function (post, index, array) {
+            if (post.key == _this5.props.index) {
+               posts[index].comments.splice(_this5.props.commentindex, 1);
+               localStorage.posts = JSON.stringify(posts);
+               return true;
+            }
+         });
+
+         this.props.post.forceUpdate();
       }
    }, {
       key: 'actions',
       value: function actions() {
+         var delete_if_user;
+         if (this.props.name === 'John Doe') {
+            delete_if_user = [_react2.default.createElement(
+               'span',
+               { id: 'comment-actions-dot', key: 0 },
+               '\xB7'
+            ), _react2.default.createElement(
+               Button,
+               { href: 'javascript:void(0);', onClick: this.onClickDelete, key: 1 },
+               'Delete'
+            )];
+         }
          return _react2.default.createElement(
             'div',
             { id: 'comment-actions' },
             _react2.default.createElement(
                Button,
                { href: 'javascript:void(0);', onClick: this.onClickLike },
-               'Like'
+               this.state.liked ? "Unlike" : "Like"
             ),
             _react2.default.createElement(
                'span',
@@ -9888,7 +9979,8 @@ var Comment = function (_React$Component2) {
                Button,
                { href: 'javascript:void(0);', onClick: this.onClickReply },
                'Reply'
-            )
+            ),
+            delete_if_user
          );
       }
    }, {
@@ -9936,17 +10028,17 @@ var NewCommentArea = function (_React$Component3) {
    function NewCommentArea(props) {
       _classCallCheck(this, NewCommentArea);
 
-      var _this3 = _possibleConstructorReturn(this, (NewCommentArea.__proto__ || Object.getPrototypeOf(NewCommentArea)).call(this, props));
+      var _this6 = _possibleConstructorReturn(this, (NewCommentArea.__proto__ || Object.getPrototypeOf(NewCommentArea)).call(this, props));
 
-      _this3.state = { value: '' };
-      _this3.onKeyPress = _this3.onKeyPress.bind(_this3);
-      return _this3;
+      _this6.state = { value: '' };
+      _this6.onKeyPress = _this6.onKeyPress.bind(_this6);
+      return _this6;
    }
 
    _createClass(NewCommentArea, [{
       key: 'onKeyPress',
       value: function onKeyPress(e) {
-         var _this4 = this;
+         var _this7 = this;
 
          if (e.key === 'Enter') {
             if (this.state.value === '') {
@@ -9958,7 +10050,7 @@ var NewCommentArea = function (_React$Component3) {
 
             if (this.props.type === 'post') {
                posts.some(function (post, index, array) {
-                  if (post.key == _this4.props.index) {
+                  if (post.key == _this7.props.index) {
                      post_index = index;
                      return true;
                   }
@@ -9970,7 +10062,12 @@ var NewCommentArea = function (_React$Component3) {
             }
 
             if (posts[post_index]) {
-               posts[post_index].comments.push({ 'name': 'John Doe', 'img': './assets/profile_img.jpg', 'content': this.state.value });
+               var content = this.state.value;
+               if (this.props.type === 'reply') {
+                  content = this.props.replyto + ' ' + content;
+               }
+
+               posts[post_index].comments.push({ 'name': 'John Doe', 'img': './assets/profile_img.jpg', 'content': content });
                localStorage.posts = JSON.stringify(posts);
             }
 
@@ -9978,23 +10075,23 @@ var NewCommentArea = function (_React$Component3) {
             this.props.post.forceUpdate();
 
             if (this.props.type === 'reply') {
-               this.parent.setState({ render_reply_area: false });
-               this.parent.forceUpdate();
+               this.props.parent.setState({ render_reply_area: false });
+               this.props.parent.forceUpdate();
             }
          }
       }
    }, {
       key: 'render',
       value: function render() {
-         var _this5 = this;
+         var _this8 = this;
 
-         return _react2.default.createElement('input', { id: 'post-new-comment', type: 'text', placeholder: 'Write a comment...',
+         return _react2.default.createElement('input', { id: 'post-new-comment', type: 'text', placeholder: this.props.type == 'reply' ? 'Write a reply...' : 'Write a comment...',
             rows: '1', cols: '65', onKeyPress: this.onKeyPress,
             onChange: function onChange(e) {
-               return _this5.setState({ value: e.target.value });
+               return _this8.setState({ value: e.target.value });
             }, value: this.state.value,
             autoComplete: 'off', ref: function ref(input) {
-               _this5.props.post.new_comment_area = input;
+               _this8.props.post.new_comment_area = input;
             } });
       }
    }]);
@@ -10008,25 +10105,25 @@ var Post = function (_React$Component4) {
    function Post(props) {
       _classCallCheck(this, Post);
 
-      var _this6 = _possibleConstructorReturn(this, (Post.__proto__ || Object.getPrototypeOf(Post)).call(this, props));
+      var _this9 = _possibleConstructorReturn(this, (Post.__proto__ || Object.getPrototypeOf(Post)).call(this, props));
 
-      _this6.state = {
+      _this9.state = {
          render: true,
          name: '',
          context: 'From NewsFeed',
          action: '',
          value: '' };
-      _this6.onClickDelete = _this6.onClickDelete.bind(_this6);
-      _this6.onClickShare = _this6.onClickShare.bind(_this6);
-      _this6.onClickLike = _this6.onClickLike.bind(_this6);
-      _this6.onClickComment = _this6.onClickComment.bind(_this6);
-      return _this6;
+      _this9.onClickDelete = _this9.onClickDelete.bind(_this9);
+      _this9.onClickShare = _this9.onClickShare.bind(_this9);
+      _this9.onClickLike = _this9.onClickLike.bind(_this9);
+      _this9.onClickComment = _this9.onClickComment.bind(_this9);
+      return _this9;
    }
 
    _createClass(Post, [{
       key: 'onClickDelete',
       value: function onClickDelete() {
-         var _this7 = this;
+         var _this10 = this;
 
          var event = {
             render: false,
@@ -10038,7 +10135,7 @@ var Post = function (_React$Component4) {
          this.setState(event);
          var posts = JSON.parse(localStorage.getItem('posts'));
          posts.some(function (post, index, array) {
-            if (post.key == _this7.props.index) {
+            if (post.key == _this10.props.index) {
                posts.splice(index, 1);
                return true;
             }
@@ -10072,12 +10169,12 @@ var Post = function (_React$Component4) {
    }, {
       key: 'onClickLike',
       value: function onClickLike() {
-         var _this8 = this;
+         var _this11 = this;
 
          var posts = JSON.parse(localStorage.getItem('posts'));
          var new_state = false;
          posts.some(function (post, index, array) {
-            if (post.key == _this8.props.index) {
+            if (post.key == _this11.props.index) {
                new_state = !post.liked;
                return true;
             }
@@ -10090,7 +10187,7 @@ var Post = function (_React$Component4) {
 
          var posts = JSON.parse(localStorage.getItem('posts'));
          posts.some(function (post, index, array) {
-            if (post.key == _this8.props.index) {
+            if (post.key == _this11.props.index) {
                post.liked = new_state;
                return true;
             }
@@ -10111,12 +10208,12 @@ var Post = function (_React$Component4) {
    }, {
       key: 'actions',
       value: function actions() {
-         var _this9 = this;
+         var _this12 = this;
 
          var posts = JSON.parse(localStorage.getItem('posts'));
          var liked = false;
          posts.some(function (post, index, array) {
-            if (post.key == _this9.props.index) {
+            if (post.key == _this12.props.index) {
                liked = post.liked;
                return true;
             }
@@ -10167,7 +10264,7 @@ var Post = function (_React$Component4) {
    }, {
       key: 'render',
       value: function render() {
-         var _this10 = this;
+         var _this13 = this;
 
          if (!this.state.render) {
             return null;
@@ -10181,7 +10278,7 @@ var Post = function (_React$Component4) {
          var posts = JSON.parse(localStorage.getItem('posts'));
          var comments = [];
          posts.some(function (post, index, array) {
-            if (post.key == _this10.props.index) {
+            if (post.key == _this13.props.index) {
                comments = post.comments;
                return true;
             }
@@ -10224,7 +10321,7 @@ var Post = function (_React$Component4) {
                comments.map(function (comment, i) {
                   return _react2.default.createElement(
                      Comment,
-                     { post: _this10, index: _this10.props.index, key: i, name: comment.name, img: comment.img },
+                     { post: _this13, index: _this13.props.index, key: i, commentindex: i, name: comment.name, img: comment.img },
                      comment.content
                   );
                }),
@@ -10243,7 +10340,8 @@ function resetPosts() {
       content: 'Hi, I\'m John',
       comments: [{ name: 'Jack Roe',
          img: './assets/profile_img.jpg',
-         content: 'Hi, John. I\'m Jack' }],
+         content: 'Hi, John. I\'m Jack',
+         liked: false }],
       key: 1 }, { name: 'Jack Roe',
       img: './assets/profile_img.jpg',
       content: 'There is a party at my house tommorow',
@@ -10263,14 +10361,14 @@ var PostArea = function (_React$Component5) {
       _classCallCheck(this, PostArea);
 
       // If null, init to 1's
-      var _this11 = _possibleConstructorReturn(this, (PostArea.__proto__ || Object.getPrototypeOf(PostArea)).call(this, props));
+      var _this14 = _possibleConstructorReturn(this, (PostArea.__proto__ || Object.getPrototypeOf(PostArea)).call(this, props));
 
       if (localStorage.getItem('posts') == 'null') {
          resetPosts();
       }
 
-      PostArea.update = PostArea.update.bind(_this11);
-      return _this11;
+      PostArea.update = PostArea.update.bind(_this14);
+      return _this14;
    }
 
    _createClass(PostArea, [{
@@ -10313,12 +10411,12 @@ var NewPostArea = function (_React$Component6) {
    function NewPostArea(props) {
       _classCallCheck(this, NewPostArea);
 
-      var _this12 = _possibleConstructorReturn(this, (NewPostArea.__proto__ || Object.getPrototypeOf(NewPostArea)).call(this, props));
+      var _this15 = _possibleConstructorReturn(this, (NewPostArea.__proto__ || Object.getPrototypeOf(NewPostArea)).call(this, props));
 
-      _this12.state = { value: '' };
-      _this12.onChange = _this12.onChange.bind(_this12);
-      _this12.onClick = _this12.onClick.bind(_this12);
-      return _this12;
+      _this15.state = { value: '' };
+      _this15.onChange = _this15.onChange.bind(_this15);
+      _this15.onClick = _this15.onClick.bind(_this15);
+      return _this15;
    }
 
    _createClass(NewPostArea, [{
@@ -10360,7 +10458,7 @@ var NewPostArea = function (_React$Component6) {
             _react2.default.createElement(
                'div',
                { id: 'new-post-area-content' },
-               _react2.default.createElement('textarea', { rows: '6', cols: '65', placeholder: 'What\'s on your mind?', value: this.state.value, onChange: this.onChange }),
+               _react2.default.createElement('textarea', { rows: '6', placeholder: 'What\'s on your mind?', value: this.state.value, onChange: this.onChange }),
                _react2.default.createElement('hr', null),
                _react2.default.createElement(
                   'div',
@@ -10382,13 +10480,25 @@ var NewPostArea = function (_React$Component6) {
 var ChatUser = function (_React$Component7) {
    _inherits(ChatUser, _React$Component7);
 
-   function ChatUser() {
+   function ChatUser(props) {
       _classCallCheck(this, ChatUser);
 
-      return _possibleConstructorReturn(this, (ChatUser.__proto__ || Object.getPrototypeOf(ChatUser)).apply(this, arguments));
+      var _this16 = _possibleConstructorReturn(this, (ChatUser.__proto__ || Object.getPrototypeOf(ChatUser)).call(this, props));
+
+      _this16.onClickName = _this16.onClickName.bind(_this16);
+      return _this16;
    }
 
    _createClass(ChatUser, [{
+      key: 'onClickName',
+      value: function onClickName() {
+         var event = { action: 'Clicked Chat User', // state.action,
+            context: 'From NewsFeed', // state.context,
+            name: this.props.name };
+         var added = this.props.chat.addChat(this.props.name);
+         return added ? event : null;
+      }
+   }, {
       key: 'render',
       value: function render() {
          return _react2.default.createElement(
@@ -10396,9 +10506,9 @@ var ChatUser = function (_React$Component7) {
             { id: 'chat-user' },
             _react2.default.createElement('img', { id: 'profile-pic', src: this.props.img }),
             _react2.default.createElement(
-               'a',
-               { href: '#' },
-               'Jack Roe'
+               Button,
+               { href: 'javascript:void(0)', onClick: this.onClickName },
+               this.props.name
             )
          );
       }
@@ -10410,23 +10520,63 @@ var ChatUser = function (_React$Component7) {
 var Chat = function (_React$Component8) {
    _inherits(Chat, _React$Component8);
 
-   function Chat() {
+   function Chat(props) {
       _classCallCheck(this, Chat);
 
-      return _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).apply(this, arguments));
+      var _this17 = _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).call(this, props));
+
+      _this17.state = { chats: [] };
+
+      _this17.addChat = _this17.addChat.bind(_this17);
+      _this17.removeChat = _this17.removeChat.bind(_this17);
+      return _this17;
    }
 
    _createClass(Chat, [{
+      key: 'addChat',
+      value: function addChat(name) {
+         if (this.state.chats.includes(name)) {
+            return false;
+         }
+
+         this.setState({ 'chats': [name].concat(this.state.chats) });
+         this.forceUpdate();
+
+         return true;
+      }
+   }, {
+      key: 'removeChat',
+      value: function removeChat(name) {
+         var chats = this.state.chats;
+         var index = chats.indexOf(name);
+         if (index > -1) {
+            chats.splice(index, 1);
+         }
+
+         this.setState({ 'chats': chats });
+      }
+   }, {
       key: 'render',
       value: function render() {
+         var _this18 = this;
+
+         var chats = [];
+         this.state.chats.forEach(function (name, index, array) {
+            chats.push(_react2.default.createElement(ChatWindow, { key: index, name: name, destroy: _this18.removeChat }));
+         });
          return _react2.default.createElement(
             'div',
             { id: 'chat-container' },
-            _react2.default.createElement(ChatWindow, { name: 'Jack Roe' }),
+            _react2.default.createElement(
+               'div',
+               { id: 'chat-window-container' },
+               chats
+            ),
             _react2.default.createElement(
                'div',
                { id: 'chat' },
-               _react2.default.createElement(ChatUser, { img: './assets/profile_img.jpg' })
+               _react2.default.createElement(ChatUser, { chat: this, img: './assets/profile_img.jpg', name: 'Jack Roe' }),
+               _react2.default.createElement(ChatUser, { chat: this, img: './assets/profile_img.jpg', name: 'Jim Mend' })
             )
          );
       }
@@ -10441,19 +10591,54 @@ var ChatWindow = function (_React$Component9) {
    function ChatWindow(props) {
       _classCallCheck(this, ChatWindow);
 
-      var _this15 = _possibleConstructorReturn(this, (ChatWindow.__proto__ || Object.getPrototypeOf(ChatWindow)).call(this, props));
+      var _this19 = _possibleConstructorReturn(this, (ChatWindow.__proto__ || Object.getPrototypeOf(ChatWindow)).call(this, props));
 
-      _this15.state = { value: "" };
-      return _this15;
+      _this19.state = { value: '', name: '' };
+
+      _this19.onKeyPress = _this19.onKeyPress.bind(_this19);
+      _this19.destroyWindow = _this19.destroyWindow.bind(_this19);
+      return _this19;
    }
 
    _createClass(ChatWindow, [{
+      key: 'onKeyPress',
+      value: function onKeyPress(e) {
+         if (e.key === 'Enter') {
+            if (this.state.value === '') {
+               return;
+            }
+
+            var outgoing_messages_list = JSON.parse(localStorage.outgoing_messages);
+            var outgoing_messages_user = [];
+            if (outgoing_messages_list) {
+               outgoing_messages_user = outgoing_messages_list[this.props.name];
+               if (!outgoing_messages_user) {
+                  outgoing_messages_user = [];
+               }
+               outgoing_messages_user.push(this.state.value);
+
+               outgoing_messages_list[this.props.name] = outgoing_messages_user;
+               localStorage.outgoing_messages = JSON.stringify(outgoing_messages_list);
+            }
+
+            this.setState({ value: '' });
+         }
+      }
+   }, {
+      key: 'destroyWindow',
+      value: function destroyWindow() {
+         var event = { action: 'Closed Chat',
+            context: 'From NewsFeed', // state.context,
+            name: this.props.name };
+         this.props.destroy(this.props.name);
+         return event;
+      }
+   }, {
       key: 'render',
       value: function render() {
-         var _this16 = this;
+         var _this20 = this;
 
-         if (!localStorage.incoming_messages) {
-            // || !localStorage.outgoing_messages) {
+         if (!localStorage.incoming_messages || !localStorage.outgoing_messages) {
             resetChat();
          }
 
@@ -10463,45 +10648,53 @@ var ChatWindow = function (_React$Component9) {
             for (var i = 0; i < incoming_messages_list.length; i++) {
                incoming_messages.push(_react2.default.createElement(
                   'p',
-                  { key: i },
+                  { id: 'chat-left', key: i },
                   incoming_messages_list[i]
                ));
             }
          }
 
-         /* var outgoing_messages_list = JSON.parse(localStorage.outgoing_messages)[this.props.name];
+         var outgoing_messages_list = JSON.parse(localStorage.outgoing_messages)[this.props.name];
          var outgoing_messages = [];
          if (outgoing_messages_list) {
             for (var i = 0; i < outgoing_messages_list.length; i++) {
-               outgoing_messages.push(<p id='chat-right' key={i}>{outgoing_messages_list[i]}</p>);
+               outgoing_messages.push(_react2.default.createElement(
+                  'p',
+                  { id: 'chat-right', key: i },
+                  outgoing_messages_list[i]
+               ));
             }
-         } */
+         }
 
          return _react2.default.createElement(
             'div',
             { id: 'chat-window' },
             _react2.default.createElement(
                'div',
-               { id: 'chat-name' },
+               { id: 'chat-header' },
                _react2.default.createElement(
                   'a',
-                  { href: '#' },
+                  { id: 'chat-name', href: '#' },
                   this.props.name
+               ),
+               _react2.default.createElement(
+                  Button,
+                  { id: 'chat-close', href: 'javascript:void(0)', onClick: this.destroyWindow },
+                  '\u2715'
                )
             ),
             _react2.default.createElement(
                'div',
                { id: 'chat-content' },
-               incoming_messages
+               incoming_messages,
+               outgoing_messages
             ),
-            _react2.default.createElement('input', { id: 'new-message', type: 'text', placeholder: 'Write a comment...',
+            _react2.default.createElement('input', { id: 'new-message', type: 'text', placeholder: 'Type a message',
                rows: '1', cols: '65', onKeyPress: this.onKeyPress,
                onChange: function onChange(e) {
-                  return _this16.setState({ value: e.target.value });
+                  return _this20.setState({ value: e.target.value });
                }, value: this.state.value,
-               autoComplete: 'off', ref: function ref(input) {
-                  _this16.props.post.new_comment_area = input;
-               } })
+               autoComplete: 'off' })
          );
       }
    }]);
@@ -10515,13 +10708,13 @@ var App = function (_React$Component10) {
    function App(props) {
       _classCallCheck(this, App);
 
-      var _this17 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+      var _this21 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
       if (!localStorage.posts) {
          resetPosts();
          location.reload();
       }
-      return _this17;
+      return _this21;
    }
 
    _createClass(App, [{

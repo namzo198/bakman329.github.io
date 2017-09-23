@@ -21,61 +21,139 @@ class Button extends React.Component {
    }
 
    render() {
-      return (<a href={this.props.href} onClick={this.onClick}>{this.props.children}</a>);
+      return (<a id={this.props.id} href={this.props.href} onClick={this.onClick}>{this.props.children}</a>);
    }
 }
 
 class Comment extends React.Component {
-   constructor(props) {
-      super(props);
-      this.state = {render_reply_area: false};
-      this.onClickLike = this.onClickLike.bind(this);
-      this.onClickReply = this.onClickReply.bind(this);
-      this.actions = this.actions.bind(this);
-   }
+    constructor(props) {
+       super(props);
+       this.state = {render_reply_area: false, liked: this.getLiked()};
 
-   onClickLike() {
+       this.getLiked = this.getLiked.bind(this);
+       this.onClickLike = this.onClickLike.bind(this);
+       this.onClickReply = this.onClickReply.bind(this);
+       this.onClickDelete = this.onClickDelete.bind(this);
+       this.actions = this.actions.bind(this);
+    }
 
-   }
+    getLiked() {
+        var posts = JSON.parse(localStorage.getItem('posts'));
+        var post_index;
 
-   onClickReply() {
-      this.setState({render_reply_area: true});
-      this.forceUpdate();
-   }
+        posts.some((post, index, array) => {
+          if (post.key == this.props.index) {
+            post_index = index;
+            return true;
+          }
+        });
 
-   replyArea() {
-      if (!this.state.render_reply_area) {
-         return;
-      }
+        var result = posts[post_index].comments[this.props.commentindex].liked;
 
-      return (
-         <NewCommentArea type='reply' index={this.props.index} parent={this} post={this.props.post} />
-      );
-   }
+        if (result != undefined) {
+            return result;
+        }
+        else {
+            return false;
+        }
+    }
 
-   actions() {
-      return (
-         <div id='comment-actions'>
-            <Button href='javascript:void(0);' onClick={this.onClickLike}>Like</Button>
-            <span id='comment-actions-dot'>·</span>
-            <Button href='javascript:void(0);' onClick={this.onClickReply}>Reply</Button>
-         </div>
-      );
-   }
+    onClickLike() {
+        var posts = JSON.parse(localStorage.getItem('posts'));
+        var new_state = !this.state.liked;
 
-   render() {
-      return (
-      <div id='comment'>
-         <img id='comment-profile-pic' src={this.props.img} />
-         <div id='comment-content'>
-            <a href='#' id='comment-name'>{this.props.name}</a>
-            <p>{' ' + this.props.children}</p>
-            <br />
-            {this.actions()}
-         </div>
-         {this.replyArea()}
-      </div>);
-   }
+        var event = {
+           action: ((new_state) ? 'Liked' : 'Unliked'),
+           context: this.state.context,
+           name: this.props.name + '\'s Comment'
+        }
+
+        var post_index;
+
+        posts.some((post, index, array) => {
+          if (post.key == this.props.index) {
+            post_index = index;
+            return true;
+          }
+        });
+
+        if (posts[post_index]) {
+           posts[post_index].comments[this.props.commentindex].liked = new_state;
+           localStorage.posts = JSON.stringify(posts);
+        }
+
+        this.setState({'liked': new_state});
+        this.props.post.forceUpdate();
+
+        return event;
+    }
+
+    onClickReply() {
+       this.setState({render_reply_area: true});
+       this.forceUpdate();
+    }
+
+    replyArea() {
+       if (!this.state.render_reply_area) {
+          return;
+       }
+
+       return (
+          <NewCommentArea type='reply' replyto={this.props.name} index={this.props.index} parent={this} post={this.props.post} />
+       );
+    }
+
+    onClickDelete() {
+        var posts = JSON.parse(localStorage.getItem('posts'));
+
+        var event = {
+           action: 'Deleted',
+           context: 'From NewsFeed', // this.state.context,
+           name: this.props.name + '\'s Comment'
+        }
+
+        posts.some((post, index, array) => {
+          if (post.key == this.props.index) {
+            posts[index].comments.splice(this.props.commentindex, 1);
+            localStorage.posts = JSON.stringify(posts);
+            return true;
+          }
+        });
+
+        this.props.post.forceUpdate();
+    }
+
+    actions() {
+       var delete_if_user;
+       if (this.props.name === 'John Doe') {
+           delete_if_user = [
+             <span id='comment-actions-dot' key={0}>·</span>,
+             <Button href='javascript:void(0);' onClick={this.onClickDelete} key={1}>Delete</Button>
+           ];
+       }
+       return (
+          <div id='comment-actions'>
+             <Button href='javascript:void(0);' onClick={this.onClickLike}>{(this.state.liked) ? "Unlike" : "Like"}</Button>
+             <span id='comment-actions-dot'>·</span>
+             <Button href='javascript:void(0);' onClick={this.onClickReply}>Reply</Button>
+             {delete_if_user}
+          </div>
+       );
+    }
+
+    render() {
+       return (
+       <div id='comment'>
+          <img id='comment-profile-pic' src={this.props.img} />
+          <div id='comment-content'>
+             <a href='#' id='comment-name'>{this.props.name}</a>
+             <p>{' ' + this.props.children}</p>
+             <br />
+             {this.actions()}
+          </div>
+          {this.replyArea()}
+       </div>);
+    }
 }
 
 function indexPosts() {
@@ -118,7 +196,12 @@ class NewCommentArea extends React.Component {
          }
 
          if (posts[post_index]) {
-            posts[post_index].comments.push({'name': 'John Doe', 'img': './assets/profile_img.jpg', 'content': this.state.value});
+            var content = this.state.value;
+            if (this.props.type === 'reply') {
+                content = this.props.replyto + ' ' + content;
+            }
+
+            posts[post_index].comments.push({'name': 'John Doe', 'img': './assets/profile_img.jpg', 'content': content});
             localStorage.posts = JSON.stringify(posts);
          }
 
@@ -126,15 +209,17 @@ class NewCommentArea extends React.Component {
          this.props.post.forceUpdate();
 
          if (this.props.type === 'reply') {
-            this.parent.setState({render_reply_area: false});
-            this.parent.forceUpdate();
+            this.props.parent.setState({render_reply_area: false});
+            this.props.parent.forceUpdate();
          }
       }
    }
 
    render() {
       return (
-         <input id='post-new-comment' type='text' placeholder='Write a comment...'
+         <input id='post-new-comment' type='text' placeholder={(this.props.type == 'reply') ?
+             'Write a reply...' :
+             'Write a comment...'}
             rows='1' cols='65' onKeyPress={this.onKeyPress}
             onChange={(e) => this.setState({value: e.target.value})} value={this.state.value}
             autoComplete='off' ref={(input) => {this.props.post.new_comment_area = input}} />
@@ -296,7 +381,7 @@ class Post extends React.Component {
                <hr />
                {this.actions()}
                <hr />
-               {comments.map((comment, i) => <Comment post={this} index={this.props.index} key={i} name={comment.name} img={comment.img}>{comment.content}</Comment>)}
+               {comments.map((comment, i) => <Comment post={this} index={this.props.index} key={i} commentindex={i} name={comment.name} img={comment.img}>{comment.content}</Comment>)}
                <NewCommentArea type='post' index={this.props.index} post={this} />
             </div>
          </div>);
@@ -310,7 +395,8 @@ function resetPosts() {
         content: 'Hi, I\'m John',
         comments: [{name: 'Jack Roe',
                     img: './assets/profile_img.jpg',
-                    content: 'Hi, John. I\'m Jack'}],
+                    content: 'Hi, John. I\'m Jack',
+                    liked: false}],
         key: 1},
        {name: 'Jack Roe',
         img: './assets/profile_img.jpg',
@@ -403,7 +489,7 @@ class NewPostArea extends React.Component {
       return (
          <div id='new-post-area'>
             <div id='new-post-area-content'>
-               <textarea rows='6' cols='65' placeholder="What's on your mind?" value={this.state.value} onChange={this.onChange} />
+               <textarea rows='6'  placeholder="What's on your mind?" value={this.state.value} onChange={this.onChange} />
                <hr />
                <div id='actions'>
                   <Button href='javascript:void(0);' onClick={this.onClick}>Post</Button>
@@ -414,23 +500,73 @@ class NewPostArea extends React.Component {
 }
 
 class ChatUser extends React.Component {
-   render() {
-      return (
-         <div id='chat-user'>
-            <img id='profile-pic' src={this.props.img} />
-            <a href='#'>Jack Roe</a>
-         </div>
-      )
-   }
+    constructor(props) {
+        super(props);
+
+        this.onClickName = this.onClickName.bind(this);
+    }
+
+    onClickName() {
+        var event = {action : 'Clicked Chat User', // state.action,
+                     context : 'From NewsFeed', // state.context,
+                     name : this.props.name};
+        var added = this.props.chat.addChat(this.props.name);
+        return ((added) ? event : null);
+    }
+
+    render() {
+       return (
+          <div id='chat-user'>
+             <img id='profile-pic' src={this.props.img} />
+             <Button href='javascript:void(0)' onClick={this.onClickName}>{this.props.name}</Button>
+          </div>
+       )
+    }
 }
 
 class Chat extends React.Component {
+   constructor(props) {
+       super(props);
+       this.state = {chats: []};
+
+       this.addChat = this.addChat.bind(this);
+       this.removeChat = this.removeChat.bind(this);
+   }
+
+   addChat(name) {
+        if (this.state.chats.includes(name)) {
+            return false;
+        }
+
+        this.setState({'chats': [name].concat(this.state.chats)});
+        this.forceUpdate();
+
+       return true;
+   }
+
+   removeChat(name) {
+       var chats = this.state.chats;
+       var index = chats.indexOf(name);
+       if (index > -1) {
+          chats.splice(index, 1);
+       }
+
+       this.setState({'chats': chats});
+   }
+
    render() {
+      var chats = []
+      this.state.chats.forEach((name, index, array) => {
+          chats.push(<ChatWindow key={index} name={name} destroy={this.removeChat} />);
+      });
       return (
          <div id='chat-container'>
-            <ChatWindow name='Jack Roe' />
+            <div id='chat-window-container'>
+               {chats}
+            </div>
             <div id='chat'>
-               <ChatUser img='./assets/profile_img.jpg' />
+               <ChatUser chat={this} img='./assets/profile_img.jpg' name='Jack Roe' />
+               <ChatUser chat={this} img='./assets/profile_img.jpg' name='Jim Mend' />
             </div>
          </div>
       );
@@ -439,12 +575,46 @@ class Chat extends React.Component {
 
 class ChatWindow extends React.Component {
    constructor(props) {
-      super(props);
-      this.state = {value: ""}
+       super(props);
+       this.state = {value: '', name: ''};
+
+       this.onKeyPress = this.onKeyPress.bind(this);
+       this.destroyWindow = this.destroyWindow.bind(this);
+   }
+
+   onKeyPress(e) {
+       if (e.key === 'Enter') {
+           if(this.state.value === '') {
+              return;
+           }
+
+           var outgoing_messages_list = JSON.parse(localStorage.outgoing_messages);
+           var outgoing_messages_user = [];
+           if (outgoing_messages_list) {
+               outgoing_messages_user = outgoing_messages_list[this.props.name];
+               if (!outgoing_messages_user) {
+                   outgoing_messages_user = [];
+               }
+               outgoing_messages_user.push(this.state.value);
+
+               outgoing_messages_list[this.props.name] = outgoing_messages_user;
+               localStorage.outgoing_messages = JSON.stringify(outgoing_messages_list);
+           }
+
+           this.setState({value: ''});
+       }
+   }
+
+   destroyWindow() {
+       var event = {action : 'Closed Chat',
+                    context : 'From NewsFeed', // state.context,
+                    name : this.props.name};
+       this.props.destroy(this.props.name);
+       return event;
    }
 
    render() {
-      if (!localStorage.incoming_messages) { // || !localStorage.outgoing_messages) {
+      if (!localStorage.incoming_messages || !localStorage.outgoing_messages) {
          resetChat();
       }
 
@@ -452,30 +622,32 @@ class ChatWindow extends React.Component {
       var incoming_messages = [];
       if (incoming_messages_list) {
          for (var i = 0; i < incoming_messages_list.length; i++) {
-            incoming_messages.push(<p key={i}>{incoming_messages_list[i]}</p>);
+            incoming_messages.push(<p id='chat-left' key={i}>{incoming_messages_list[i]}</p>);
          }
       }
 
-      /* var outgoing_messages_list = JSON.parse(localStorage.outgoing_messages)[this.props.name];
+      var outgoing_messages_list = JSON.parse(localStorage.outgoing_messages)[this.props.name];
       var outgoing_messages = [];
       if (outgoing_messages_list) {
          for (var i = 0; i < outgoing_messages_list.length; i++) {
             outgoing_messages.push(<p id='chat-right' key={i}>{outgoing_messages_list[i]}</p>);
          }
-      } */
+      }
 
       return (
          <div id='chat-window'>
-            <div id='chat-name'>
-               <a href='#'>{this.props.name}</a>
+            <div id='chat-header'>
+               <a id='chat-name' href='#'>{this.props.name}</a>
+               <Button id='chat-close' href='javascript:void(0)' onClick={this.destroyWindow}>&#10005;</Button>
             </div>
             <div id='chat-content'>
                {incoming_messages}
+               {outgoing_messages}
             </div>
-            <input id='new-message' type='text' placeholder='Write a comment...'
+            <input id='new-message' type='text' placeholder='Type a message'
                rows='1' cols='65' onKeyPress={this.onKeyPress}
                onChange={(e) => this.setState({value: e.target.value})} value={this.state.value}
-               autoComplete='off' ref={(input) => {this.props.post.new_comment_area = input}} />
+               autoComplete='off' />
          </div>
       );
    }

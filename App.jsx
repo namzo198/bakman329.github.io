@@ -1,17 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {CreateEvent} from './controller/databaseFunctions.js';
+import  PropTypes from 'prop-types';
 
 //Get the hashId session index.htm/:sessionid=theidisthisone
 
-/**http://fakebook.usabart.nl/?session=a09eb84d555bb8d55510ef28a56a6f3d&changesub=auto&unsubstatus=auto&reportspam=auto&requestphoto=auto&timelinevisibility=auto&restrictuser=auto&blockevent=auto&chatoffline=auto&withholdcellphone=auto&withholdotherphone=auto&withholdim=auto&withholdstreet=auto&withholdinterest=auto&withholdreligion=auto&withholdpolitical=auto
+/**http://fakebook.usabart.nl/?session_id=a09eb84d555bb8d55510ef28a56a6f3d&changesub=auto&unsubstatus=auto&reportspam=auto&requestphoto=auto&timelinevisibility=auto&restrictuser=auto&blockevent=auto&chatoffline=auto&withholdcellphone=auto&withholdotherphone=auto&withholdim=auto&withholdstreet=auto&withholdinterest=auto&withholdreligion=auto&withholdpolitical=auto
 */
 
 class Button extends React.Component {
-   constructor(props) {
-      super(props);
+   constructor(props,context) {
+      super(props,context);
       this.onClick = this.onClick.bind(this);
-   }
+    }
 
    onClick() {
       var state = this.props.onClick();
@@ -19,16 +20,29 @@ class Button extends React.Component {
          return;
       }
 
-      var event = {action : state.action,
-                   details : state.context,
-                   object : state.name};
+      var event = { action : state.action,
+                    details : state.context,
+                    object : state.name,
+                    session_id: this.context.session
+                  };
+      // console.log("The Button session is", this.context.session);
+       //console.log("The Button newsfeed is", this.context.NewsFeed);
+       //console.log("The Button timeline is", this.context.Timeline);
+       
       CreateEvent(event);
    }
 
    render() {
+       
       return (<a href={this.props.href} onClick={this.onClick}>{this.props.children}</a>);
    }
 }
+//Helps the Button Component access the global variables
+Button.contextTypes = {
+    session: PropTypes.string,
+    NewsFeed: PropTypes.bool,
+    Timeline: PropTypes.bool
+};
 
 function indexPosts() {
    var posts = JSON.parse(localStorage.getItem('posts'));
@@ -287,6 +301,8 @@ class App extends React.Component {
          resetPosts();
          location.reload();
       }
+       
+       
    }
     
 //Turn the querystring into a JSON object
@@ -302,12 +318,20 @@ class App extends React.Component {
       
                return JSON.parse(JSON.stringify(result));
   }
-    
+ 
+ 
+    //Defines global variables
+    getChildContext(){
+         //Get the url parameters 
+        const {session} = this.urlqueryStringToJSON();
+       // const {change}="Hello"
+        const current_session = {session};
+        return {session: current_session.session,NewsFeed:true,Timeline:false};     
+    }
      
    render() {  
-        //Get the url parameters 
-   const {session} = this.urlqueryStringToJSON();
-
+       //TODO Delete asd this variable is accessed for debugging purposes only 
+      const {session_id} = this.urlqueryStringToJSON();
       return (
          <div>
             <header>
@@ -335,7 +359,7 @@ class App extends React.Component {
                      <a href="javascript:void(0)" onClick={() => { resetPosts(); location.reload(); }}>Reset Posts(DEBUG)</a>
                   </li>
                    <li>
-                       <h3>Session_id: {session}</h3>
+                       <h3>Session_id:{session_id}</h3>
                    </li>
                </ul>
                <PostArea />
@@ -344,5 +368,13 @@ class App extends React.Component {
       );
    }
 }
+
+//Defines the types of pbjects that getChildContext returns.
+App.childContextTypes = {
+    session: PropTypes.string,
+    NewsFeed: PropTypes.bool,
+    Timeline: PropTypes.bool,
+  
+};
 
 export default App;

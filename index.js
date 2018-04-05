@@ -11660,6 +11660,8 @@ Object.defineProperty(exports, "__esModule", {
    value: true
 });
 
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(8);
@@ -12384,16 +12386,166 @@ var NewPostArea = function (_React$Component6) {
    return NewPostArea;
 }(_react2.default.Component);
 
-var ChatUser = function (_React$Component7) {
-   _inherits(ChatUser, _React$Component7);
+var Menu = function (_React$Component7) {
+   _inherits(Menu, _React$Component7);
+
+   function Menu(props) {
+      _classCallCheck(this, Menu);
+
+      var _this16 = _possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
+
+      _this16.state = { show: false };
+
+      _this16.toggleShow = _this16.toggleShow.bind(_this16);
+      _this16.setWrapperRef = _this16.setWrapperRef.bind(_this16);
+      _this16.handleClickOutside = _this16.handleClickOutside.bind(_this16);
+      return _this16;
+   }
+
+   _createClass(Menu, [{
+      key: 'componentDidMount',
+      value: function componentDidMount() {
+         document.addEventListener('mousedown', this.handleClickOutside);
+      }
+   }, {
+      key: 'componentWillUnmount',
+      value: function componentWillUnmount() {
+         document.removeEventListener('mousedown', this.handleClickOutside);
+      }
+   }, {
+      key: 'setWrapperRef',
+      value: function setWrapperRef(node) {
+         this.wrapperRef = node;
+      }
+   }, {
+      key: 'handleClickOutside',
+      value: function handleClickOutside(event) {
+         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+            this.setState({ show: false });
+         }
+      }
+   }, {
+      key: 'toggleShow',
+      value: function toggleShow() {
+         this.setState({ show: !this.state.show });
+      }
+   }, {
+      key: 'unshow',
+      value: function unshow() {
+         this.setState({ show: false });
+      }
+   }, {
+      key: 'render',
+      value: function render() {
+         if (!this.state.show) {
+            return _react2.default.createElement('div', { className: 'menu', tabIndex: '0' });
+         }
+         return _react2.default.createElement(
+            'div',
+            { className: 'menu', tabIndex: '0', ref: this.setWrapperRef },
+            this.props.children
+         );
+      }
+   }]);
+
+   return Menu;
+}(_react2.default.Component);
+
+var MenuButton = function (_Button) {
+   _inherits(MenuButton, _Button);
+
+   function MenuButton(props) {
+      _classCallCheck(this, MenuButton);
+
+      return _possibleConstructorReturn(this, (MenuButton.__proto__ || Object.getPrototypeOf(MenuButton)).call(this, props));
+   }
+
+   _createClass(MenuButton, [{
+      key: 'onClick',
+      value: function onClick() {
+         _get(MenuButton.prototype.__proto__ || Object.getPrototypeOf(MenuButton.prototype), 'onClick', this).call(this);
+         // TODO: Buttons in menus should unshow their parent menu when pressed
+         // this.props.menu.unshow();
+      }
+   }]);
+
+   return MenuButton;
+}(Button);
+
+var Popup = function (_React$Component8) {
+   _inherits(Popup, _React$Component8);
+
+   function Popup(props) {
+      _classCallCheck(this, Popup);
+
+      var _this18 = _possibleConstructorReturn(this, (Popup.__proto__ || Object.getPrototypeOf(Popup)).call(this, props));
+
+      _this18.destroy = _this18.destroy.bind(_this18);
+      return _this18;
+   }
+
+   _createClass(Popup, [{
+      key: 'destroy',
+      value: function destroy() {
+         var mount_node = _reactDom2.default.findDOMNode(this.refs.mount);
+
+         try {
+            _reactDom2.default.unmountComponentAtNode(mount_node);
+         } catch (e) {
+            console.error(e);
+         }
+      }
+   }, {
+      key: 'render',
+      value: function render() {
+         return _react2.default.createElement(
+            'div',
+            { className: 'popup' },
+            _react2.default.createElement(
+               'div',
+               { className: 'popup-header' },
+               this.props.title
+            ),
+            _react2.default.createElement(
+               'div',
+               { className: 'popup-content' },
+               _react2.default.createElement(
+                  'div',
+                  null,
+                  this.props.children
+               )
+            ),
+            _react2.default.createElement(
+               'div',
+               { className: 'popup-footer' },
+               _react2.default.createElement(
+                  Button,
+                  { href: 'javascript:void(0)', onClick: this.props.destroy },
+                  'Okay'
+               ),
+               _react2.default.createElement(
+                  Button,
+                  { href: 'javascript:void(0)', onClick: this.props.destroy },
+                  'Cancel'
+               )
+            )
+         );
+      }
+   }]);
+
+   return Popup;
+}(_react2.default.Component);
+
+var ChatUser = function (_React$Component9) {
+   _inherits(ChatUser, _React$Component9);
 
    function ChatUser(props) {
       _classCallCheck(this, ChatUser);
 
-      var _this16 = _possibleConstructorReturn(this, (ChatUser.__proto__ || Object.getPrototypeOf(ChatUser)).call(this, props));
+      var _this19 = _possibleConstructorReturn(this, (ChatUser.__proto__ || Object.getPrototypeOf(ChatUser)).call(this, props));
 
-      _this16.onClickName = _this16.onClickName.bind(_this16);
-      return _this16;
+      _this19.onClickName = _this19.onClickName.bind(_this19);
+      return _this19;
    }
 
    _createClass(ChatUser, [{
@@ -12424,19 +12576,23 @@ var ChatUser = function (_React$Component7) {
    return ChatUser;
 }(_react2.default.Component);
 
-var Chat = function (_React$Component8) {
-   _inherits(Chat, _React$Component8);
+var Chat = function (_React$Component10) {
+   _inherits(Chat, _React$Component10);
 
    function Chat(props) {
       _classCallCheck(this, Chat);
 
-      var _this17 = _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).call(this, props));
+      var _this20 = _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).call(this, props));
 
-      _this17.state = { chats: [] };
+      _this20.state = { chats: [], renderChatPopup: false, turnOffChat: "someContacts" };
+      _this20.turnOffChatPopup = null;
 
-      _this17.addChat = _this17.addChat.bind(_this17);
-      _this17.removeChat = _this17.removeChat.bind(_this17);
-      return _this17;
+      _this20.addChat = _this20.addChat.bind(_this20);
+      _this20.removeChat = _this20.removeChat.bind(_this20);
+      _this20.toggleMenu = _this20.toggleMenu.bind(_this20);
+      _this20.handleTurnOffChatOptionChange = _this20.handleTurnOffChatOptionChange.bind(_this20);
+      _this20.createTurnOffChatPopup = _this20.createTurnOffChatPopup.bind(_this20);
+      return _this20;
    }
 
    _createClass(Chat, [{
@@ -12463,14 +12619,71 @@ var Chat = function (_React$Component8) {
          this.setState({ 'chats': chats });
       }
    }, {
+      key: 'toggleMenu',
+      value: function toggleMenu() {
+         this._menu.toggleShow();
+      }
+   }, {
+      key: 'handleTurnOffChatOptionChange',
+      value: function handleTurnOffChatOptionChange(e) {
+         this.setState({ turnOffChat: e.target.value });
+         console.log(e.target.value);
+         console.log(this.state.turnOffChat);
+      }
+   }, {
+      key: 'createTurnOffChatPopup',
+      value: function createTurnOffChatPopup() {
+         this.setState({ renderChatPopup: true });
+      }
+   }, {
       key: 'render',
       value: function render() {
-         var _this18 = this;
+         var _this21 = this;
 
          var chats = [];
          this.state.chats.forEach(function (name, index, array) {
-            chats.push(_react2.default.createElement(ChatWindow, { key: index, name: name, destroy: _this18.removeChat }));
+            chats.push(_react2.default.createElement(ChatWindow, { key: index, name: name, destroy: _this21.removeChat }));
          });
+
+         var turnOffChatPopup = _react2.default.createElement(
+            Popup,
+            { title: 'Turn Off Chat', destroy: function destroy() {
+                  _this21.setState({ renderChatPopup: false });
+               } },
+            _react2.default.createElement(
+               'label',
+               null,
+               _react2.default.createElement('input', { type: 'radio', id: 'turn-off-chat-all-contacts',
+                  name: 'turn-off-chat', value: 'allContacts',
+                  onChange: this.handleTurnOffChatOptionChange,
+                  checked: this.state.turnOffChat === "allContacts" }),
+               'Turn off chat for all contacts'
+            ),
+            _react2.default.createElement(
+               'label',
+               null,
+               _react2.default.createElement('input', { type: 'radio', id: 'turn-off-chat-all-contacts-except',
+                  name: 'turn-off-chat', value: 'allContactsExcept',
+                  onChange: this.handleTurnOffChatOptionChange,
+                  checked: this.state.turnOffChat === "allContactsExcept" }),
+               'Turn off chat for all contacts except...'
+            ),
+            _react2.default.createElement(
+               'label',
+               null,
+               _react2.default.createElement('input', { type: 'radio', id: 'turn-off-chat-some-contacts',
+                  name: 'turn-off-chat', value: 'someContacts',
+                  onChange: this.handleTurnOffChatOptionChange,
+                  checked: this.state.turnOffChat === "someContacts" }),
+               'Turn off chat for some contacts...'
+            ),
+            _react2.default.createElement(
+               'p',
+               null,
+               'Note: When chat is off, messages from contacts go to your inbox for you to read later.'
+            )
+         );
+
          return _react2.default.createElement(
             'div',
             { id: 'chat-container' },
@@ -12482,8 +12695,33 @@ var Chat = function (_React$Component8) {
             _react2.default.createElement(
                'div',
                { id: 'chat' },
+               this.state.renderChatPopup ? turnOffChatPopup : null,
                _react2.default.createElement(ChatUser, { chat: this, img: './assets/profile_img.jpg', name: 'Jack Roe' }),
-               _react2.default.createElement(ChatUser, { chat: this, img: './assets/profile_img.jpg', name: 'Jim Mend' })
+               _react2.default.createElement(ChatUser, { chat: this, img: './assets/profile_img.jpg', name: 'Jim Mend' }),
+               _react2.default.createElement(
+                  'div',
+                  { id: 'chat-footer' },
+                  _react2.default.createElement(
+                     'div',
+                     { id: 'settings' },
+                     _react2.default.createElement(
+                        Menu,
+                        { ref: function ref(menu) {
+                              _this21._menu = menu;
+                           } },
+                        _react2.default.createElement(
+                           MenuButton,
+                           { href: 'javascript:void(0)', onClick: this.createTurnOffChatPopup },
+                           'Turn off chat'
+                        )
+                     ),
+                     _react2.default.createElement(
+                        Button,
+                        { href: 'javascript:void(0)', onClick: this.toggleMenu },
+                        '*'
+                     )
+                  )
+               )
             )
          );
       }
@@ -12492,19 +12730,19 @@ var Chat = function (_React$Component8) {
    return Chat;
 }(_react2.default.Component);
 
-var ChatWindow = function (_React$Component9) {
-   _inherits(ChatWindow, _React$Component9);
+var ChatWindow = function (_React$Component11) {
+   _inherits(ChatWindow, _React$Component11);
 
    function ChatWindow(props) {
       _classCallCheck(this, ChatWindow);
 
-      var _this19 = _possibleConstructorReturn(this, (ChatWindow.__proto__ || Object.getPrototypeOf(ChatWindow)).call(this, props));
+      var _this22 = _possibleConstructorReturn(this, (ChatWindow.__proto__ || Object.getPrototypeOf(ChatWindow)).call(this, props));
 
-      _this19.state = { value: '', name: '' };
+      _this22.state = { value: '', name: '' };
 
-      _this19.onKeyPress = _this19.onKeyPress.bind(_this19);
-      _this19.destroyWindow = _this19.destroyWindow.bind(_this19);
-      return _this19;
+      _this22.onKeyPress = _this22.onKeyPress.bind(_this22);
+      _this22.destroyWindow = _this22.destroyWindow.bind(_this22);
+      return _this22;
    }
 
    _createClass(ChatWindow, [{
@@ -12543,7 +12781,7 @@ var ChatWindow = function (_React$Component9) {
    }, {
       key: 'render',
       value: function render() {
-         var _this20 = this;
+         var _this23 = this;
 
          if (!localStorage.incoming_messages || !localStorage.outgoing_messages) {
             resetChat();
@@ -12599,7 +12837,7 @@ var ChatWindow = function (_React$Component9) {
             _react2.default.createElement('input', { id: 'new-message', type: 'text', placeholder: 'Type a message',
                rows: '1', cols: '65', onKeyPress: this.onKeyPress,
                onChange: function onChange(e) {
-                  return _this20.setState({ value: e.target.value });
+                  return _this23.setState({ value: e.target.value });
                }, value: this.state.value,
                autoComplete: 'off' })
          );
@@ -12609,20 +12847,20 @@ var ChatWindow = function (_React$Component9) {
    return ChatWindow;
 }(_react2.default.Component);
 
-var App = function (_React$Component10) {
-   _inherits(App, _React$Component10);
+var App = function (_React$Component12) {
+   _inherits(App, _React$Component12);
 
    function App(props) {
       _classCallCheck(this, App);
 
-      var _this21 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+      var _this24 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
       if (!localStorage.posts) {
          resetPosts();
          location.reload();
       }
 
-      return _this21;
+      return _this24;
    }
 
    //Turn the querystring into a JSON object

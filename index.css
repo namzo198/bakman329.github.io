@@ -269,9 +269,77 @@ a {
     padding-right: 8px;
 }
 
+#chat-footer {
+	position: absolute;
+	bottom: 0;
+}
+
 #new-message {
     position: absolute;
     right: 0;
     bottom: 0;
     width: 98%;
+}
+
+.menu {
+    display: block;
+    position: relative;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.menu a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.popup {
+	position: fixed;
+	top: 50%;
+    left: 50%;
+    margin-left: -222.5px;
+    margin-top: -145px;
+    width: 445px;
+    height: 290px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.popup-header {
+	background-color: #6d84b4;
+	color: #ffffff;
+    border: 1px solid #365899;
+    height: 18px;
+}
+
+.popup-content {
+	background-color: #ffffff;
+	height: 244px;
+	padding: 10px;
+}
+
+.popup-content div {
+	padding: 10px 20px 10px 20px;
+}
+
+.popup-footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 28px;
+	padding: 10px 0 10px 0;
+	background-color: #f2f2f2;
+}
+
+.popup-footer a {
+	padding-right: 10px;
+	float: right;
+}
+
+.popup label {
+	display: block;
 }

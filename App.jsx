@@ -517,6 +517,99 @@ class NewPostArea extends React.Component {
    }
 }
 
+class Menu extends React.Component {
+   constructor(props) {
+      super(props);
+      this.state = {show: false};
+      
+      this.toggleShow = this.toggleShow.bind(this);
+      this.setWrapperRef = this.setWrapperRef.bind(this);           
+      this.handleClickOutside = this.handleClickOutside.bind(this);
+   }
+
+   componentDidMount() {
+      document.addEventListener('mousedown', this.handleClickOutside);
+   }
+
+   componentWillUnmount() {
+      document.removeEventListener('mousedown', this.handleClickOutside);
+   }
+
+   setWrapperRef(node) {
+      this.wrapperRef = node;
+   }
+
+   handleClickOutside(event) {
+         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+            this.setState({show: false});
+         }
+    }
+
+   toggleShow() {
+      this.setState({show: !this.state.show});
+   }
+
+   unshow() {
+      this.setState({show: false});
+   }
+
+   render() {
+      if (!this.state.show) {
+         return (
+            <div className="menu" tabIndex="0"></div>
+         )
+      }
+      return (
+         <div className="menu" tabIndex="0" ref={this.setWrapperRef}>{this.props.children}</div>
+      )
+   }
+}
+
+class MenuButton extends Button {
+   constructor(props) {
+      super(props);
+   }
+
+   onClick() {
+      super.onClick();
+      // TODO: Buttons in menus should unshow their parent menu when pressed
+      // this.props.menu.unshow();
+   }
+}
+
+class Popup extends React.Component {
+   constructor(props) {
+      super(props);
+      this.destroy = this.destroy.bind(this);
+   }
+
+   destroy() {
+     var mount_node = ReactDOM.findDOMNode(this.refs.mount);
+
+      try {
+         ReactDOM.unmountComponentAtNode(mount_node);
+      } catch (e) {
+         console.error(e);
+      }
+   }
+
+   render() {
+      return (
+         <div className="popup">
+            <div className="popup-header">{this.props.title}</div>
+
+            <div className="popup-content"><div>{this.props.children}</div></div>
+
+            <div className="popup-footer">
+               {/* TODO: Only pressing "Okay" should register the new setting in state */}
+               <Button href='javascript:void(0)' onClick={this.props.destroy}>Okay</Button>
+               <Button href='javascript:void(0)' onClick={this.props.destroy}>Cancel</Button>
+            </div>
+         </div>
+      )
+   }
+}
+
 class ChatUser extends React.Component {
     constructor(props) {
         super(props);
@@ -544,11 +637,15 @@ class ChatUser extends React.Component {
 
 class Chat extends React.Component {
    constructor(props) {
-       super(props);
-       this.state = {chats: []};
+      super(props);
+      this.state = {chats: [], renderChatPopup: false, turnOffChat: "someContacts"};
+      this.turnOffChatPopup = null;
 
-       this.addChat = this.addChat.bind(this);
-       this.removeChat = this.removeChat.bind(this);
+      this.addChat = this.addChat.bind(this);
+      this.removeChat = this.removeChat.bind(this);
+      this.toggleMenu = this.toggleMenu.bind(this);
+      this.handleTurnOffChatOptionChange = this.handleTurnOffChatOptionChange.bind(this);
+      this.createTurnOffChatPopup = this.createTurnOffChatPopup.bind(this);
    }
 
    addChat(name) {
@@ -563,13 +660,27 @@ class Chat extends React.Component {
    }
 
    removeChat(name) {
-       var chats = this.state.chats;
-       var index = chats.indexOf(name);
-       if (index > -1) {
-          chats.splice(index, 1);
-       }
+      var chats = this.state.chats;
+      var index = chats.indexOf(name);
+      if (index > -1) {
+         chats.splice(index, 1);
+      }
 
-       this.setState({'chats': chats});
+      this.setState({'chats': chats});
+   }
+
+   toggleMenu() {
+      this._menu.toggleShow();
+   }
+
+   handleTurnOffChatOptionChange(e) {
+      this.setState({turnOffChat: e.target.value});
+      console.log(e.target.value);
+      console.log(this.state.turnOffChat);
+   }
+
+   createTurnOffChatPopup() {
+      this.setState({renderChatPopup: true});
    }
 
    render() {
@@ -577,14 +688,53 @@ class Chat extends React.Component {
       this.state.chats.forEach((name, index, array) => {
           chats.push(<ChatWindow key={index} name={name} destroy={this.removeChat} />);
       });
+
+      var turnOffChatPopup = (
+         <Popup title="Turn Off Chat" destroy={() => {this.setState({renderChatPopup: false})}}>
+            <label>
+               <input type="radio" id="turn-off-chat-all-contacts"
+                  name="turn-off-chat" value="allContacts"
+                  onChange={this.handleTurnOffChatOptionChange}
+                  checked={this.state.turnOffChat === "allContacts"} />
+               Turn off chat for all contacts
+            </label>
+
+            <label>
+               <input type="radio" id="turn-off-chat-all-contacts-except"
+                  name="turn-off-chat" value="allContactsExcept"
+                  onChange={this.handleTurnOffChatOptionChange}
+                  checked={this.state.turnOffChat === "allContactsExcept"} />
+               Turn off chat for all contacts except...
+            </label>
+
+            <label>
+               <input type="radio" id="turn-off-chat-some-contacts"
+                  name="turn-off-chat" value="someContacts"
+                  onChange={this.handleTurnOffChatOptionChange}
+                  checked={this.state.turnOffChat === "someContacts"} />
+               Turn off chat for some contacts...
+            </label>
+            <p>Note: When chat is off, messages from contacts go to your inbox for you to read later.</p>
+         </Popup>)
+
       return (
          <div id='chat-container'>
             <div id='chat-window-container'>
                {chats}
             </div>
             <div id='chat'>
+               {this.state.renderChatPopup ? turnOffChatPopup : null}
                <ChatUser chat={this} img='./assets/profile_img.jpg' name='Jack Roe' />
                <ChatUser chat={this} img='./assets/profile_img.jpg' name='Jim Mend' />
+               <div id='chat-footer'>
+                  <div id='settings'>
+                     <Menu ref={(menu) => {this._menu = menu; }}>
+                        <MenuButton href='javascript:void(0)' onClick={this.createTurnOffChatPopup}>Turn off chat</MenuButton>
+                     </Menu>
+                     {/* TODO: Figure out how we're doing icons, and replace this */}
+                     <Button href='javascript:void(0)' onClick={this.toggleMenu}>*</Button>
+                  </div>
+               </div>
             </div>
          </div>
       );

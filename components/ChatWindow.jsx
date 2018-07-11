@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 import Button from './Button.jsx'
 
@@ -67,8 +67,9 @@ class ChatWindow extends React.Component {
       return (
          <div id='chat-window'>
             <div id='chat-header'>
+               {/* TODO: Add option to turn chat back on from here */}
                <a id='chat-name' href='#'>{this.props.name}</a>
-               <Button id='chat-close' href='javascript:void(0)' onClick={this.destroyWindow}>&#10005;</Button>
+               <Button id='chat-close' onClick={this.destroyWindow}>&#10005;</Button>
             </div>
             <div id='chat-content'>
                {incoming_messages}

@@ -1,52 +1,64 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
+import Button from './Button.jsx'
+
+// Largely from https://blog.campvanilla.com/reactjs-dropdown-menus-b6e06ae3a8fe
 class Menu extends React.Component {
-   constructor(props) {
-      super(props);
-      this.state = {show: false};
-      
-      this.toggleShow = this.toggleShow.bind(this);
-      this.setWrapperRef = this.setWrapperRef.bind(this);           
-      this.handleClickOutside = this.handleClickOutside.bind(this);
-   }
+  constructor() {
+    super();
+    
+    this.state = {showMenu: false,
+      overflow: false};
+    this.showMenu = this.showMenu.bind(this);
+    this.closeMenu = this.closeMenu.bind(this);
+  }
 
-   componentDidMount() {
-      document.addEventListener('mousedown', this.handleClickOutside);
-   }
+  showMenu(event) {
+    // event.preventDefault();
+    
+    this.setState({showMenu: true}, () => {
+      document.addEventListener('click', this.closeMenu);
+    });
+  }
 
-   componentWillUnmount() {
-      document.removeEventListener('mousedown', this.handleClickOutside);
-   }
-
-   setWrapperRef(node) {
-      this.wrapperRef = node;
-   }
-
-   handleClickOutside(event) {
-         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            this.setState({show: false});
-         }
+  closeMenu() {
+    // Pass checkContains to keep the menu open if a click occurs within the menu options
+    if (!this.props.checkContains || !this.dropdownMenu.contains(event.target)) {
+      this.setState({showMenu: false}, () => {
+        document.removeEventListener('click', this.closeMenu);
+      });
     }
+  }
 
-   toggleShow() {
-      this.setState({show: !this.state.show});
-   }
+  render () {
+    return (
+      <div className="menu">
+        {
+          (this.state.showMenu && this.props.upwards) ?
+          (
+            <div className="dropdown-menu" ref={(element) => {this.dropdownMenu = element}}>
+              {this.props.children}
+            </div>
+          ) : (null)
+        }
 
-   unshow() {
-      this.setState({show: false});
-   }
+        <Button href='javascript:void(0)' onClick={this.showMenu}>
+          {/* Icon prop is one of: {vert, horiz, gear}, vert is default*/}
+          <span className={"menu-icon"  + ' ' + (this.props.icon ? this.props.icon : "vert")}></span>
+        </Button>
 
-   render() {
-      if (!this.state.show) {
-         return (
-            <div className="menu" tabIndex="0"></div>
-         )
-      }
-      return (
-         <div className="menu" tabIndex="0" ref={this.setWrapperRef}>{this.props.children}</div>
-      )
-   }
+        {
+          (this.state.showMenu && !this.props.upwards) ?
+          (
+            <div className="dropdown-menu" ref={(element) => {this.dropdownMenu = element}}>
+              {this.props.children}
+            </div>
+          ) : (null)
+        }
+      </div>
+    );
+  }
 }
 
 export default Menu;

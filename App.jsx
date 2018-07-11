@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {CreateEvent} from './controller/databaseFunctions.js';
-import  PropTypes from 'prop-types';
-import {indexPosts, resetPosts, resetChat} from './utilities.js'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {CreateEvent} from './controller/databaseFunctions.js'
+import  PropTypes from 'prop-types'
+import {indexPosts, verifyLocalStorage, resetAll} from './utilities.js'
 
 import Button from './components/Button.jsx'
 import Comment from './components/Comment.jsx'
@@ -18,10 +18,7 @@ import Chat from './components/Chat.jsx'
 class App extends React.Component {
    constructor(props) {
       super(props);
-      if (!localStorage.posts) {
-         resetPosts();
-         location.reload();
-      }
+      verifyLocalStorage();
    }
     
    //Turn the querystring into a JSON object
@@ -75,7 +72,7 @@ class App extends React.Component {
                      <a href='#'>News Feed</a>
                   </li>
                   <li>
-                     <a href='javascript:void(0)' onClick={() => { resetPosts(); resetChat(); location.reload(); }}>Reset Posts(DEBUG)</a>
+                     <a href='javascript:void(0)' onClick={() => { resetAll() }}>Reset Posts(DEBUG)</a>
                   </li>
                    <li>
                        <h3>Session_id:{session_id}</h3>

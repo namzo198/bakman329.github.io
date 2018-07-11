@@ -58,15 +58,16 @@ a {
 #page-content {
     padding: inherit;
     background-color: #e9ebee;
-    float: center;
     position: absolute;
     top: 42px;
     bottom: 0;
-    width: 100%; 
+    width: 100%;
+    overflow: auto;
     z-index: -99;
 }
 
 #left-navagation {
+    position: fixed;
     display: inline-block;
     list-style-type: none;
     width: 180px;
@@ -87,6 +88,7 @@ a {
 }
 
 #post-area {
+    margin-left: 269.5px;
     display: inline-block;
     padding-top: 12px;
 }
@@ -187,8 +189,12 @@ a {
 }
 
 #chat-area {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin-top: 42px;
     float: right;
-    height: 100%;
+    height: calc(100% - 42px);
 }
 
 @media (max-width: 732px) {
@@ -199,8 +205,8 @@ a {
 }
 
 #chat-container {
-    height: 100%;
     float: right;
+    height: 100%;
 }
 
 #chat {

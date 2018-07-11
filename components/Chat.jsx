@@ -123,7 +123,7 @@ class Chat extends React.Component {
          );
       }
 
-
+   {/* TODO: Reconsile with new "Active Status" lexical change on Facebook */}
       var turnOffChatPopup = (
          <Popup title="Turn Off Chat"
             destroy={() => {
@@ -201,8 +201,6 @@ class Chat extends React.Component {
                      <Menu ref={(_menu) => {this.menu = _menu}} upwards icon='gear'>
                         <Button onClick={this.createTurnOffChatPopup}>Turn off chat</Button>
                      </Menu>
-                     {/* TODO: Figure out how we're doing icons, and replace this */}
-                     {/* <Button href='javascript:void(0)' onClick={this.toggleMenu}>*</Button> */}
                   </div>
                </div>
             </div>

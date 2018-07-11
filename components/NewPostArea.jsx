@@ -33,6 +33,7 @@ class NewPostArea extends React.Component {
      localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
      indexPosts();
      PostArea.update();
+     this.state.value = '';
 
      return event;
    }

@@ -17,25 +17,26 @@ class NewCommentArea extends React.Component {
          var posts = JSON.parse(localStorage.getItem('posts'));
          var post_index;
 
-         if (this.props.type === 'post') {
-            posts.some((post, index, array) => {
-              if (post.key == this.props.index) {
-                post_index = index;
-                return true;
-              }
-            });
-         }
-         // TODO: Replying sometimes creates comments in the wrong post. Seems to happen most on posts created by the user.
-         // To reproduce: Create a post, comment on it, then reply to the comment.
-         else if (this.props.type === 'reply') {
+         // This if statement was causing wrong replying behavior
+         // It seems that it is entirely unnecessary, though it is possible that replying is bugged with it removed
+         // if (this.props.type === 'post') {
+          posts.some((post, index, array) => {
+            if (post.key == this.props.index) {
+              post_index = index;
+              return true;
+            }
+          });
+         // }
+         /* else if (this.props.type === 'reply') {
             post_index = this.props.index - 1;
          }
          else {
             return;
-         }
+         } */
 
          if (posts[post_index]) {
             var content = this.state.value;
+            // TODO: Consider replacing these two props with one "replyto" prop who's presence implies type=reply
             if (this.props.type === 'reply') {
                 content = this.props.replyto + ' ' + content;
             }

@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 import Button from './Button.jsx'
 
@@ -22,9 +22,9 @@ class ChatUser extends React.Component {
        return (
           <div id='chat-user'>
              <img id='profile-pic' src={this.props.img} />
-             <Button href='javascript:void(0)' onClick={this.onClickName}>{this.props.name}</Button>
+             <Button onClick={this.onClickName}>{this.props.name}</Button>
           </div>
-       )
+       );
     }
 }
 

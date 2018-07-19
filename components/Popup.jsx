@@ -11,6 +11,7 @@ class Popup extends React.Component {
 
    destroy() {
      var mount_node = ReactDOM.findDOMNode(this.refs.mount);
+     console.log("FF");
 
       try {
          ReactDOM.unmountComponentAtNode(mount_node);
@@ -23,13 +24,10 @@ class Popup extends React.Component {
       return (
          <div className="popup">
             <div className="popup-header">{this.props.title}</div>
-
             <div className="popup-content"><div>{this.props.children}</div></div>
-
             <div className="popup-footer">
-               {/* TODO: Only pressing "Okay" should register the new setting in state */}
-               <Button href='javascript:void(0)' onClick={this.props.destroy}>Okay</Button>
-               <Button href='javascript:void(0)' onClick={this.props.destroy}>Cancel</Button>
+               <Button onClick={() => {this.props.okay(); this.props.destroy();}}>Okay</Button>
+               <Button onClick={() => {this.props.cancel(); this.props.destroy(true);}}>Cancel</Button>
             </div>
          </div>
       )

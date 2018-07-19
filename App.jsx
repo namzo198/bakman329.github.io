@@ -45,7 +45,7 @@ class App extends React.Component {
       return {session: current_session.session,NewsFeed:true,Timeline:false};     
     }
      
-   render() {  
+   render() { 
        //TODO Delete as this variable is accessed for debugging purposes only 
       const {session_id} = this.urlqueryStringToJSON();
       return (

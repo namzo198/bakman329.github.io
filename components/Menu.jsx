@@ -11,22 +11,20 @@ class Menu extends React.Component {
     this.state = {showMenu: false,
       overflow: false};
     this.showMenu = this.showMenu.bind(this);
-    this.closeMenu = this.closeMenu.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   showMenu(event) {
-    // event.preventDefault();
-    
     this.setState({showMenu: true}, () => {
-      document.addEventListener('click', this.closeMenu);
+      document.addEventListener('click', this.onClick);
     });
   }
 
-  closeMenu() {
+  onClick(e) {
     // Pass checkContains to keep the menu open if a click occurs within the menu options
-    if (!this.props.checkContains || !this.dropdownMenu.contains(event.target)) {
+    if (!this.props.checkContains || !this.dropdownMenu.contains(e.target)) {
       this.setState({showMenu: false}, () => {
-        document.removeEventListener('click', this.closeMenu);
+        document.removeEventListener('click', this.onClick);
       });
     }
   }
@@ -44,7 +42,7 @@ class Menu extends React.Component {
         }
 
         <Button href='javascript:void(0)' onClick={this.showMenu}>
-          {/* Icon prop is one of: {vert, horiz, gear}, vert is default*/}
+          {/* Icon prop is one of: {vert, horiz, gear}, vert is default */}
           <span className={"menu-icon"  + ' ' + (this.props.icon ? this.props.icon : "vert")}></span>
         </Button>
 

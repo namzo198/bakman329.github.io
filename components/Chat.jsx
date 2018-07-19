@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import AutocompleteInput from './AutocompleteInput.jsx'
 import Button from './Button.jsx'
 import Menu from './Menu.jsx'
 import ChatUser from './ChatUser.jsx'
@@ -8,6 +9,7 @@ import ChatWindow from './ChatWindow.jsx'
 import Popup from './Popup.jsx'
 import {containsIgnoreCase} from '../utilities.js'
 
+// TODO: Facebook has changed its wording on this feature from "turn off chat" to "turn off active status"
 class Chat extends React.Component {
    constructor(props) {
       super(props);
@@ -101,20 +103,26 @@ class Chat extends React.Component {
       var except_text;
       var some_text;
       if (this.state.turnOffChat === "allContactsExcept") {
-         except_text = <input id='turn-off-chat-all-contacts-except-text' className='popup-text-input' type='text' placeholder='Required: Enter names or lists'
-               rows='1' cols='65' onKeyPress={this.onKeyPress}
-               onChange={(e) => this.setState({except_contacts: e.target.value})} value={this.state.except_contacts}
-               autoComplete='off' />;
+         except_text = <AutocompleteInput
+            commaSeperated
+            onChange={(value) => this.setState({except_contacts: value})}
+            defaultValue={this.state.except_contacts}
+            placeholder='Required: Enter names or lists'
+            list={["Jack Roe", "Jim Mend"]} />
       }
       else if (this.state.turnOffChat === "someContacts") {
-         some_text = <input id='turn-off-chat-some-contacts-text' className='popup-text-input' type='text' placeholder='Optional: Enter names or lists'
-               rows='1' cols='65' onKeyPress={this.onKeyPress}
-               onChange={(e) => this.setState({some_contacts: e.target.value})} value={this.state.some_contacts}
-               autoComplete='off' />;
+         some_text = <AutocompleteInput
+            commaSeperated
+            onChange={(value) => this.setState({some_contacts: value})}
+            defaultValue={this.state.some_contacts}
+            placeholder='Optional: Enter names or lists'
+            list={["Jack Roe", "Jim Mend"]} />
       }
 
       var except_warning;
       if (this.state.showExceptWarning) {
+         // TODO: Note that despite the fact that facebook's feature was changed from "turn off chat" to "turn off active status", this notice remains unchanged on facebook!
+         // TODO: Should we keep facebook's bugs, or minimize confusion? I imagine the ladder -- Henry
          except_warning = (
             <p>
             Note: If "Turn off chat for all contacts except..." is selected but no contacts are entered into the box, you will be offline to all contacts.
@@ -123,11 +131,11 @@ class Chat extends React.Component {
          );
       }
 
-   {/* TODO: Reconsile with new "Active Status" lexical change on Facebook */}
+      {/* TODO: Reconsile with new "Active Status" lexical change on Facebook */}
       var turnOffChatPopup = (
          <Popup title="Turn Off Chat"
-            destroy={() => {
-               if (this.state.turnOffChat == "allContactsExcept" && this.state.except_contacts == "") {
+            destroy={(cancel=false) => {
+               if (!cancel && this.state.turnOffChat == "allContactsExcept" && this.state.except_contacts == "") {
                   return;
                }
 
@@ -177,6 +185,7 @@ class Chat extends React.Component {
             </label>
             {some_text}
 
+            {/* TODO: This message has been changed on Facebook */}
             <p>Note: When chat is off, messages from contacts go to your inbox for you to read later.</p>
 
             {except_warning}

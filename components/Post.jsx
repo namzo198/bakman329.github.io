@@ -173,7 +173,7 @@ class Post extends React.Component {
                     { (this.props.name != "John Doe") ? <Button>Unfollow {this.props.name}</Button> : null }
                   </Menu>
                </div>
-               <p>{this.props.children}</p>
+               <p id="post-content-text">{this.props.children}</p>
                <hr />
                {this.actions()}
                <hr />

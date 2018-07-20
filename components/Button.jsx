@@ -33,7 +33,11 @@ class Button extends React.Component {
    }
 
    render() {
-      return (<a id={this.props.id} href={this.props.href ? this.props.href : "javascript:void(0)"} onClick={this.onClick}>{this.props.children}</a>);
+      // TODO: Implement styling
+      return (<a
+        id={this.props.id} href={this.props.href ? this.props.href : "javascript:void(0)"}
+        onClick={this.onClick}
+        className={"button"  + ' ' + (this.props.type ? this.props.type : "default")}>{this.props.children}</a>);
    }
 }
 

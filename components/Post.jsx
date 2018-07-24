@@ -1,11 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {indexPosts} from '../utilities.js'
 
 import Button from './Button.jsx'
 import Comment from './Comment.jsx'
 import NewCommentArea from './NewCommentArea.jsx'
 import PostArea from './PostArea.jsx'
+import Menu from './Menu.jsx'
 import Popup from './Popup.jsx'
 import SuggestionPopup from '../adaptations/Suggestion.jsx'
 import Automation from '../adaptations/Automation.jsx'
@@ -28,13 +29,11 @@ class Post extends React.Component {
         this.onClickShare = this.onClickShare.bind(this);
         this.onClickLike = this.onClickLike.bind(this);
         this.onClickComment = this.onClickComment.bind(this);
+        this.onClickHide = this.onClickHide.bind(this);
         this.onClickUndo = this.onClickUndo.bind(this);
         this.show = this.show.bind(this);
     }
 
-
-    
-    
     componentWillMount(){
         //Set a time on when to display the Suggestion. 
         setTimeout(()=>this.show(),2000)
@@ -127,8 +126,14 @@ class Post extends React.Component {
         }
     }
 
-    actions(adaptMethod) {
+    onClickHide() {
+        var posts = JSON.parse(localStorage.getItem('posts'));
+        // TODO: Implement
+        // When hide is clicked, the post should be replaced with a dismissable box saying "You won't see this post in News Feed"
+        // This includes an undo button, and several snooze/report options that might be unneccesary
+    }
 
+    actions(adaptMethod) {
         var posts = JSON.parse(localStorage.getItem('posts'));
         var liked = false;
         posts.some((post, index, array) => {
@@ -162,7 +167,6 @@ class Post extends React.Component {
 
 
     onClickUndo(){
-
         var event = {
             render: false,
             action: 'Undo Delete Post',
@@ -178,7 +182,6 @@ class Post extends React.Component {
     }
 
     renderPost(comments,post_title) {
-
         if(this.props.adapt.deletepost==='auto'&& this.props.index===2 && !this.state.showPostWhenHidden){
             return(
                < Automation Undobutton="Undo" label="This post was automatically deleted" onUndoClick={this.onClickUndo} />
@@ -238,6 +241,10 @@ class Post extends React.Component {
                             <a href='#' id='post-name'>{post_title}</a>
                             <p id='post-time'>1 hr</p>
                         </div>
+                        <Menu icon='horiz'>
+                            <Button>Hide post</Button>
+                            { (this.props.name != "John Doe") ? <Button>Unfollow {this.props.name}</Button> : null }
+                        </Menu>
                     </div>
                     <p>{this.props.children}</p>
                     <hr />
@@ -274,9 +281,6 @@ class Post extends React.Component {
         });
         comments = (comments) ? comments : [];
 
-
-
-
         const Children = this.props.children
 
         return(
@@ -284,8 +288,6 @@ class Post extends React.Component {
                 <div id='post-content'> 
                     <p>{/*this.props.children*/}</p> 
                     {this.renderPost(comments,post_title)}
-
-
                 </div>
             </div>);
     }

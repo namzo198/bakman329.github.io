@@ -9,7 +9,6 @@ import ChatWindow from './ChatWindow.jsx'
 import Popup from './Popup.jsx'
 import {containsIgnoreCase} from '../utilities.js'
 
-// TODO: Facebook has changed its wording on this feature from "turn off chat" to "turn off active status"
 class Chat extends React.Component {
    constructor(props) {
       super(props);
@@ -85,8 +84,6 @@ class Chat extends React.Component {
 
       var friends = [];
       JSON.parse(localStorage.getItem('friends')).forEach((name, index, array) => {
-         // Show only exceptions if allContactsExcept is on, or exclude some people if someContacts is on
-         // TODO: Ignore case
          var setting = JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0];
          var except_contacts_includes = containsIgnoreCase(JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][1], name);
          var some_contacts_includes = containsIgnoreCase(JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][2], name);
@@ -121,17 +118,15 @@ class Chat extends React.Component {
 
       var except_warning;
       if (this.state.showExceptWarning) {
-         // TODO: Note that despite the fact that facebook's feature was changed from "turn off chat" to "turn off active status", this notice remains unchanged on facebook!
-         // TODO: Should we keep facebook's bugs, or minimize confusion? I imagine the ladder -- Henry
+         // TODO: Note that despite the fact that Facebook's feature was changed from "turn off chat" to "turn off active status", this notice remains unchanged on facebook!
          except_warning = (
-            <p>
-            Note: If "Turn off chat for all contacts except..." is selected but no contacts are entered into the box, you will be offline to all contacts.
+            <p className="popup-note" id="except-warning">
+            Note: If "Turn off active status for all contacts except..." is selected but no contacts are entered into the box, you will be offline to all contacts.
             Please either enter a list of contacts you'd like to be online to or choose another option.
             </p>
          );
       }
 
-      {/* TODO: Reconsile with new "Active Status" lexical change on Facebook */}
       var turnOffChatPopup = (
          <Popup title="Turn Off Chat"
             destroy={(cancel=false) => {
@@ -164,7 +159,7 @@ class Chat extends React.Component {
                   name="turn-off-chat" value="allContacts"
                   onChange={this.handleTurnOffChatOptionChange}
                   checked={this.state.turnOffChat === "allContacts"} />
-               Turn off chat for all contacts
+               Turn off active status for all contacts
             </label>
 
             <label>
@@ -172,21 +167,24 @@ class Chat extends React.Component {
                   name="turn-off-chat" value="allContactsExcept"
                   onChange={this.handleTurnOffChatOptionChange}
                   checked={this.state.turnOffChat === "allContactsExcept"} />
-               Turn off chat for all contacts except...
+               Turn off active status for all contacts except...
+               {except_text}
             </label>
-            {except_text}
 
             <label>
                <input type="radio" id="turn-off-chat-some-contacts"
                   name="turn-off-chat" value="someContacts"
                   onChange={this.handleTurnOffChatOptionChange}
                   checked={this.state.turnOffChat === "someContacts"} />
-               Turn off chat for some contacts...
+               Turn off active status for only some contacts...
+               {some_text}
             </label>
-            {some_text}
 
-            {/* TODO: This message has been changed on Facebook */}
-            <p>Note: When chat is off, messages from contacts go to your inbox for you to read later.</p>
+            <p className="popup-note">
+            Your friends and contacts will see when you're active or recently active.
+            You'll appear active or recently active unless you turn off the setting every place you're using Messenger or Facebook.
+            You'll also see when your friends and contacts are active or recently active.
+            </p>
 
             {except_warning}
          </Popup>);
@@ -208,7 +206,7 @@ class Chat extends React.Component {
                <div id='chat-footer'>
                   <div id='settings'>
                      <Menu ref={(_menu) => {this.menu = _menu}} upwards icon='gear'>
-                        <Button onClick={this.createTurnOffChatPopup}>Turn off chat</Button>
+                        <Button onClick={this.createTurnOffChatPopup}>Turn Off Active Status</Button>
                      </Menu>
                   </div>
                </div>

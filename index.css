@@ -1,5 +1,7 @@
 body {
     margin: 0px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 15px;
 }
 
 header {
@@ -12,6 +14,15 @@ header {
 
 a {
     text-decoration-line: none;
+}
+
+input[type=text] {
+    font: inherit;
+    padding: 1px 0px 1px 3px; 
+}
+
+textarea {
+    font: inherit;
 }
 
 #logo, #header-text {
@@ -130,6 +141,12 @@ a {
 #post-time {
     display: block;
     margin: 0px;
+}
+
+#post-content-text {
+    margin-top: 6px;
+    margin-bottom: 0px;
+    padding-bottom: 4.5px;
 }
 
 #actions a {
@@ -330,6 +347,9 @@ a {
   border-radius: 50%;
   border: 0.21429em solid gray;
   box-sizing: border-box;
+  font-family: "times new roman";
+  font-weight: bold;
+  font-size: 16px;
 }
 .menu-icon.gear:before, .menu-icon.gear:after {
   content: '×';
@@ -377,8 +397,10 @@ a {
 .popup-header {
 	background-color: #6d84b4;
 	color: #ffffff;
-    border: 1px solid #365899;
     height: 18px;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 5px 10px;
 }
 
 .popup-content {
@@ -391,6 +413,17 @@ a {
 	padding: 10px 20px 10px 20px;
 }
 
+.popup label {
+    color: #333;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.popup label input[type=text] {
+    font-weight: normal;
+    font-size: 13.3px;
+}
+
 .popup-footer {
 	position: relative;
 	bottom: 0;
@@ -398,6 +431,11 @@ a {
 	height: 28px;
 	padding: 10px 0 10px 0;
 	background-color: #f2f2f2;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
 }
 
 .popup-footer a {
@@ -410,7 +448,18 @@ a {
 }
 
 .popup input[type=text] {
+    margin-top: 5px;
 	width: 300px;
+}
+
+#except-warning {
+    padding: 10px;
+    background-color: #fff9d7;
+    border: 1px solid #e2c822;
+}
+
+.popup-note {
+    font-size: 12px;
 }
 
 .dropdown {

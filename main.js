@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.jsx';
-import {BrowserRouter as Router,Route,Switch,browserHistory} from 'react-router-dom';
+import BasicInfo from './components/settings/BasicInfo.jsx'
+import {BrowserRouter as Router,Link,Route,Switch,browserHistory} from 'react-router-dom';
 
  
 const app = document.getElementById('app');
@@ -11,6 +12,8 @@ const UrlRouting = () =>(
     <Router history={browserHistory}>
         <Switch>
             <Route exact path="/" component={App}/>
+            <Route path="/settings/BasicInfo*" component={BasicInfo}/>
+                                                         
         </Switch>
     </Router>
 );

@@ -5,6 +5,10 @@ import {indexPosts} from '../utilities.js'
 import Button from './Button.jsx'
 import PostArea from './PostArea.jsx'
 
+
+
+
+
 class NewPostArea extends React.Component {
    constructor(props) {
       super(props);
@@ -25,11 +29,13 @@ class NewPostArea extends React.Component {
      }
 
      var posts = JSON.parse(localStorage.getItem('posts'));
+       
      var post = {name: 'John Doe',
                  img: './assets/profile_img.jpg',
                  content: this.state.value,
                  key: posts.length,
                  comments: []};
+       
      localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
      indexPosts();
      PostArea.update();
@@ -48,7 +54,7 @@ class NewPostArea extends React.Component {
                <textarea rows='6'  placeholder="What's on your mind?" value={this.state.value} onChange={this.onChange} />
                <hr />
                <div id='actions'>
-                  <Button href='javascript:void(0);' onClick={this.onClick}>Post</Button>
+                   <Button href='javascript:void(0);' onClick={this.onClick}>Post</Button>
                </div>
             </div>
          </div>);

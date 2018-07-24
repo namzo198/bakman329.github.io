@@ -4,7 +4,7 @@ import $ from 'jquery';
 
 export const CreateEvent = (event_data)=>{
    
-    console.log("Yeah we have been called");
+    //console.log("Yeah we have been called");
     let action = event_data.action;
     let details = event_data.details;
     let object = event_data.object;

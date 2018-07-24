@@ -23,11 +23,14 @@ class PostArea extends React.Component {
       JSON.parse(localStorage.getItem('posts')).forEach((post, index, array) => {
          // Create posts for rendering
          // Key and count are in reverse order, hence subtracting from count
-         out[index] = React.createElement(Post, {name: post.name, img: post.img, key: count - index - 1, index: count - index - 1, original_poster: post.original_poster}, post.content);
+          //
+         out[index] = React.createElement(Post, {name: post.name, img: post.img, key: count -  index - 1, index: count - index - 1, original_poster: post.original_poster, adapt:this.props.toAdapt}, post.content);
       });
-
+ 
+       //console.log("Post Area "+this.props.toAdapt)
       return out;
    }
+     
 
    static update() {
       this.forceUpdate();
@@ -36,8 +39,9 @@ class PostArea extends React.Component {
    render() {
       return (
          <div id='post-area'>
-            <NewPostArea postarea={this} />
+            <NewPostArea postarea={this}/>
             {this.getPosts()}
+            {/*this.getAutomatic(2)*/}
          </div>);
    }
 }

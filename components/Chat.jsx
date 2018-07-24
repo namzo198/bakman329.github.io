@@ -7,26 +7,51 @@ import Menu from './Menu.jsx'
 import ChatUser from './ChatUser.jsx'
 import ChatWindow from './ChatWindow.jsx'
 import Popup from './Popup.jsx'
+import {highLight,No_highLight} from '../adaptations/Highlight.js'
+import SuggestionPopup from '../adaptations/Suggestion.jsx'
 import {containsIgnoreCase} from '../utilities.js'
 
 class Chat extends React.Component {
-   constructor(props) {
-      super(props);
-      this.state = {chats: [], renderChatPopup: false,
-         turnOffChat: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0],
-         except_contacts: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][1].join(", "),
-         some_contacts: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][2].join(", "),
-         showExceptWarning: false};
-      this.turnOffChatPopup = null;
+    constructor(props) {
+        super(props);
+        this.state = {chats: [], renderChatPopup: false, turnOffChat: "someContacts", adapt:'', undo:false, context:'From Chat',renderSuggestion:false};
+        this.state = {chats: [], renderChatPopup: false,
+          turnOffChat: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0],
+          except_contacts: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][1].join(", "),
+          some_contacts: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][2].join(", "),
+          showExceptWarning: false,
+          adapt:'', undo:false, renderSuggestion:false,
+          context:'From Chat'};
+        this.turnOffChatPopup = null;
 
-      this.addChat = this.addChat.bind(this);
-      this.removeChat = this.removeChat.bind(this);
-      this.toggleMenu = this.toggleMenu.bind(this);
-      this.handleTurnOffChatOptionChange = this.handleTurnOffChatOptionChange.bind(this);
-      this.createTurnOffChatPopup = this.createTurnOffChatPopup.bind(this);
-   }
+        this.addChat = this.addChat.bind(this);
+        this.removeChat = this.removeChat.bind(this);
+        this.toggleMenu = this.toggleMenu.bind(this);
+        this.handleTurnOffChatOptionChange = this.handleTurnOffChatOptionChange.bind(this);
+        this.createTurnOffChatPopup = this.createTurnOffChatPopup.bind(this);
+        this.onClickUndo = this.onClickUndo.bind(this);
+        this.show =this.show.bind(this);
+    }
 
-   addChat(name) {
+    componentWillMount(){
+        this.setState({
+            adapt:this.props.toAdapt
+        })
+        
+        //Set a time on when to display the Suggestion. 
+          setTimeout(()=>this.show(),5000)
+        
+    }
+   
+
+    //Show the Suggestion
+    show(){
+         this.setState({
+             renderSuggestion:true
+         })
+     }
+
+    addChat(name) {
         if (this.state.chats.includes(name)) {
             return false;
         }
@@ -34,32 +59,39 @@ class Chat extends React.Component {
         this.setState({'chats': [name].concat(this.state.chats)});
         this.forceUpdate();
 
-       return true;
-   }
+        return true;
+    }
 
-   removeChat(name) {
-      var chats = this.state.chats;
-      var index = chats.indexOf(name);
-      if (index > -1) {
-         chats.splice(index, 1);
-      }
+    /*TODO, create event and send to DB*/
+    onClickUndo(){
+        this.setState({
+            undo:true,
+        });
+    }
 
-      this.setState({'chats': chats});
-   }
+    removeChat(name) {
+        var chats = this.state.chats;
+        var index = chats.indexOf(name);
+        if (index > -1) {
+            chats.splice(index, 1);
+        }
 
-   toggleMenu() {
-      this.menu.toggleShow();
-   }
+        this.setState({'chats': chats});
+    }
 
-   handleTurnOffChatOptionChange(e) {
-      this.setState({turnOffChat: e.target.value});
-   }
+    toggleMenu() {
+        this.menu.toggleShow();
+    }
 
-   createTurnOffChatPopup() {
-      this.setState({renderChatPopup: true});
-   }
+    handleTurnOffChatOptionChange(e) {
+        this.setState({turnOffChat: e.target.value});
+    }
 
-   parseText(str) {
+    createTurnOffChatPopup() {
+        this.setState({renderChatPopup: true});
+    }
+        
+    parseText(str) {
       var raw_list = str.split(",").map(function(item) {
          return item.trim();
       });
@@ -68,18 +100,68 @@ class Chat extends React.Component {
       return raw_list.filter((item) => {
          return containsIgnoreCase(friends, item);
       });
-   }
-
-   updateSettings() {
-      this.setState({turnOffChat: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0],
+    }
+        
+    updateSettings() {
+        this.setState({turnOffChat: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0],
           except_contacts: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][1].join(", "),
           some_contacts: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][2].join(", ")});
-   }
+    }
 
-   render() {
+    //To automate or normally display the chat setting
+    renderChat(){
+        if (this.state.adapt==='auto' &!this.state.undo){
+            return (
+                <Button href='javascript:void(0)' onClick={this.onClickUndo}><span id ='chat-auto' style={No_highLight}>Chat was automatically turned off for all contacts except Jack Roe</span> Undo</Button>
+            )
+        }
+        else if (this.state.adapt==='sugst'){
+            var Suggestion_Popup=(
+              <SuggestionPopup title="Suggestion" allow={()=>{
+                      var event={
+                          action:'Accept to turn off chat',
+                          context:this.state.context,
+                          name:'This is the Chat suggestion to turn off chat for all except Jack Crow',
+                          renderSuggestion:false
+                      };
+                      this.setState(event);
+
+                      return event;
+                  }} 
+
+                  destroy={()=>{
+                      var event={
+                          action:'Would rather not turn off chat',
+                          context:this.state.context,
+                          name:'This is the Chat suggestion to turn off chat for all except Jack Crow',
+                          renderSuggestion:false
+                      };
+                      this.setState(event);
+
+                      return event;
+                  }}>
+
+                  <label>
+                      I think you should turn off chat for all contacts except Jack Crow.
+                  </label>
+              </SuggestionPopup>)
+        }
+
+        return(
+            <div>
+                <Menu ref={(_menu) => {this.menu = _menu}} upwards icon='gear' adapt={this.props.toAdapt}>
+                  <Button onClick={this.createTurnOffChatPopup} adapt={this.props.toAdapt}>Turn Off Active Status</Button>
+                </Menu>
+
+                {this.state.renderSuggestion?Suggestion_Popup:null}
+            </div>
+        )
+    }
+
+    render() {
       var chats = []
       this.state.chats.forEach((name, index, array) => {
-         chats.push(<ChatWindow key={index} name={name} destroy={this.removeChat} />);
+          chats.push(<ChatWindow key={index} name={name} destroy={this.removeChat} />);
       });
 
       var friends = [];
@@ -96,7 +178,7 @@ class Chat extends React.Component {
 
          friends.push(<ChatUser key={index} chat={this} img='./assets/profile_img.jpg' name={name} />);
       });
-
+          
       var except_text;
       var some_text;
       if (this.state.turnOffChat === "allContactsExcept") {
@@ -187,33 +269,33 @@ class Chat extends React.Component {
             </p>
 
             {except_warning}
-         </Popup>);
+        </Popup>);
+          
+        // TODO: Consider if there's a better solution than this warning
+        var turned_off_warning;
+        if (JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0] == "allContacts") {
+           turned_off_warning = <p>Note: Chat is turned off for all contacts</p>;
+        }
 
-      // TODO: Consider if there's a better solution than this warning
-      var turned_off_warning;
-      if (JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0] == "allContacts") {
-         turned_off_warning = <p>Note: Chat is turned off for all contacts</p>;
-      }
-      return (
-         <div id='chat-container'>
-            <div id='chat-window-container'>
-               {chats}
+        return (
+            <div id='chat-container'>
+                <div id='chat-window-container'>
+                    {chats}
+                </div>
+                <div id='chat'>
+                    {this.state.renderChatPopup ? turnOffChatPopup : null}
+                    {turned_off_warning}
+                    {friends}
+                    <div id='chat-footer'>
+                        <div id='settings'>
+                          { /* TODO: Allow adaptation of the menu button by passing the adapt prop into the underlying button */ }
+                          {this.renderChat()}
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id='chat'>
-               {this.state.renderChatPopup ? turnOffChatPopup : null}
-               {turned_off_warning}
-               {friends}
-               <div id='chat-footer'>
-                  <div id='settings'>
-                     <Menu ref={(_menu) => {this.menu = _menu}} upwards icon='gear'>
-                        <Button onClick={this.createTurnOffChatPopup}>Turn Off Active Status</Button>
-                     </Menu>
-                  </div>
-               </div>
-            </div>
-         </div>
-      );
-   }
+        );
+    }
 }
 
 export default Chat;

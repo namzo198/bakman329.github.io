@@ -64,18 +64,12 @@ class Button extends React.Component {
    }
 
    render() {
-       
-       let highlighted;
-       if(this.state.highlight === true){
-           highlighted = <a id={this.props.id} href={this.props.href} onClick={this.onClick}><span style={highLight}>{this.props.children}</span></a>
-       }else {
-           highlighted = <a id={this.props.id} href={this.props.href} onClick={this.onClick}>{this.props.children}</a>
-       }
-       
-       
-      return ( 
-            highlighted
-         );
+      let inner = this.state.highlight ? <span style={highLight}>{this.props.children}</span> : {this.props.children};
+      // TODO: Implement styling
+      return (<a
+        id={this.props.id} href={this.props.href ? this.props.href : "javascript:void(0)"}
+        onClick={this.onClick}
+        className={"button"  + ' ' + (this.props.type ? this.props.type : "default")}>{inner}</a>);
    }
 }
 

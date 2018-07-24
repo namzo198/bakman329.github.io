@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {indexPosts} from '../utilities.js'
 
 import Button from './Button.jsx'
@@ -12,6 +12,7 @@ import PostArea from './PostArea.jsx'
 class NewPostArea extends React.Component {
    constructor(props) {
       super(props);
+      
       this.state = {value: ''};
       this.onChange = this.onChange.bind(this);
       this.onClick = this.onClick.bind(this);
@@ -39,6 +40,7 @@ class NewPostArea extends React.Component {
      localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
      indexPosts();
      PostArea.update();
+     this.state.value = '';
 
      return event;
    }

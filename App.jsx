@@ -130,6 +130,13 @@
                          <p>John Doe</p>
                          <p>Home</p>
                          <p>Find Friends</p>
+        
+                        <p><Link to={{
+                                  pathname:'settings/BlockInvite',
+                                  search:'?blockevent=high&&blockapp=high',
+                                  start:{
+                                      fromNewsFeed:true, session:this.state.userSession_id, blockInfo:'high'}
+                              }}>Settings</Link></p>
                       </div>
                    </div>
                 </header>

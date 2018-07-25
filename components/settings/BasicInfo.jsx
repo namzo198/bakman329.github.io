@@ -1,6 +1,7 @@
     import React from 'react'
     import Header from './header.jsx'
     import Body from './body.jsx'
+    
    
 
     class BasicInfo extends React.Component {
@@ -25,8 +26,11 @@
             return(
 
                 <div >
-                   <Header />
+                    <Header />
                    <Body adapt={this.state.adaptationMethod} userSession={this.state.userSessionId}/>
+                    
+                    
+                    
                 </div>
             );
         }

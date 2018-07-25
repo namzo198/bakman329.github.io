@@ -7,7 +7,7 @@
     render() {
       return (
 
-        <basicInfo-header>
+        <header>
           <h1 id="logo"> fakebook</h1>
               <div id='user'>
                 <img id='profile-pic' src='../assets/profile_img.jpg' />
@@ -17,7 +17,7 @@
                    <p>Find Friends</p>
              </div>
               </div>
-        </basicInfo-header>
+        </header>
       );
      }
     }

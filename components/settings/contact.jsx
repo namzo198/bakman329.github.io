@@ -124,7 +124,7 @@
     
      regex(wordtomatch){
           /*Discern between the many contact and basic information attributes*/
-           var regex =/(Mobile|Address|Email|Key|Website|Social|Dob|Year|Gender|Interest|Language|Religious|Political)/;
+           var regex =/(Mobile|Address|Email|Key|Websites|Social|Dob|Year|Gender|Interest|Language|Religious|Political)/;
            var inputfieldname = wordtomatch.match(regex)[1];
           return inputfieldname;  
        }

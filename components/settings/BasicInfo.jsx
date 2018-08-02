@@ -8,17 +8,10 @@ class BasicInfo extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {adaptationMethod: '',
-      value: '', displaycontactinfo:false};
+    this.state = {value: '', displaycontactinfo:false};
    
     this.overview = this.overview.bind(this);
     this.getSection = this.getSection.bind(this);
-  }
-  
-  componentDidMount() {
-    this.setState({
-        adaptationMethod: this.props.location.state.witholdbasicInfo
-    });
   }
 
   overview() {

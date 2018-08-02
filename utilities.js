@@ -40,11 +40,21 @@ export function resetFriends() {
   localStorage.setItem('friends', JSON.stringify(["Jack Roe", "Jim Mend"]));
 }
 
+export function resetAdaptations() {
+  localStorage.setItem('adaptations', JSON.stringify({}));
+}
+
+export function resetSession() {
+  localStorage.setItem('session_id', "");
+}
+
 export function resetAll() {
   resetPosts();
   resetChat();
   resetSettings();
   resetFriends();
+  resetAdaptations();
+  resetSession();
   location.reload();
 }
 
@@ -61,6 +71,11 @@ export function verifyLocalStorage() {
 
   if (!localStorage.friends) {
     resetFriends();
+    location.reload();
+  }
+
+  if (!localStorage.adaptations) {
+    resetAdaptations();
     location.reload();
   }
 }

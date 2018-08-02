@@ -85,6 +85,10 @@ class Chat extends React.Component {
 
     handleTurnOffChatOptionChange(e) {
         this.setState({turnOffChat: e.target.value});
+
+        if (e.target.value != "allContactsExcept") {
+          this.setState({showExceptWarning: false});
+        }
     }
 
     createTurnOffChatPopup() {
@@ -216,7 +220,7 @@ class Chat extends React.Component {
                   return;
                }
 
-               this.setState({renderChatPopup: false})
+               this.setState({renderChatPopup: false});
             }}
             okay={() => {
                if (this.state.turnOffChat == "allContactsExcept" && this.state.except_contacts == "") {

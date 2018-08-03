@@ -56,7 +56,7 @@ onClickUltimateBlock(){
 
 UltimateBlock(){
      return (
-     <Popup title = {`Are you sure you want to block ${this.state.username}?`} destroy={()=>{this.cancel('second')}} 
+     <Popup title = {`Are you sure you want to block ${this.state.username}?`} cancel={()=>{this.cancel('second')}} 
                 
         okay = {()=>{this.allowed()}} > 
        <div>
@@ -74,7 +74,8 @@ UltimateBlock(){
                
               <div>If you just want to limit what you share with {this.state.username} or see less of him on Fakebook, you cacn <a href="javascript:void(0)">take a break</a> from him instead </div> 
               
-               <div>.......</div>
+               <div>.......(this should be a light border)</div>
+               
                <div>Instead, you may want to send {this.state.username} a message because he might not know he is bothering you.  <a href="">Let him know.</a></div>     
            </div>
         </div>  
@@ -109,7 +110,7 @@ BlockPopup(){
                             
         pop = (
             //Popup has no okay button, just the x button to cancel
-            <Popup title="Block People" destroy={()=>{this.cancel('first')}}>
+            <Popup title="Block People" cancel={()=>{this.cancel('first')}}>
                 
                 {!found? <div>No results found</div>:
 
@@ -131,7 +132,7 @@ BlockPopup(){
     }else{
         console.log(' Invalid Search Query: Please type a valid query in the search box and try again')
         pop = (
-            <Popup title="Invalid Search Query" destroy={()=>{this.cancel('first')}}>
+            <Popup title="Invalid Search Query" cancel={()=>{this.cancel('first')}}>
                <p>Please type a valid query in the search box and try again</p> 
             </Popup>
         )
@@ -169,7 +170,7 @@ unblockUser(){
     
     return(
         
-        <Popup title={`Unblock ${user}`} destroy={()=>{this.cancel('third')}} okay={()=> this.allowUnblock()}>
+        <Popup title={`Unblock ${user}`} cancel={()=>{this.cancel('third')}} okay={()=> this.allowUnblock()}>
         
              <div>Are you sure you want to unblock {user}</div>
                 
@@ -187,68 +188,62 @@ unblockUser(){
     
 render(){
   
-    
 return (
-<div id="container">
-  <div id="wrapper_left">
-    <ul id="info_left">
-      <li> <a href="javascript:void(0)"> Privacy </a> </li>
-      <li > <a  href="javascript:void(0)"> Blocking  </a> </li>
-    </ul>
-  </div>
-  <div className="divider" > </div>
-  <div id="wrapper_right">
-    <div>
-    <h2 id = "right_header"> Manage blocking </h2>
-    </div>
-  <hr/>
-<br/>
-  <div id="right_top">
-    <span className="righttop_label"> Restricted List </span>
-    <a className="right_link" href="#"> Edit List </a>
-        <div className = "righttop_text"> When you add a friend to your Restricted list, they won't see posts on Facebook that you share to Friends only.
-      They may still see things that you share to Public or on a mutual friend's timeline, and posts that they're tagged in.
-       Facebook doesn't notify your friends when you add them to your Restricted list. <a href="#">Learn more</a>
-      </div>
-</div>
-<hr/>
-
-  <div id="right_bottom">
-    <span className="rightbottom_label"> Block users </span>
-    <div className= "rightbottom_text"> Once you block someone, that person can no longer see things you post on your timeline, tag you, invite
-      you to events or groups,start a conversation with you, or add you as a friend.
-      Note: Does not include apps, games or groups you both participate in.
-    </div>
-    <div id="right_bottom_form">
-      <form onSubmit={this.handleSubmit}>
-        <label> Block users
-          <input id = "text" type="text" placeholder="Add name or email" onChange={this.handleChange} />
-        </label>
-          <Button href="javascript:void(0)" onClick={this.onClickBlock}>Block </Button>
-        <br/>
-      </form>
-        
-        {this.state.renderPopup?this.BlockPopup():null}
-        {this.state.renderUltimateBlock?this.UltimateBlock():null}
-       
-        {this.state.showBlockedusers&&this.state.blockedUserslist.length > 0?
-                
+    <div id="wrapper_right">
+        <div className = "right_content">
             <div>
-               <ul>
-                {this.state.blockedUserslist.map((user,index)=>{
-                   return <li key={index}>{user} <Button href="javascript:void(0)" onClick={()=> {this.onClickUnblock(user)}}>Unblock</Button></li>
-                })}
-                </ul>
-            </div>: null
-           }
-           
-           {this.state.showUnblockPopup?this.unblockUser():null}
-        
-    </div>
-  </div>
-</div>
-</div>
+            <h2 className = "right_header"> Manage blocking </h2>
+            </div>
+            <hr/>
+            <br/>
+            <div id="right_top">
+            <span className="righttop_label"> Restricted List </span>
+                <a className="right_link" href="#"> Edit List </a>
+                <div className = "righttop_text">
+                  When you add a friend to your Restricted list, they won't see posts on Facebook that you share to Friends only.
+                  They may still see things that you share to Public or on a mutual friend's timeline, and posts that they're tagged in.
+                   Facebook doesn't notify your friends when you add them to your Restricted list. <a href="#">Learn more</a>
+                  </div>
+            </div>
+            <hr/>
 
+            <div id="right_bottom">
+                <span className="rightbottom_label"> Block users </span>
+                <div className= "rightbottom_text"> 
+                     Once you block someone, that person can no longer see things you post on your timeline, tag you, invite
+                      you to events or groups,start a conversation with you, or add you as a friend.
+                      Note: Does not include apps, games or groups you both participate in.
+                </div>
+                
+                <div id="right_bottom_form">
+
+                 <form onSubmit={this.handleSubmit}>
+                    <label> Block users
+                      <input id = "text" type="text" placeholder="Add name or email" onChange={this.handleChange} />
+                    </label>
+                    <Button href="javascript:void(0)" onClick={this.onClickBlock}>Block </Button>
+                    <br/>
+                 </form>
+
+                    {this.state.renderPopup?this.BlockPopup():null}
+                    {this.state.renderUltimateBlock?this.UltimateBlock():null}
+
+                    {this.state.showBlockedusers&&this.state.blockedUserslist.length > 0?
+
+                        <div>
+                           <ul>
+                            {this.state.blockedUserslist.map((user,index)=>{
+                               return <li key={index}>{user} <Button href="javascript:void(0)" onClick={()=> {this.onClickUnblock(user)}}>Unblock</Button></li>
+                            })}
+                            </ul>
+                        </div>: null
+                    }
+
+                   {this.state.showUnblockPopup?this.unblockUser():null}
+                </div>
+          </div>
+        </div>
+    </div>
   );
  }
 }

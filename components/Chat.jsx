@@ -132,7 +132,7 @@ class Chat extends React.Component {
                       return event;
                   }} 
 
-                  destroy={()=>{
+                  cancel={()=>{
                       var event={
                           action:'Would rather not turn off chat',
                           context:this.state.context,

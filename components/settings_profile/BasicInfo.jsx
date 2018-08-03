@@ -39,8 +39,8 @@ class BasicInfo extends React.Component {
   }
   
   render() {
-    console.log(this.state);
-    console.log(this.props);
+    //console.log(this.state);
+    //console.log(this.props);
     // TODO: Create generic user profile page, and make this a routed child of that
     return (
       <div id="page-container">

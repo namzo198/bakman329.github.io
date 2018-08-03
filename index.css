@@ -71,6 +71,11 @@ textarea {
     display: inline;
 }
 
+#user span{
+    color:white;
+}
+
+
 #header-text {
     display: inline;
     position: relative;
@@ -81,6 +86,10 @@ textarea {
 #header-text p {
     display: inline;
     padding-left: 12px;
+}
+
+#header-text span{
+    color: white;
 }
 
 #profile-pic {

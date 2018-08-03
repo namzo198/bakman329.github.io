@@ -17,10 +17,10 @@ class BasicInfo extends React.Component {
   overview() {
     return(
         <ul id="info_left">
-          <li id="selector"><Link to='/settings/overview'>Overview</Link></li>
+          <li id="selector"><Link to='/settings_profile/overview'>Overview</Link></li>
           <li><a href="javascript:void(0)">Work and education</a></li>
           <li><a href="javascript:void(0)">Places you've lived</a></li>
-          <li><Link to='/settings/contact'>Contact and basic info</Link></li>
+          <li><Link to='/settings_profile/contact'>Contact and basic info</Link></li>
           <li><a href="javascript:void(0)">Details about you</a></li>
           <li><a href="javascript:void(0)">Life events </a></li>
         </ul>

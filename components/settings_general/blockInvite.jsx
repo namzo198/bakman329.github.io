@@ -1,11 +1,10 @@
 import React,{Component} from 'react';
 import Button from '../Button.jsx';
 import Popup from '../Popup.jsx'
-import Header from './header.jsx'
 import {levenshteinDistance} from '../../algorithms.js'
 
 
-class Block extends React.Component {
+class BlockInvite extends React.Component {
   constructor(props) {
     super(props);
     this.state = {username: '', renderPopup:false, list:["Jack Roe", "Jim Mend"],renderUltimateBlock:false,blockedUserslist:[], showBlockedusers:false,showUnblockPopup:false};
@@ -191,7 +190,6 @@ render(){
     
 return (
 <div id="container">
-    <Header/>
   <div id="wrapper_left">
     <ul id="info_left">
       <li> <a href="javascript:void(0)"> Privacy </a> </li>
@@ -255,4 +253,4 @@ return (
  }
 }
 
-export default Block;
+export default BlockInvite;

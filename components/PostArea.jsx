@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import Post from './Post.jsx'
 import NewPostArea from './NewPostArea.jsx'
 
+import {resetPosts} from '../utilities.js'
+
 class PostArea extends React.Component {
    constructor(props) {
       super(props);

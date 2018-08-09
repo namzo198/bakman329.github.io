@@ -1,22 +1,37 @@
 import React,{Component} from 'react';
-import Button from '../Button.jsx';
-import Popup from '../Popup.jsx'
-import {levenshteinDistance} from '../../algorithms.js'
+import Button from '../../Button.jsx';
+import Popup from '../../Popup.jsx'
+import {levenshteinDistance} from '../../../algorithms.js'
 
 
-class BlockInvite extends React.Component {
+class BlockUsers extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {username: '', renderPopup:false, list:["Jack Roe", "Jim Mend"],renderUltimateBlock:false,blockedUserslist:[], showBlockedusers:false,showUnblockPopup:false};
+    this.state = {username: '', renderPopup:false, friendsList:[],renderUltimateBlock:false,blockedUserslist:[],showUnblockPopup:false};
     this.handleChange = this.handleChange.bind(this);
     this.onClickBlock = this.onClickBlock.bind(this);
     this.onClickUltimateBlock = this.onClickUltimateBlock.bind(this);
     this.onClickUnblock = this.onClickUnblock.bind(this);
+      this. 
+  showBlockedUsers = this.showBlockedUsers.bind(this);
       
       
   }
 
-
+componentDidMount(){
+    var blockedUsers = JSON.parse(localStorage.getItem('blockedUsers'));
+    var friends = JSON.parse(localStorage.getItem('friends'))
+    
+    //console.log('The blocked'+  blockedUsers)
+    
+    this.setState({
+       blockedUserslist: blockedUsers,
+       friendsList: friends
+    })
+    
+    //console.log('The state blocked' +this.state.blockedUserslist.length)
+}
+    
 handleChange(email) {
    this.setState({username: email.target.value});
  }
@@ -35,23 +50,25 @@ cancel(what){
         this.setState({showUnblockPopup:false})
     }
 }
+  
+setLocalStorage(){
+ localStorage.setItem('blockedUsers',JSON.stringify(this.state.blockedUserslist))  
+}
     
 allowed(){
-    console.log('Okayed')
-    this.state.blockedUserslist.push(this.state.username) 
-              
+   
+    this.state.blockedUserslist.push(this.state.username)
+    this.setLocalStorage(); 
+    
     this.cancel('second')
     this.cancel('first')
-                
-    this.setState({
-        blockedUserslist:this.state.blockedUserslist,
-        showBlockedusers:true
-    })
                  
 }
      
-onClickUltimateBlock(){
-   this.setState({renderUltimateBlock:true }) 
+onClickUltimateBlock(user){
+   this.setState({
+       renderUltimateBlock:true, 
+       username:user}) 
 }
 
 UltimateBlock(){
@@ -60,8 +77,9 @@ UltimateBlock(){
                 
         okay = {()=>{this.allowed()}} > 
        <div>
+          <div className="popup_imgwrap">
            <img src='../../assets/warning.png' width="53" height="48"/>
-           <div>
+           <div className="popup_content">
                <div><h4>{this.state.username} will no longer be able to:</h4></div>
                <ul>
                    <li>See things you post on your timeline</li>
@@ -70,13 +88,14 @@ UltimateBlock(){
                    <li>Start a conversation with you</li>
                    <li>Add you as a friend</li>
                </ul>
-               <div>If you're friends, blocking {this.state.username} will also unfriend him.</div>
+               <div className="popup_content_2">If you're friends, blocking {this.state.username} will also unfriend him.</div>
                
-              <div>If you just want to limit what you share with {this.state.username} or see less of him on Fakebook, you cacn <a href="javascript:void(0)">take a break</a> from him instead </div> 
+              <div className="popup_content_2">If you just want to limit what you share with {this.state.username} or see less of him on Fakebook, you cacn <a href="javascript:void(0)">take a break</a> from him instead </div> 
               
-               <div>.......(this should be a light border)</div>
+               <div className ="popup_content_border"> </div>
                
-               <div>Instead, you may want to send {this.state.username} a message because he might not know he is bothering you.  <a href="">Let him know.</a></div>     
+               <div className="popup_content_2">Instead, you may want to send {this.state.username} a message because he might not know he is bothering you.  <a href="">Let him know.</a></div>     
+           </div>
            </div>
         </div>  
     </Popup>
@@ -87,19 +106,13 @@ BlockPopup(){
     
     var pop;
     
-    var tea= levenshteinDistance("J ","Jack Roe ");
-    
-    
-    
-    console.log(tea);
-    
     if(this.state.username !== '') {
         
         var user = this.state.username;
         var foundelements = [];
         var found = false;
         
-        this.state.list.map((element, index) => {           
+        this.state.friendsList.map((element, index) => {           
         var editdistance = levenshteinDistance(user,element);
             //I choose 7 for username input where it takes atleast 7 edits to arrive to exising usernames 
             if (editdistance <= 7 ){
@@ -119,7 +132,7 @@ BlockPopup(){
 
                         <ul className="BlockPopup">
                             {foundelements.map((element, index) => {
-                                return <li key={index}> {element} <Button href="javascript:void(0)" onClick={this.onClickUltimateBlock}> Block </Button> </li>
+                                return <li key={index}> {element} <Button href="javascript:void(0)" onClick={()=>{this.onClickUltimateBlock(element)}}> Block </Button> </li>
                             })}
 
                         </ul>
@@ -147,15 +160,11 @@ allowUnblock(){
    var Index = this.state.blockedUserslist.indexOf(user);
     this.state.blockedUserslist.splice(Index,1);
     
+    this.setLocalStorage(); 
     this.cancel('third')
                 
-    this.setState({
-        blockedUserslist:this.state.blockedUserslist
-    }) 
 }
-
-
-    
+  
 onClickUnblock(user){
     this.setState({
         showUnblockPopup:true,
@@ -185,12 +194,28 @@ unblockUser(){
         </Popup>
         )   
     }
+  
+  showBlockedUsers(){
+      
+     if(this.state.blockedUserslist.length > 0){
+        return (
+           <div>
+               <ul>
+                {this.state.blockedUserslist.map((user,index)=>{
+                   return <li key={index}>{user} <Button href="javascript:void(0)" onClick={()=>{this.onClickUnblock(user)}}>Unblock</Button></li>
+                })}
+                </ul>
+            </div>
+          )
+       }
+      
+  }     
     
 render(){
   
 return (
-    <div id="wrapper_right">
-        <div className = "right_content">
+    
+        <div>
             <div>
             <h2 className = "right_header"> Manage blocking </h2>
             </div>
@@ -216,36 +241,22 @@ return (
                 </div>
                 
                 <div id="right_bottom_form">
-
-                 <form onSubmit={this.handleSubmit}>
                     <label> Block users
                       <input id = "text" type="text" placeholder="Add name or email" onChange={this.handleChange} />
                     </label>
                     <Button href="javascript:void(0)" onClick={this.onClickBlock}>Block </Button>
                     <br/>
-                 </form>
-
-                    {this.state.renderPopup?this.BlockPopup():null}
-                    {this.state.renderUltimateBlock?this.UltimateBlock():null}
-
-                    {this.state.showBlockedusers&&this.state.blockedUserslist.length > 0?
-
-                        <div>
-                           <ul>
-                            {this.state.blockedUserslist.map((user,index)=>{
-                               return <li key={index}>{user} <Button href="javascript:void(0)" onClick={()=> {this.onClickUnblock(user)}}>Unblock</Button></li>
-                            })}
-                            </ul>
-                        </div>: null
-                    }
-
-                   {this.state.showUnblockPopup?this.unblockUser():null}
+                    
+                    {this.state.renderPopup?this.BlockPopup():""}
+                    {this.state.renderUltimateBlock?this.UltimateBlock():""}
+                    {this.state.showUnblockPopup?this.unblockUser():""}
+                    {this. showBlockedUsers()} 
                 </div>
           </div>
         </div>
-    </div>
+   
   );
  }
 }
 
-export default BlockInvite;
+export default BlockUsers;

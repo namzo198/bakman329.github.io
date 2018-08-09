@@ -121,7 +121,7 @@ class Chat extends React.Component {
         }
         else if (this.state.adapt==='sugst'){
             var Suggestion_Popup=(
-              <SuggestionPopup title="Suggestion" allow={()=>{
+              <SuggestionPopup title="Suggestion" okay={()=>{
                       var event={
                           action:'Accept to turn off chat',
                           context:this.state.context,

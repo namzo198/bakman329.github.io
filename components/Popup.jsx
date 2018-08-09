@@ -29,7 +29,7 @@ class Popup extends React.Component {
             <div className="popup-footer">
 
               <Button type="cancel" onClick={() => {this.props.cancel(); 
-                                        if(this.props.destroy != undefined)this.props.destroy(true);}}>Cancel</Button>
+                     if(this.props.destroy != undefined)this.props.destroy(true);}}>Cancel</Button>
               <Button type="confirm" onClick={() => {this.props.okay();  if(this.props.destroy != undefined)this.props.destroy();}}>Okay</Button>
               
             </div>

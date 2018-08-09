@@ -48,6 +48,47 @@ export function resetSession() {
   localStorage.setItem('session_id', "");
 }
 
+export function resetContactInfo(){
+    localStorage.setItem('contactInfo',JSON.stringify({
+        email:{
+            email:'johndoe@gmail.com',
+            AddEmailInfo:false,
+            BasicEmailAdded:true
+        },
+        dob:{
+            dob:'01 January',
+            AddDobInfo:false,
+            BasicDobAdded:true
+        },
+        year:{
+            year:'1990',
+            AddYearInfo:false,
+            BasicYearAdded:true
+        },
+        gender:{
+            gender:'Male',
+            AddGenderInfo:false,
+            BasicGenderAdded:true
+        }
+    }))
+}
+
+export function resetBlockedUsers(){
+    localStorage.setItem('blockedUsers',JSON.stringify(["Richard Roe", "Jane Appleeseed"]))
+}
+
+export function resetBlockedApps(){
+    localStorage.setItem('blockedApps',JSON.stringify(["Yahoo","Uber"]))
+}
+
+export function resetBlockedAppInvites(){
+    localStorage.setItem('blockedAppInvites',JSON.stringify([]))
+}
+
+export function resetBlockedEventInvites(){
+    localStorage.setItem('blockedEventInvites',JSON.stringify([]))
+}
+
 export function resetAll() {
   resetPosts();
   resetChat();
@@ -55,6 +96,11 @@ export function resetAll() {
   resetFriends();
   resetAdaptations();
   resetSession();
+  resetContactInfo();
+  resetBlockedUsers();
+  resetBlockedApps();
+  resetBlockedAppInvites();
+  resetBlockedEventInvites();
   location.reload();
 }
 
@@ -78,6 +124,32 @@ export function verifyLocalStorage() {
     resetAdaptations();
     location.reload();
   }
+    
+  if(!localStorage.contactInfo){
+      resetContactInfo();
+      location.reload();
+  }
+    
+  if(!localStorage.blockedUsers){
+      resetBlockedUsers();
+      location.reload();
+  }
+    
+   if(!localStorage.blockedApps){
+       resetBlockedApps();
+       location.reload();
+   }
+    
+    if(!localStorage.blockedAppInvites){
+        resetBlockedAppInvites();
+        location.reload();
+    }
+    
+    if(!localStorage.blockedEventInvites){
+        resetBlockedEventInvites();
+        location.reload();
+    }
+
 }
 
 export function containsIgnoreCase(arr, str) {

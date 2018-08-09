@@ -1104,7 +1104,7 @@ header #logo {
 
 .divider {
   border-left: 1px solid #ccc;
-  height: 800px;
+  height: 1200px;
   margin-left: 180px;
   position: absolute;
 }
@@ -1115,8 +1115,19 @@ header #logo {
   margin-top:50px;
 }
 
-
 .imgwrap_1 {
+    background-position: -16px -18px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yj/r/5mN3n2EorbT.png);
+    background-size: 34px 308px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    padding-left:20px;
+    font-size: 12px;
+    margin-bottom:10px;
+ }
+
+.imgwrap_2 {
     background-position: 0 -236px;
     background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yj/r/5mN3n2EorbT.png);
     background-size: 34px 308px;
@@ -1129,7 +1140,7 @@ header #logo {
 
 }
 
-.imgwrap_2 {
+.imgwrap_3 {
     background-position: 0 -290px; 
     background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yj/r/5mN3n2EorbT.png);
     background-size: 34px 308px;
@@ -1142,7 +1153,7 @@ header #logo {
 
 }
 
-.imgwrap_3 {
+.imgwrap_4 {
     height: 16px;
     background-position: -18px -56px; 
     background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yj/r/5mN3n2EorbT.png);
@@ -1154,7 +1165,7 @@ header #logo {
     margin-bottom:10px;
 }
 
-.imgwrap_4 {
+.imgwrap_5 {
     background-position: 0 -182px;
     background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yj/r/5mN3n2EorbT.png);
     background-size: 34px 308px;
@@ -1166,9 +1177,6 @@ header #logo {
     margin-bottom:10px;
 
 }
-
-
-
 
 
 #wrapper_right {
@@ -1198,10 +1206,32 @@ header #logo {
   font-weight: 600;
 }
 
+.settings_right {
+  margin-top:30px;
+  float:right;
+  text-align:justify;
+  margin-right: 290px;
+}
+
+.righttop_label_content {
+      font-weight: 600;
+      color: #90949c;
+      font-size: 12px;
+      margin-right:190px;
+
+}
+
+.righttop_label_content_1{
+  color: #90949c;
+  font-size: 12px;
+  margin-right:190px;
+
+}
 
 #right_bottom {
   padding-top: 10px;
 }
+
 .righttop_text {
 color: #90949c;
 font-size: 13px;
@@ -1211,6 +1241,7 @@ line-height: 18px;
 margin-left: 155px;
 
 }
+
 .rightbottom_text{
   color: #90949c;
   font-size: 13px;
@@ -1246,14 +1277,13 @@ margin-left: 155px;
 font-size: 13px;
 color: #365899;
 float: right;
-padding-left: 25px;
+padding-left: 30px;
 padding-right: 5px;
 text-align: right;
 }
 
-
 #right_bottom_form{
-  margin: 20px 100px 100px 150px;
+  margin: 20px 100px 20px 150px;
   padding-top: 10px;
   padding-bottom: 10px;
   border-top:1px solid #e9ebee;
@@ -1261,10 +1291,11 @@ text-align: right;
   background: #f6f7f9;
 
 }
+
 #right_bottom_form label{
   font-weight: bold;
   color: #666;
-  padding-left: 65px;
+  padding-left: 10px;
   margin: 15px 0px 30px 40px;
   text-align: right;
   font-size: 12px;
@@ -1339,7 +1370,7 @@ text-align: center;
 
 }
 
-#button{
+#button {
   background-color: #f6f7f9;
     border-color: #ced0d4;
     color: #4b4f56;
@@ -1364,3 +1395,25 @@ text-align: center;
     text-align: center;
     margin-bottom: 30px;
   }
+
+/*CSS CODE FOR warning POPUP in BlockUsers.Jsx */
+.popup_imgwrap {
+  float: left;
+}
+.popup_content {
+  margin-left:40px;
+}
+
+.popup_content ul {
+  list-style-type: square;
+  font-size:12px;
+}
+.popup_content_2 {
+  font-size:12px;
+
+}
+.popup_content_border {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}

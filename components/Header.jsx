@@ -14,7 +14,7 @@ class Header extends React.Component {
         <div id='user'>
           <Link to={{
                 pathname:'/settings_profile/overview',
-                    state:{fromNewsFeed:true}}}><img id='profile-pic' src='../assets/profile_img.jpg'/><span>John Doe</span></Link>
+                    state:{fromNewsFeed:true}}}><img id='profile-pic' src='../assets/profile_img.jpg'/><span id='header-text'>John Doe</span></Link>
                     
           <div id='header-text'>
             <p><Link to={{

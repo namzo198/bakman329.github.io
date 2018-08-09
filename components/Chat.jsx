@@ -121,7 +121,7 @@ class Chat extends React.Component {
         }
         else if (this.state.adapt==='sugst'){
             var Suggestion_Popup=(
-              <SuggestionPopup title="Suggestion" allow={()=>{
+              <SuggestionPopup title="Suggestion" okay={()=>{
                       var event={
                           action:'Accept to turn off chat',
                           context:this.state.context,
@@ -129,11 +129,10 @@ class Chat extends React.Component {
                           renderSuggestion:false
                       };
                       this.setState(event);
-
                       return event;
                   }} 
 
-                  destroy={()=>{
+                  cancel={()=>{
                       var event={
                           action:'Would rather not turn off chat',
                           context:this.state.context,
@@ -141,7 +140,6 @@ class Chat extends React.Component {
                           renderSuggestion:false
                       };
                       this.setState(event);
-
                       return event;
                   }}>
 
@@ -219,7 +217,6 @@ class Chat extends React.Component {
                if (!cancel && this.state.turnOffChat == "allContactsExcept" && this.state.except_contacts == "") {
                   return;
                }
-
                this.setState({renderChatPopup: false});
             }}
             okay={() => {
@@ -230,7 +227,6 @@ class Chat extends React.Component {
                else {
                   this.setState({showExceptWarning: false});
                }
-
                var settings = JSON.parse(localStorage.getItem('settings'));
                settings["turn_off_chat"][0] = this.state.turnOffChat;
                settings["turn_off_chat"][1] = this.parseText(this.state.except_contacts);

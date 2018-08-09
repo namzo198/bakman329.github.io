@@ -25,7 +25,7 @@ destroy(i) {
 
   allow(i){
     var mount_node = ReactDOM.findDOMNode(this.refs.mount);
-    <Chat /> 
+      
     try {
       ReactDOM.unmountComponentAtNode(mount_node);
     } catch (e) {

@@ -1,4 +1,4 @@
-import React from 'react'
+ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import {containsIgnoreCase} from '../utilities.js'
@@ -33,6 +33,13 @@ class AutocompleteInput extends React.Component {
       : str.substr(0, last_comma_i) + ", " + complete_value;
     this.setState({value: new_value, current_focus: -1});
     this.props.onChange(new_value);
+      
+      if(this.props.onEnter !== undefined ){
+          
+           //console.log("The enter key has been pressed");
+            this.props.onEnter(new_value)  
+            this.setState({value:''})
+        }
   }
 
   componentWillUnmount() {
@@ -122,23 +129,35 @@ class AutocompleteInput extends React.Component {
     } else if (e.keyCode == 13) { // Enter key
 
       if (this.state.current_focus > -1 && this.items[this.state.current_focus]) {
-        this.items[this.state.current_focus]();
+       
+          this.items[this.state.current_focus]();
+          
+       
+          
+          
       }
+    
+        
+       
     }
+       
 
     this.setState({current_focus: new_focus},
       () => {this.createList(e)});
+      
+      
   }
 
 	render() {
     var container;
 		return (
 			<div className="autocomplete">
-        <input type='text' placeholder={this.props.placeholder}
+        <input id="text" type='text' placeholder={this.props.placeholder}
                rows={this.props.rows ? this.props.rows : '1'}
                cols={this.props.cols ? this.props.cols : '65'}
                ref={(element) => {this.input = element}}
-               onChange={this.onChange} value={this.state.value}
+               onChange={this.onChange} 
+               value={this.state.value}
                onKeyDown={this.onKeyDown}
                onFocus={this.createList}
                autoComplete='off' />

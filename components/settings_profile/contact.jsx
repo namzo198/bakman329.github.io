@@ -72,7 +72,6 @@ class ContactInfo extends Component {
   componentWillMount() {
     this.setState({
       adaptationMethod:this.props.adapt,
-      userSessionId:this.props.userSession
     });
   } 
 
@@ -80,24 +79,31 @@ class ContactInfo extends Component {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+  getStoredContactInfo(){
+      return JSON.parse(localStorage.getItem('contactInfo'));
+  }
   // TODO: The usage of this method may be unnecessary, and may cause state synchronicity issues
   componentDidMount() {
     /*Display the info that might have already been input/changed  by user within current session*/
     var allContact_BasicInfo = ["mobile","address","email","key","websites","social","dob","year","gender","interest","language","religious","political"];
    
-    // var getInfo = JSON.parse(localStorage.getItem(stored_info));
+      //Get the JSON for all the stored info
+    var storedContactInfo =  this.getStoredContactInfo();
+      
     allContact_BasicInfo.forEach((stored_info) => {
-      var getInfo = JSON.parse(localStorage.getItem(stored_info));
-
+        
+      var getInfo = storedContactInfo[stored_info];
+        
       if(getInfo != null && (getInfo[stored_info] !== '')) {
         var to_uppercase =  this.firstChar_Upper(stored_info);
         var basic_added = 'Basic'+to_uppercase+'Added';
         var add_info = 'Add'+to_uppercase+'Info';
 
+          
         this.setState({
           [stored_info]:getInfo[stored_info],
-          [add_info]: getInfo[stored_info],
-          [basic_added]:getInfo[stored_info]
+          [add_info]: getInfo[add_info],
+          [basic_added]:getInfo[basic_added]
         });
       }
     });   
@@ -136,11 +142,11 @@ class ContactInfo extends Component {
         name: 'John Doe'
       };
 
-      updateinfo = {
+      updateinfo = {[inputfieldname_lwrcse] :{
         [inputfieldname_lwrcse]:this.state[inputfieldname_lwrcse],
         [add]:this.state[add],
         [infoAdded]:false
-      };
+      }};
 
       this.setState(prevState => ({
         [add]: prevState.add,
@@ -155,11 +161,11 @@ class ContactInfo extends Component {
         name: 'John Doe'
       };
             
-      updateinfo = {
+      updateinfo = {[inputfieldname_lwrcse]:{
         [inputfieldname_lwrcse]: this.state[inputfieldname_lwrcse],
         [add]: false,
         [infoAdded]: !this.state[infoAdded]                   
-      };
+      }};
 
       this.setState(prevState => ({
         backup: this.state[inputfieldname_lwrcse],
@@ -167,7 +173,10 @@ class ContactInfo extends Component {
       }));
     }
 
-    localStorage.setItem(inputfieldname_lwrcse, JSON.stringify(updateinfo));
+    //localStorage.setItem(inputfieldname_lwrcse, JSON.stringify(updateinfo));
+      var storedContactInfo = this.getStoredContactInfo();
+        storedContactInfo[inputfieldname_lwrcse] = updateinfo;
+      localStorage.setItem('contactInfo', JSON.stringify(storedContactInfo));
 
     return event;
   }
@@ -180,7 +189,9 @@ class ContactInfo extends Component {
     // When the edit button is pressed and the changes are cancelled
     if(this.state.edit) {
       var basic = 'Basic'+inputfieldname+'Added';
-      var original_input =  JSON.parse(localStorage.getItem(inputfieldname_lwrcse))
+      
+      var storedContactInfo = this.getStoredContactInfo();   
+      var original_input =  storedContactInfo[inputfieldname_lwrcse]
        
       // If cancelled change is empty
       if(this.state[inputfieldname_lwrcse] !=='') {
@@ -218,7 +229,7 @@ class ContactInfo extends Component {
     var inputfieldname = this.regex(buttonname)
     var add = 'Add' + inputfieldname + 'Info';
 
-    console.log('The edit button is ' + buttonname)
+   
     this.setState(prevState => ({
       [buttonname]: false,
       [add]: true,

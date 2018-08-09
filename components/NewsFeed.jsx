@@ -125,7 +125,7 @@ class NewsFeed extends React.Component {
             <li>
               <img src='./assets/profile_img.jpg' />
               <Link to={{
-                pathname:'/settings/overview',
+                pathname:'/settings_profile/overview',
                 state:{fromNewsFeed:true}}}>John Doe</Link>
             </li>
             <li>

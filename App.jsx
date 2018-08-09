@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {BrowserRouter, Link, Switch, Route} from 'react-router-dom'
 import PropTypes from 'prop-types';
@@ -6,6 +7,7 @@ import NewsFeed from './components/NewsFeed.jsx'
 import Header from './components/Header.jsx'
 import Profile from './components/profile/Profile.jsx'
 import Chat from './components/Chat.jsx'
+import GeneralSettings from './components/settings_general/GeneralSettings.jsx'
 
 import {verifyLocalStorage} from './utilities.js'
 
@@ -110,16 +112,19 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header />
         <BrowserRouter>
-          <Switch>
-            <Route exact path='/' component={NewsFeed} />
-            <Route path='/profile/:user' component={Profile} />
-          </Switch>
+          <div>
+            <Header />
+            <Switch>
+              <Route exact path='/' component={NewsFeed} />
+              <Route path='/profile/:user' component={Profile} />
+              <Route path='/settings_general/:section' component={GeneralSettings} />
+            </Switch>
+            <div id='chat-area'>
+              <Chat />
+            </div>
+          </div>
         </BrowserRouter>
-        <div id='chat-area'>
-          <Chat />
-        </div>
       </div>
     );
   }

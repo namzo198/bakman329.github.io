@@ -19,6 +19,7 @@ class Popup extends React.Component {
       }
    }
 
+   
    render() {
       // Configure size and centering
       // Unit is px

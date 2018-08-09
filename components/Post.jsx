@@ -212,7 +212,7 @@ class Post extends React.Component {
         {/*TO DO: Delete post on click of'OK' and record edb event*/}
 
         var Suggestion_Popup=(
-          <SuggestionPopup title="Suggestion" allow={()=>{
+          <SuggestionPopup title="Suggestion" okay={()=>{
               var event={
                 render:false,
                 action: 'Followed and agreed with Suggestion',

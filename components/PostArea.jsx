@@ -26,10 +26,21 @@ class PostArea extends React.Component {
          // Create posts for rendering
          // Key and count are in reverse order, hence subtracting from count
           //
-         out[index] = React.createElement(Post, {name: post.name, img: post.img, key: count -  index - 1, index: count - index - 1, original_poster: post.original_poster, adapt:this.props.toAdapt}, post.content);
+          let render = true;
+          if (this.props.name) {
+            render = (post.name === this.props.name);
+            console.log(render)
+          }
+         out[index] = React.createElement(Post,
+          {name: post.name,
+           key: count -  index - 1,
+           index: count - index - 1,
+           original_poster: post.original_poster,
+           adapt:this.props.toAdapt,
+           render: render}, post.content);
       });
  
-       //console.log("Post Area "+this.props.toAdapt)
+      //console.log("Post Area "+this.props.toAdapt)
       return out;
    }
      

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {indexPosts} from '../utilities.js'
+import {indexPosts, getProfilePic} from '../utilities.js'
 
 import Button from './Button.jsx'
 import Comment from './Comment.jsx'
@@ -10,19 +10,33 @@ import Menu from './Menu.jsx'
 import Popup from './Popup.jsx'
 import SuggestionPopup from '../adaptations/Suggestion.jsx'
 import Automation from '../adaptations/Automation.jsx'
-import Chat from './Chat.jsx'
+import ProfileLink from './ProfileLink.jsx'
 
 class Post extends React.Component {
-constructor(props) {
+  constructor(props) {
     super(props);
+
+    var posts = JSON.parse(localStorage.getItem('posts'));
+    var hidden = false;
+    posts.some((post, index, array) => {
+      if (post.key == this.props.index) {
+        if (post.hidden) {
+          hidden = true;
+        }
+        return true;
+      }
+    });
+
+    let render = (this.props.render !== undefined) ? (this.props.render) : true;
     this.state = {
-      render: true,
+      render: render && !hidden,
       name: '',
       context: 'From NewsFeed',
       action: '',
       value: '',
       showPostWhenHidden: false,
       renderSuggestion:false,
+      hidden: hidden
     };
 
     this.onClickDelete = this.onClickDelete.bind(this);
@@ -35,15 +49,17 @@ constructor(props) {
   }
 
   componentDidMount() {
-    // Set a time on when to display the Suggestion. 
-    setTimeout(() => this.show(), 2000);
+    // Set a time on when to display the Suggestion.
+    if (!this.state.hidden) {
+      setTimeout(() => this.show(), 2000);
+    }
   }
 
   // Show the Suggestion
   show() {
     this.setState({
       renderSuggestion:true
-    })
+    });
   }
 
   onClickDelete() {
@@ -78,7 +94,6 @@ constructor(props) {
       var posts = JSON.parse(localStorage.getItem('posts'));
       var post = {name: 'John Doe',
                   original_poster: this.props.name,
-                  img: './assets/profile_img.jpg',
                   content: this.props.children,
                   comments: [],
                   key: posts.length};
@@ -126,10 +141,16 @@ constructor(props) {
   }
 
   onClickHide() {
+    // TODO: Add confirmation popup and undo button
     var posts = JSON.parse(localStorage.getItem('posts'));
-    // TODO: Implement
-    // When hide is clicked, the post should be replaced with a dismissable box saying "You won't see this post in News Feed"
-    // This includes an undo button, and several snooze/report options that might be unneccesary
+    posts.some((post, index, array) => {
+      if (post.key == this.props.index) {
+        posts[index].hidden = true;
+        localStorage.setItem('posts', JSON.stringify(posts));
+        this.setState({hidden: true});
+        return true;
+      }
+    });
   }
 
   actions() {
@@ -226,13 +247,13 @@ constructor(props) {
       return(
         <div>
           <div id='post-info'>
-            <img id='post-pic' src={this.props.img} />
+            <img id='post-pic' src={getProfilePic(this.props.name)} />
             <div id='post-text'>
-              <a href='#' id='post-name'>{post_title}</a>
+              <div id='post-name'>{post_title}</div>
               <p id='post-time'>1 hr</p>
             </div>
             <Menu icon='horiz'>
-              <Button>Hide post</Button>
+              <Button onClick={this.onClickHide}>Hide post</Button>
               {(this.props.name != "John Doe") ? <Button>Unfollow {this.props.name}</Button> : null}
             </Menu>
           </div>
@@ -241,7 +262,7 @@ constructor(props) {
         
           {this.actions()}
           <hr />
-          {comments.map((comment, i) => <Comment post={this} index={this.props.index} key={i} commentindex={i} name={comment.name} img={comment.img}>{comment.content}</Comment>)}
+          {comments.map((comment, i) => <Comment post={this} index={this.props.index} key={i} commentindex={i} name={comment.name}>{comment.content}</Comment>)}
           <NewCommentArea type='post' index={this.props.index} post={this} />
 
           {this.state.renderSuggestion ? Suggestion_Popup : null}
@@ -250,13 +271,42 @@ constructor(props) {
   }
 
   render() {
+    console.log(this.state)
     if (!this.state.render) {
       return null;
     }
 
-    var post_title = this.props.name;
+    if (this.state.hidden) {
+      // TODO: Make this say newsfeed when it is newsfeed
+      return (
+        <div id='post' className='hidden'>
+          <div id='post-content'>
+            This post is now hidden from your timeline.
+            {" "}
+            <Button onClick={() => {
+              this.setState({hidden: false});
+              var posts = JSON.parse(localStorage.getItem('posts'));
+              posts.some((post, index, array) => {
+                if (post.key == this.props.index) {
+                  posts[index].hidden = false;
+                  localStorage.setItem('posts', JSON.stringify(posts));
+                  return true;
+                }
+              });
+            }}>Undo</Button>
+            <span id='hide-post-dismiss'>
+              <Button onClick={() => this.setState({render: false})}>X</Button>
+            </span>
+          </div>
+        </div>
+      );
+    }
+
+    var post_title = [<ProfileLink name={this.props.name} key={0} />];
     if (this.props.original_poster) {
-      post_title += ' shared ' + this.props.original_poster + '\'s post';
+      post_title.push(' shared ');
+      post_title.push(<ProfileLink name={this.props.original_poster} key={1} />);
+      post_title.push('\'s post');
     }
 
     var posts = JSON.parse(localStorage.getItem('posts'));

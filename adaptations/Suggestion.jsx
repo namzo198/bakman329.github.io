@@ -37,7 +37,7 @@ destroy(i) {
     return(
       <div id="pop" className="suggestPopup">
         <div className="popup-header">{this.props.title}</div>
-        <a className="suggestPopupCloseButton" href="javascript:void(0)" onClick={this.props.destroy}>X</a>
+        <a className="suggestPopupCloseButton" href="javascript:void(0)" onClick={this.props.destroy}></a>
         <div className="suggest_popup-content"><div>{this.props.children}</div>
 
         <div className="suggest_popup-footer">

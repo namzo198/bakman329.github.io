@@ -20,7 +20,7 @@ class Chat extends React.Component {
           except_contacts: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][1].join(", "),
           some_contacts: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][2].join(", "),
           showExceptWarning: false,
-          adapt:'', undo:false, renderSuggestion:false,
+          undo:false, renderSuggestion:false,
           context:'From Chat'};
         this.turnOffChatPopup = null;
 
@@ -34,10 +34,6 @@ class Chat extends React.Component {
     }
 
     componentWillMount(){
-        this.setState({
-            adapt:this.props.toAdapt
-        })
-        
         //Set a time on when to display the Suggestion. 
           setTimeout(()=>this.show(),5000)
         
@@ -151,10 +147,11 @@ class Chat extends React.Component {
               </SuggestionPopup>)
         }
 
+        let adaptation = JSON.parse(localStorage.adaptations)["chatoffline"];
         return(
             <div>
-                <Menu ref={(_menu) => {this.menu = _menu}} upwards icon='gear' adapt={this.props.toAdapt}>
-                  <Button onClick={this.createTurnOffChatPopup} adapt={this.props.toAdapt}>Turn Off Active Status</Button>
+                <Menu ref={(_menu) => {this.menu = _menu}} upwards icon='gear' adapt={adaptation}>
+                  <Button onClick={this.createTurnOffChatPopup} adapt={adaptation}>Turn Off Active Status</Button>
                 </Menu>
 
                 {this.state.renderSuggestion?Suggestion_Popup:null}
@@ -169,18 +166,23 @@ class Chat extends React.Component {
       });
 
       var friends = [];
-      JSON.parse(localStorage.getItem('friends')).forEach((name, index, array) => {
-         var setting = JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0];
-         var except_contacts_includes = containsIgnoreCase(JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][1], name);
-         var some_contacts_includes = containsIgnoreCase(JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][2], name);
+      JSON.parse(localStorage.getItem('users')).forEach((user, index, array) => {
+        if (!user.friend) {
+          return;
+        }
+        
+        var name = user.name;
+        var setting = JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0];
+        var except_contacts_includes = containsIgnoreCase(JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][1], name);
+        var some_contacts_includes = containsIgnoreCase(JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][2], name);
 
-         if (setting == "allContacts"
-            || (setting == "allContactsExcept" && !except_contacts_includes)
-            || (setting == "someContacts" && some_contacts_includes)) {
-            return;
-         }
+        if (setting == "allContacts"
+          || (setting == "allContactsExcept" && !except_contacts_includes)
+          || (setting == "someContacts" && some_contacts_includes)) {
+          return;
+        }
 
-         friends.push(<ChatUser key={index} chat={this} img='./assets/profile_img.jpg' name={name} />);
+        friends.push(<ChatUser key={index} chat={this} name={name} />);
       });
           
       var except_text;
@@ -292,7 +294,6 @@ class Chat extends React.Component {
                     {friends}
                     <div id='chat-footer'>
                         <div id='settings'>
-                          { /* TODO: Allow adaptation of the menu button by passing the adapt prop into the underlying button */ }
                           {this.renderChat()}
                         </div>
                     </div>

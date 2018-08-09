@@ -10,17 +10,17 @@ export function indexPosts() {
 export function resetPosts() {
  localStorage.setItem('posts', JSON.stringify(
     [{name: 'John Doe',
-      img: './assets/profile_img.jpg',
       content: 'Hi, I\'m John',
       comments: [{name: 'Jack Roe',
                   img: './assets/profile_img.jpg',
                   content: 'Hi, John. I\'m Jack',
                   liked: false}],
+      hidden: false,
       key: 1},
      {name: 'Jack Roe',
-      img: './assets/profile_img.jpg',
       content: 'There is a party at my house tommorow',
       comments: [],
+      hidden: false,
       key: 0}]));
 }
 
@@ -35,9 +35,24 @@ export function resetSettings() {
   localStorage.setItem('settings', JSON.stringify({"turn_off_chat": ["someContacts", [], []]}));
 }
 
-export function resetFriends() {
-  // TODO: Add "users" storage variable, containing all users hardcoded into system, and use it to store profile pics, etc.
+/* export function resetFriends() {
   localStorage.setItem('friends', JSON.stringify(["Jack Roe", "Jim Mend"]));
+} */
+
+export function resetUsers() {
+  localStorage.setItem('users', JSON.stringify(
+    [{name: "John Doe",
+      profile_pic: 'profile_img.jpg',
+      friend: false},
+     {name: "Jack Roe",
+      profile_pic: 'profile_img.jpg',
+      friend: true},
+     {name: "Jim Mend",
+      profile_pic: 'profile_img.jpg',
+      friend: true},
+     {name: "Mike Booth",
+      profile_pic: 'profile_img.jpg',
+      friend: false}]));
 }
 
 export function resetAdaptations() {
@@ -52,7 +67,7 @@ export function resetAll() {
   resetPosts();
   resetChat();
   resetSettings();
-  resetFriends();
+  resetUsers();
   resetAdaptations();
   resetSession();
   location.reload();
@@ -69,8 +84,8 @@ export function verifyLocalStorage() {
     location.reload();
   }
 
-  if (!localStorage.friends) {
-    resetFriends();
+  if (!localStorage.users) {
+    resetUsers();
     location.reload();
   }
 
@@ -82,4 +97,31 @@ export function verifyLocalStorage() {
 
 export function containsIgnoreCase(arr, str) {
   return arr.findIndex(item => str.toLocaleLowerCase() == item.toLocaleLowerCase()) != -1;
+}
+
+export function getProfilePic(name) {
+  let users = JSON.parse(localStorage.users);
+
+  let pic = "/assets/default_pic.jpg";
+  users.some((element) => {
+    if (element.name.toLocaleLowerCase() == name.toLocaleLowerCase()) {
+      pic = "/assets/" + element.profile_pic;
+      return true;
+    }
+  });
+
+  return pic;
+}
+
+export function nameToLink(name) {
+  return name.toLowerCase().split(' ').join('_');
+}
+
+export function linkToName(link) {
+  let parts = link.split('_');
+  parts.forEach(function(part, index) {
+    parts[index] = part.charAt(0).toUpperCase() + part.substr(1);
+  });
+
+  return parts.join(' ');
 }

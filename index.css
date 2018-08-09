@@ -11,10 +11,11 @@ header {
     box-sizing: border-box;
     border-bottom: 1px solid #29487d;
     position: fixed;
-    z-index: 99;
+    z-index: 101;
 }
 
 a {
+    color: rgb(54, 88, 153);
     text-decoration-line: none;
 }
 
@@ -124,9 +125,12 @@ textarea {
 }
 
 #post-area {
-    margin-left: 269.5px;
-    display: inline-block;
+    display: block;
     padding-top: 12px;
+}
+
+#page-content #post-area {
+  margin-left: 269.5px;
 }
 
 #post {
@@ -136,6 +140,15 @@ textarea {
     border: 1px solid;
     border-color: #e5e6e9 #dfe0e4 #d0d1d5;
     margin-bottom: 12px;
+}
+
+#post.hidden #post-content {
+  padding: 12px 12px 12px;
+}
+
+#post.hidden #post-content a {
+  color: #4b4f56;
+  font-weight: bold;
 }
 
 #post-content {
@@ -171,6 +184,10 @@ textarea {
     margin-top: 6px;
     margin-bottom: 0px;
     padding-bottom: 4.5px;
+}
+
+#hide-post-dismiss {
+  float: right;
 }
 
 #actions a {
@@ -213,6 +230,10 @@ textarea {
 
 #comment p {
     display: inline;
+}
+
+#comment-name a {
+  font-weight: bold;
 }
 
 #comment-content {
@@ -415,14 +436,8 @@ textarea {
 
 .popup {
 	position: fixed;
-	top: 50%;
-    left: 50%;
-    margin-left: -222.5px;
-    margin-top: -145px;
-    width: 445px;
-    min-height: 304px;
-    border-style: solid;
-    border-width: 1px;
+  border-style: solid;
+  border-width: 1px;
 }
 
 .popup-header {
@@ -737,6 +752,19 @@ Edit_Icon_pos{
   height : 1200px;
 }
 
+#profile-content {
+  margin-left: 18.75%;
+}
+
+#profile-content h2 {
+  color: #fff;
+  top: 150px;
+  margin-left: 210px;
+  position: absolute;
+  z-index: 100;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+}
+
 hr {
     display: block;
     unicode-bidi: isolate;
@@ -756,15 +784,13 @@ header #logo {
 }
 
 .top_container {
-  margin: auto;
-  height: 205px;
   width: 851px !important;
 }
 
 .cover_photo {
   position: relative;
   background-color: #000;
-  height: 100%;
+  height: 205px;
 }
 
 .top_options {
@@ -862,8 +888,6 @@ header #logo {
 }
 
 #info_wrapper {
-  margin: auto;
-  margin-top: 60px;
   position: relative;
   min-height: 430px;
   background-color: #ffff;

@@ -59,6 +59,7 @@ class Button extends React.Component {
 
   render() {
     let inner = this.state.highlight ? <span style={highLight}>{this.props.children}</span> : this.props.children;
+    // Type prop is one of {default, cancel, confirm}
     return (<a
       id={this.props.id} href={this.props.href ? this.props.href : "javascript:void(0)"}
       onClick={this.onClick}

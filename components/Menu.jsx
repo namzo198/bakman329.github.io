@@ -30,6 +30,19 @@ class Menu extends React.Component {
   }
 
   render () {
+    {/* Icon prop is one of: {vert, horiz, gear, current}, vert is default */}
+    let button = null;
+    if (this.props.icon == "current") {
+      // this.props.current is a callback function which tells the menu what the currently selection option is
+      button = <Button type="cancel" onClick={this.showMenu} id="current-button">{this.props.current()}</Button>
+    }
+    else {
+      button = (
+          <Button onClick={this.showMenu}>
+            <span className={"menu-icon"  + ' ' + (this.props.icon ? this.props.icon : "vert")}></span>
+          </Button>
+        );
+    }
     return (
       <div className="menu">
         {
@@ -41,10 +54,7 @@ class Menu extends React.Component {
           ) : (null)
         }
 
-        <Button href='javascript:void(0)' onClick={this.showMenu}>
-          {/* Icon prop is one of: {vert, horiz, gear}, vert is default */}
-          <span className={"menu-icon"  + ' ' + (this.props.icon ? this.props.icon : "vert")}></span>
-        </Button>
+        {button}
 
         {
           (this.state.showMenu && !this.props.upwards) ?

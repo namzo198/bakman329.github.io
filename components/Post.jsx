@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {indexPosts, getProfilePic} from '../utilities.js'
+import {indexPosts, getProfilePic, audienceText} from '../utilities.js'
 
 import Button from './Button.jsx'
 import Comment from './Comment.jsx'
@@ -251,6 +251,8 @@ class Post extends React.Component {
             <div id='post-text'>
               <div id='post-name'>{post_title}</div>
               <p id='post-time'>1 hr</p>
+              {" · "}
+              <p style={{display: "inline"}}>{audienceText(this.props.audience)}</p>
             </div>
             <Menu icon='horiz'>
               <Button onClick={this.onClickHide}>Hide post</Button>

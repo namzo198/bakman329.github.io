@@ -16,12 +16,14 @@ export function resetPosts() {
                   content: 'Hi, John. I\'m Jack',
                   liked: false}],
       hidden: false,
+      audience: "public",
       key: 1},
      {name: 'Jack Roe',
       content: 'There is a party at my house tommorow',
       comments: [],
       hidden: false,
-      key: 0}]));
+      key: 0,
+      audience: "public"}]));
 }
 
 export function resetChat() {
@@ -196,4 +198,26 @@ export function linkToName(link) {
   });
 
   return parts.join(' ');
+}
+
+export function audienceText(audience) {
+  let text = "";
+  switch (audience) {
+    case "public":
+      text = "Public";
+      break;
+
+    case "friends":
+      text = "Friends";
+      break;
+    
+    case "friends_except":
+      text = "Friends except...";
+      break;
+
+    default:
+      text = "";
+  }
+
+  return text;
 }

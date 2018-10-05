@@ -51,6 +51,9 @@ class NewPostArea extends React.Component {
 
    onChangeAudience(audience) {
       this.setState({audience: audience});
+
+      var settings = JSON.parse(localStorage.getItem('settings'));
+      var audience_settings = settings["post_audience_settings"][0];
    }
 
    render() {
@@ -65,8 +68,7 @@ class NewPostArea extends React.Component {
                     options={["public", "friends", "friends_except", "only_me", "more"]}
                     more={["specific_friends", "see_all"]}
                     see_all={["custom"]}
-                    title="Who should see this?"
-                    subtitle="Hello" />
+                    title="Who should see this?" />
                </div>
             </div>
          </div>);

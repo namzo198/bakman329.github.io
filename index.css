@@ -502,6 +502,7 @@ textarea {
 	position: fixed;
   border-style: solid;
   border-width: 1px;
+  z-index: 200;
 }
 
 .popup-header {
@@ -516,11 +517,15 @@ textarea {
 .popup-content {
 	background-color: #ffffff;
 	min-height: 216px;
-	padding: 10px;
+	padding: 10px 0 10px 0;
 }
 
 .popup-content > div {
 	padding: 10px 20px 10px 20px;
+}
+
+#popup-no-padding {
+  padding: 0;
 }
 
 .popup label {
@@ -813,6 +818,7 @@ Edit_Icon_pos{
   position: absolute;
   top:42px;
   width: 100%;
+  height: 100%;
 }
 
 #profile-content {
@@ -1494,4 +1500,90 @@ text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
   border-bottom: 1px solid #ddd;
+}
+
+#friend-selector {
+  padding: 0;
+}
+
+#friend-selector-friends-text {
+  color: #90949c;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 18px;
+  padding-left: 12px;
+  margin: 0;
+}
+
+#friend-selector-user {
+  height: 56px;
+  line-height: 56px;
+  padding: 8px 0 8px 0;
+}
+
+#friend-selector-user:hover {
+  background-color: #d9e2de;
+  border-style: solid;
+  border-color: #ced0d4;
+  border-width: 1px 0 1px 0;
+  height: 54px;
+  line-height: 54px;
+}
+
+#friend-selector-user:hover #friend-selector-profile-pic {
+  margin-top: -1px;
+}
+
+#friend-selector-profile-pic {
+  width: 56px;
+  height: 56px;
+  position: absolute;
+  left: 8px;
+}
+
+#friend-selector-name {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 72px;
+}
+
+#friend-selector-setting {
+  width: 26px;
+  height: 26px;
+  float: right;
+  margin-right: 17px;
+  margin-top: 14px;
+}
+
+#friend-selector-user:hover #friend-selector-setting {
+  margin-top: 13px;
+}
+
+#friend-selector-setting::before {
+  background-image: url("/assets/empty_gray_circle.png");
+  background-size: 26px 26px;
+  display: inline-block;
+  position: fixed;
+  width: 26px;
+  height: 26px;
+  content: "";
+}
+
+#friend-selector-user:hover #friend-selector-setting::before {
+  background-image: url("/assets/empty_blue_circle.png");
+}
+
+#friend-selector-user:hover #friend-selector-setting.friend-selector-except::before {
+  background-image: url("/assets/red_minus.png");
+}
+
+.friend-selector-enabled::before {
+  background-image: url("/assets/solid_blue_check.png") !important;
+}
+
+.friend-selector-enabled.friend-selector-except::before {
+  background-image: url("/assets/solid_red_minus.png") !important;
 }

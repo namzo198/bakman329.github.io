@@ -22,11 +22,25 @@ class Menu extends React.Component {
 
   onClick(e) {
     // Pass checkContains to keep the menu open if a click occurs within the menu options
-    if (!this.props.checkContains || !this.dropdownMenu.contains(e.target)) {
-      this.setState({showMenu: false}, () => {
-        document.removeEventListener('click', this.onClick);
+    if (this.props.checkContains && e.target.closest(".dropdown-menu")) { // this.dropdownMenu.contains(e.target)) {
+      return;
+    }
+
+    // Pass expandButtons with a list of element references to allow some buttons to be pressed without closing the list
+    let exit = false;
+    if (this.props.expandButtons) {
+      this.props.expandButtons.forEach((button) => {
+        if (button != undefined && button.contains(e.target)) {
+          exit = true;
+        }
       });
     }
+    if (exit) return;
+
+    this.setState({showMenu: false}, () => {
+      document.removeEventListener('click', this.onClick);
+      if (this.props.onClose) this.props.onClose();
+    });
   }
 
   render () {

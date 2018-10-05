@@ -45,8 +45,13 @@ class Popup extends React.Component {
           <div className="popup-footer">
             <Button type="cancel" onClick={() => {this.props.destroy();}}>Close</Button>
           </div>;
-      }
-      else {
+      } else if (this.props.saveChanges) {
+        footer =
+          <div className="popup-footer">
+            <Button type="confirm" onClick={() => {this.props.okay(); this.props.destroy();}}>Save Changes</Button>
+            <Button type="cancel" onClick={() => {this.props.cancel(); this.props.destroy(true);}}>Cancel</Button>
+          </div>;
+        } else {
         footer =
           <div className="popup-footer">
             <Button type="cancel" onClick={() => {this.props.cancel(); this.props.destroy(true);}}>Cancel</Button>
@@ -57,7 +62,7 @@ class Popup extends React.Component {
       return (
          <div className="popup" style={style}>
             <div className="popup-header">{this.props.title}</div>
-            <div className="popup-content"><div>{this.props.children}</div></div>
+            <div className="popup-content"><div id={(this.props.noPadding) ? "popup-no-padding" : ""}>{this.props.children}</div></div>
             {footer}
          </div>
       )

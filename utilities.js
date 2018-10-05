@@ -16,12 +16,14 @@ export function resetPosts() {
                   content: 'Hi, John. I\'m Jack',
                   liked: false}],
       hidden: false,
+      audience: "public",
       key: 1},
      {name: 'Jack Roe',
       content: 'There is a party at my house tommorow',
       comments: [],
       hidden: false,
-      key: 0}]));
+      key: 0,
+      audience: "public"}]));
 }
 
 export function resetChat() {
@@ -32,7 +34,8 @@ export function resetChat() {
 
 export function resetSettings() {
   // turn_off_chat: [setting, [list of "except" contacts], [list of "some" contacts]]
-  localStorage.setItem('settings', JSON.stringify({"turn_off_chat": ["someContacts", [], []]}));
+  // post_audience_settings: [setting, [list of "except" friends], [list of specific friends], [[List of custom groups/people to share with], [List not to share with]]]
+  localStorage.setItem('settings', JSON.stringify({"turn_off_chat": ["someContacts", [], []], "post_audience_settings": ["public", [], [], [[], []]]}));
 }
 
 /* export function resetFriends() {
@@ -196,4 +199,34 @@ export function linkToName(link) {
   });
 
   return parts.join(' ');
+}
+
+export function audienceText(audience) {
+  let text = "";
+  switch (audience) {
+    case "public":
+      text = "Public";
+      break;
+
+    case "friends":
+      text = "Friends";
+      break;
+    
+    case "friends_except":
+      text = "Friends except...";
+      break;
+
+    case "only_me":
+      text = "Only Me"
+      break;
+
+    case "specific_friends":
+      text = "Specific Friends"
+      break;
+
+    default:
+      text = "";
+  }
+
+  return text;
 }

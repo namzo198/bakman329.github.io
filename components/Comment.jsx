@@ -148,7 +148,6 @@ class Comment extends React.Component {
       matches_list.sort((a, b) => {
         return a[1] - b[1];
       });
-      console.log("HI", matches_list);
 
       let content = [];
       let last_index = 0;
@@ -166,7 +165,6 @@ class Comment extends React.Component {
       if (content.length == 0) {
         content = [text];
       }
-      console.log("HEE", content);
 
       return content;
     }

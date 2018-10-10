@@ -506,12 +506,11 @@ textarea {
 }
 
 .popup-header {
-	background-color: #6d84b4;
-	color: #ffffff;
-    height: 18px;
-    font-size: 14px;
-    font-weight: 700;
-    padding: 5px 10px;
+  height: 18px;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .popup-content {
@@ -1586,4 +1585,9 @@ text-align: center;
 
 .friend-selector-enabled.friend-selector-except::before {
   background-image: url("/assets/solid_red_minus.png") !important;
+}
+
+#custom-popup-container {
+  padding: 32px;
+  height: 100px;
 }

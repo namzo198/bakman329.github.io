@@ -10,7 +10,6 @@ class FriendSelector extends React.Component {
   constructor(props) {
     super(props);
 
-
     let enabled = {};
     JSON.parse(localStorage.getItem('users')).forEach((user, index, array) => {
       if (!user.friend) {
@@ -79,7 +78,7 @@ class FriendSelector extends React.Component {
               localStorage.setItem('settings', JSON.stringify(settings));
             }}
             cancel={() => {return;}}
-            noPadding>
+            noPadding grayHeader dismissButton>
         <p id="friend-selector-friends-text">Friends</p>
         {friends}
       </Popup>

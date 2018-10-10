@@ -36,6 +36,18 @@ class Popup extends React.Component {
         width: width,
         minHeight: height
       };
+
+      let header_style = {
+        backgroundColor: "#6d84b4",
+        color: "#ffffff"
+      }
+
+      if (this.props.grayHeader) {
+        header_style = {
+          backgroundColor: "#f5f6f7",
+          color: "#1d2129"
+        }
+      }
       
       let footer = null;
 
@@ -61,7 +73,10 @@ class Popup extends React.Component {
 
       return (
          <div className="popup" style={style}>
-            <div className="popup-header">{this.props.title}</div>
+            <div className="popup-header" style={header_style}>
+              {this.props.title}
+              {(this.props.dismissButton) ? <Button onClick={() => {this.props.cancel(); this.props.destroy(true);}} style={{float: "right", paddingRight: "8px", color: "#b5b5b5"}}>X</Button> : ''}
+            </div>
             <div className="popup-content"><div id={(this.props.noPadding) ? "popup-no-padding" : ""}>{this.props.children}</div></div>
             {footer}
          </div>

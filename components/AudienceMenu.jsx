@@ -5,6 +5,7 @@ import {audienceText} from '../utilities.js'
 import Button from './Button.jsx'
 import Menu from './Menu.jsx'
 import FriendSelector from './FriendSelector.jsx'
+import CustomSelector from './CustomSelector.jsx'
 
 class AudienceMenu extends React.Component {
   constructor(props) {
@@ -13,7 +14,8 @@ class AudienceMenu extends React.Component {
     var audience = JSON.parse(localStorage.getItem('settings'))["post_audience_settings"][0];
 
     this.state = {audience: audience, more: false, see_all: false,
-      render_friends_except: false, render_specific_friends: false};
+      render_friends_except: false, render_specific_friends: false,
+      render_custom: false};
 
     this.setAudience = this.setAudience.bind(this);
     this.generateButtons = this.generateButtons.bind(this);
@@ -130,7 +132,7 @@ class AudienceMenu extends React.Component {
 
         case "custom":
           buttons.push(
-            <Button onClick={() => {this.setAudience(option)}} key={i}>
+            <Button onClick={() => {this.setState({"render_custom": true})}} key={i}>
               {text[0]}
               {subtext}
             </Button>
@@ -154,7 +156,7 @@ class AudienceMenu extends React.Component {
   }
 
   unrenderPopups() {
-    this.setState({"render_friends_except": false, "render_specific_friends": false});
+    this.setState({"render_friends_except": false, "render_specific_friends": false, "render_custom": false});
   }
 
   render() {
@@ -162,17 +164,22 @@ class AudienceMenu extends React.Component {
     let subtitle = (this.props.subtitle) ? <p id="audience-header-subtitle">{this.props.subtitle}</p> : "";
 
     let friends_except_popup = (
-      <FriendSelector except okay={(empty) => {this.setAudience(empty ? "public" : "friends_except")}} destroy={this.unrenderPopups} />
+      <FriendSelector except okay={(empty) => {this.setAudience(empty ? "friends" : "friends_except")}} destroy={this.unrenderPopups} />
     );
 
     let specific_friends_popup = (
-      <FriendSelector okay={(empty) => {this.setAudience(empty ? "public" : "specific_friends")}} destroy={this.unrenderPopups} />
+      <FriendSelector okay={(empty) => {this.setAudience(empty ? "only_me" : "specific_friends")}} destroy={this.unrenderPopups} />
+    );
+
+    let custom_popup = (
+      <CustomSelector destroy={this.unrenderPopups} />
     );
 
     return (
       <span className="audience-menu">
       {(this.state.render_friends_except) ? friends_except_popup : null}
       {(this.state.render_specific_friends) ? specific_friends_popup : null}
+      {(this.state.render_custom) ? custom_popup : null}
       <Menu icon="current" current={() => {return audienceText(this.state.audience) + " ▼"}} onClose={() => {this.setState({more: false, see_all: false})}} expandButtons={[this.more_button, this.see_all_button]}>
         {title}
         {subtitle}

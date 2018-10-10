@@ -224,6 +224,10 @@ export function audienceText(audience) {
       text = "Specific Friends"
       break;
 
+    case "custom":
+      text = "Custom"
+      break;
+
     default:
       text = "";
   }

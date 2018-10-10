@@ -62,6 +62,7 @@ class Button extends React.Component {
     // Type prop is one of {default, cancel, confirm}
     return (<a
       id={this.props.id} href={this.props.href ? this.props.href : "javascript:void(0)"}
+      style={this.props.style}
       onClick={this.onClick}
       className={"button"  + ' ' + (this.props.type ? this.props.type : "default")}>{inner}</a>);
   }

@@ -96,7 +96,12 @@ class Chat extends React.Component {
          return item.trim();
       });
 
-      var friends = JSON.parse(localStorage.getItem('friends'));
+      var friends = JSON.parse(localStorage.getItem('users')).filter((user) => {
+        return user.friend;
+      }).map((item) => {
+        return item.name;
+      });
+
       return raw_list.filter((item) => {
          return containsIgnoreCase(friends, item);
       });

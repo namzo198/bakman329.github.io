@@ -5,19 +5,21 @@ import {indexPosts} from '../utilities.js'
 import Button from './Button.jsx'
 import AudienceMenu from './AudienceMenu.jsx'
 import PostArea from './PostArea.jsx'
+import Popup from './Popup.jsx'
 
 class NewPostArea extends React.Component {
    constructor(props) {
       super(props);
       
       this.state = {value: '',
-                    audience: 'public'};
+                    audience: 'public',
+                    renderUploadPopup: false};
       this.onChange = this.onChange.bind(this);
       this.onClick = this.onClick.bind(this);
       this.onChangeAudience = this.onChangeAudience.bind(this);
    }
 
-   onClick() {
+   onClick(img) {
       var event = {
          action: 'Post Created',
          context: 'From NewsFeed',
@@ -57,6 +59,24 @@ class NewPostArea extends React.Component {
    }
 
    render() {
+        var uploadPopup = (
+         <Popup title="Upload photo/video"
+            destroy={(cancel=false) => {
+              this.setState({renderUploadPopup: false});
+            }}
+            okay={() => {
+
+            }}
+            cancel={() => {}}>
+          <a onClick={() => {this.onClick(this.img_0)}}>
+          <img src='/assets/profile_img.jpg'
+            style={{width: 60, height: 60}}
+            ref={(img) => {this.img_0 = img}} />
+          </a>
+          <p>Me.jpg</p>
+          <img src='/assets/profile_img.jpg' style={{width: 60, height: 60}} />
+        </Popup>);
+
       return (
          <div id='new-post-area'>
             <div id='new-post-area-content'>
@@ -64,12 +84,14 @@ class NewPostArea extends React.Component {
                <hr />
                <div id='actions'>
                   <Button type="confirm" onClick={this.onClick}>Post</Button>
+                  <Button type="cancel" onClick={() => {this.setState({renderUploadPopup: true})}}>Photo/Video</Button>
                   <AudienceMenu onChange={this.onChangeAudience} className="new-post-menu"
                     options={["public", "friends", "friends_except", "only_me", "more"]}
                     more={["specific_friends", "see_all"]}
                     see_all={["custom"]}
                     title="Who should see this?" />
                </div>
+               {this.state.renderUploadPopup ? uploadPopup : null}
             </div>
          </div>);
    }

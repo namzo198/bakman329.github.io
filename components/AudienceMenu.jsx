@@ -172,7 +172,7 @@ class AudienceMenu extends React.Component {
     );
 
     let custom_popup = (
-      <CustomSelector destroy={this.unrenderPopups} />
+      <CustomSelector okay={(new_audience) => {this.setAudience(new_audience)}} destroy={this.unrenderPopups} />
     );
 
     return (

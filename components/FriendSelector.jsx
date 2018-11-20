@@ -17,10 +17,8 @@ class FriendSelector extends React.Component {
       }
       var settings = JSON.parse(localStorage.getItem('settings'));
       
-      // Select either specific friends settings or except settings
       var audience_settings = settings["post_audience_settings"][(this.props.except) ? 1 : 2];
 
-      // TODO: Replace with a check of localstorage settings
       enabled[user.name] = (audience_settings.indexOf(user.name) >= 0);
     });
     this.state = {enabled: enabled};

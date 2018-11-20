@@ -60,14 +60,18 @@ class Popup extends React.Component {
       } else if (this.props.saveChanges) {
         footer =
           <div className="popup-footer">
-            <Button type="confirm" onClick={() => {this.props.okay(); this.props.destroy();}}>Save Changes</Button>
+            <Button type="confirm"
+              onClick={() => {this.props.okay(); this.props.destroy();}}
+              isDisabled={this.props.confirmDisabled}>Save Changes</Button>
             <Button type="cancel" onClick={() => {this.props.cancel(); this.props.destroy(true);}}>Cancel</Button>
           </div>;
         } else {
         footer =
           <div className="popup-footer">
             <Button type="cancel" onClick={() => {this.props.cancel(); this.props.destroy(true);}}>Cancel</Button>
-            <Button type="confirm" onClick={() => {this.props.okay(); this.props.destroy();}}>Okay</Button>
+            <Button type="confirm"
+              onClick={() => {this.props.okay(); this.props.destroy();}}
+              isDisabled={this.props.confirmDisabled}>Okay</Button>
           </div>;
       }
 

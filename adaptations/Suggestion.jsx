@@ -12,12 +12,12 @@ class SuggestionPopup extends React.Component{
   }
 
 
-destroy(i) {
+destroy() {
  var mount_node = ReactDOM.findDOMNode(this.refs.mount);
 
   try {
     ReactDOM.unmountComponentAtNode(mount_node);
-    return i;
+    //return i;
   } catch (e) {
     console.error(e);
   }
@@ -37,12 +37,12 @@ destroy(i) {
     return(
       <div id="pop" className="suggestPopup">
         <div className="popup-header">{this.props.title}</div>
-        <a className="suggestPopupCloseButton" href="javascript:void(0)" onClick={this.props.destroy}></a>
+        <a className="suggestPopupCloseButton" href="javascript:void(0)" onClick={this.props.destroy}>X</a>
         <div className="suggest_popup-content"><div>{this.props.children}</div>
 
         <div className="suggest_popup-footer">
-          <span className="leftbutton"><Button href='javascript:void(0)' onClick={this.props.destroy}>Rather Not</Button></span>
-          <span className="rightbutton"><Button href='javascript:void(0)' onClick={this.props.allow}>OK</Button></span> 
+          <span className="popup-footer"><Button type="cancel" href='javascript:void(0)' onClick={this.props.destroy}>Rather Not</Button></span>
+          <span className="popup-footer"><Button type="confirm" href='javascript:void(0)' onClick={this.props.okay} routeTo = {this.props.routeTo}>OK</Button></span> 
         </div>
         </div>
       </div>

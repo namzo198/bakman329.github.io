@@ -12,7 +12,7 @@ class ProfileLink extends React.Component {
       <Link to={{
         pathname: '/profile/' + nameToLink(this.props.name),
         state: {fromNewsFeed: (this.props.fromNewsFeed) ? (this.props.fromNewsFeed) : false}}}>
-        {this.props.name}
+           <span id="left-navagation-profile_name">{this.props.name}</span>
       </Link>
     );
   }

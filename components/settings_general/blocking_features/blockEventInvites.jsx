@@ -50,7 +50,7 @@ class BlockEventInvites extends React.Component {
         var event = {
            action: `Unblock ${friend} from Event Invites`,
            context: 'Block event invites',
-            name: 'John Doe'
+            name: 'Alex Doe'
         };
         return event;
     }

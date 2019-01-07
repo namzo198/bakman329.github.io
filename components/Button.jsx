@@ -2,17 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {CreateEvent} from '../controller/databaseFunctions.js';
 import  PropTypes from 'prop-types';
-import {highLightStyle} from '../adaptations/Highlight.js';
+import {highLight,No_highLight } from '../adaptations/Highlight.js';
+import {Link} from 'react-router-dom'
 
 //Get the hashId session index.htm/:sessionid=theidisthisone
 
 /**http://fakebook.usabart.nl/?session_id=a09eb84d555bb8d55510ef28a56a6f3d&changesub=auto&unsubstatus=auto&reportspam=auto&requestphoto=auto&timelinevisibility=auto&restrictuser=auto&blockevent=auto&chatoffline=auto&withholdcellphone=auto&withholdotherphone=auto&withholdim=auto&withholdstreet=auto&withholdinterest=auto&withholdreligion=auto&withholdpolitical=auto
 */
 
-const highLight = {
-  backgroundColor:highLightStyle.yellow,
-  color:highLightStyle.black
-}
+
 
 class Button extends React.Component {
   constructor(props) {
@@ -20,11 +18,11 @@ class Button extends React.Component {
     this.onClick = this.onClick.bind(this);
      
      this.state={
-        highlight:false,
+        highlight:this.props.adapt === 'high'?true:false,
      }
   }
 
-  componentWillMount(){
+  /*componentWillMount(){
     // Initialize the adaptation method 
      let adaptationMethod = this.props.adapt;
      console.log("The button adaptation Method is " + adaptationMethod)
@@ -34,7 +32,7 @@ class Button extends React.Component {
           })
       }
       
-  }
+  }*/
 
 
   onClick() {
@@ -46,7 +44,7 @@ class Button extends React.Component {
 
     var event = { action : state.action,
                   details : state.context,
-                  object : state.name,
+                  object : 'Alex Doe', //state.name,
                   session_id: localStorage.session_id
                 };
     
@@ -59,6 +57,11 @@ class Button extends React.Component {
 
   render() {
     let inner = this.state.highlight ? <span style={highLight}>{this.props.children}</span> : this.props.children;
+      if(this.props.routeTo){
+        return(
+        <Link id={this.props.id} onClick={this.onClick} to={this.props.routeTo} className={"button"  + ' ' + (this.props.type ? this.props.type : "default")}>{inner}</Link>
+        )  
+      }
     // Type prop is one of {default, cancel, confirm}
     return (<a
       id={this.props.id} href={this.props.href ? this.props.href : "javascript:void(0)"}

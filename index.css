@@ -14,6 +14,28 @@ header {
     z-index: 101;
 }
 
+hb {
+  display: block;
+  unicode-bidi: isolate;
+  -webkit-margin-before: 0.5em;
+  -webkit-margin-after: 0.5em;
+  -webkit-margin-start: 9em;;
+  -webkit-margin-end: auto;
+  border-style: inset;
+  border-width: 1px;
+  }
+
+hr {
+    display: block;
+    unicode-bidi: isolate;
+    -webkit-margin-before: 0.5em;
+    -webkit-margin-after: 0.5em;
+    -webkit-margin-start: auto;
+    -webkit-margin-end: auto;
+    border-style: inset;
+    border-width: 1px;
+}
+
 a {
     color: rgb(54, 88, 153);
     text-decoration-line: none;
@@ -98,8 +120,14 @@ textarea {
     position: relative
     top: 50%;
     transform: translateY(25%);
+    border-radius: 50%;
 }
-
+/**.settingsImage{
+background-image: url("/assets/settings.png");
+background-repeat: no-repeat;
+background-size: 283px 401px;
+background-position: -250px -330px;
+}*/
 #page-content {
     padding: inherit;
     background-color: #e9ebee;
@@ -122,15 +150,28 @@ textarea {
     float: left;
 }
 
+#left-navagation li{
+    margin-bottom: 10px;
+}
+
 #left-navagation a {
     display: inline-block;
 }
 
 #left-navagation img {
     display: inline-block;
-    width: 18px;
-    height: 18px;
+    width: 23px;
+    height: 23px;
     margin-right: 6px;
+}
+
+#left-navagation-words,#left-navagation-profile_name{
+    color:#1d2129;
+   
+}
+
+#left-navagation-words{
+    font-weight: 600;
 }
 
 #post-area {
@@ -172,6 +213,7 @@ textarea {
     width: 40px;
     height: 40px;
     margin-right: 8px;
+    border-radius: 50%;
 }
 
 #post-text {
@@ -182,6 +224,11 @@ textarea {
 #post-name {    
     vertical-align: top;
     display: block;
+    
+}
+
+#post-name #left-navagation-profile_name{
+  color:#365899;  
 }
 
 #post-time {
@@ -194,6 +241,7 @@ textarea {
     margin-bottom: 0px;
     padding-bottom: 4.5px;
 }
+
 
 #hide-post-dismiss {
   float: right;
@@ -282,11 +330,12 @@ textarea {
     display: inline-block;
 }
 
-#comment img {
+#comment-profile-pic {
     display: inline-block;
     width: 32px;
     height: 32px;
     margin-right: 9px;
+    border-radius: 50%;
 }
 
 /* TODO: Fix overlap on low-width screens */
@@ -514,10 +563,35 @@ textarea {
     padding: 5px 10px;
 }
 
+.popup-header_altColor {
+    background-color: #f2f2f2;
+    color: black;
+    height: 18px;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 5px 10px;
+}
+
 .popup-content {
 	background-color: #ffffff;
 	min-height: 216px;
-	padding: 10px 0 10px 0;
+	padding: 10px;
+    overflow: scroll;
+}
+.popup-content_altHeight{
+    background-color: #ffffff;
+    padding: 10px 20px 10px 20px;
+    overflow: scroll;
+}
+
+.close-thin {
+  color: #777;
+  font: 14px/100% arial, sans-serif;
+  position: absolute;
+  right: 5px;
+  text-decoration: none;
+  text-shadow: 0 1px 0 #fff;
+  top: 5px;
 }
 
 .popup-content > div {
@@ -546,7 +620,6 @@ textarea {
 	height: 28px;
 	padding: 10px 0 10px 0;
 	background-color: #f2f2f2;
-    background-color: #f2f2f2;
     border: 1px solid #ccc;
     border-bottom: none;
     border-left: none;
@@ -577,7 +650,7 @@ textarea {
     left: 60%;
     margin-left: -250px;
     width: 30%;
-    height: 13%;
+    /*height: 13%;*/
     border-style: solid;
     border-width: 1px;
     vertical-align: middle;
@@ -600,7 +673,7 @@ textarea {
 
 .suggest_popup-content {
 	background-color: #ffffff;
-	height: 90px;
+	height: 120px;
 	padding: 10px;
 }
 
@@ -818,7 +891,7 @@ Edit_Icon_pos{
   position: absolute;
   top:42px;
   width: 100%;
-  height: 100%;
+  /*height: 100%;*/
 }
 
 #profile-content {
@@ -902,13 +975,15 @@ header #logo {
   position: absolute;
   box-shadow: none;
   border: 4px solid #fff;
-  outline: 1px solid #00000026;
+ /*outline: 1px solid #00000026;*/
   z-index: 100;
+  border-radius: 50%
 }
 
 .profile_photo img {
   height: 168px;
   width: 168px;
+  border-radius: 50%
 }
 
 .profile_name {
@@ -1049,6 +1124,7 @@ header #logo {
   font-size: 12px;
   font-weight: 600;
   text-transform:uppercase;
+  padding-top: 2px;
   border-bottom: 1px solid #dddfe2;
   line-height: 26px;
 }
@@ -1282,8 +1358,9 @@ header #logo {
   float: right;
   max-width: 740px;
   text-align: justify;
-  margin-right: 330px;
+  margin-right: 490px;
 }
+
 .right_header {
   padding: 20px 0px 10px 0px;
   font-size: 16px;
@@ -1295,6 +1372,14 @@ header #logo {
   float:right;
   text-align:justify;
   margin-right: 290px;
+}
+
+.privacy_public_search_input {
+  color:#666;
+  font-weight:600;
+  margin-right: 10px;
+  width: 16px
+    
 }
 
 .righttop_label_content {
@@ -1364,6 +1449,24 @@ float: right;
 padding-left: 30px;
 padding-right: 5px;
 text-align: right;
+}
+
+.edit_audience_selected{
+    margin-right: 100px;
+    font-weight: 400;
+    font-family: inherit;
+    color:#90949c;
+    float:right;
+}
+
+.audience_selection{
+    margin-left: 150px;
+}
+
+.review_image{
+    display:block;
+    width:508px;
+    height: 320px;
 }
 
 #right_bottom_form{
@@ -1587,3 +1690,4 @@ text-align: center;
 .friend-selector-enabled.friend-selector-except::before {
   background-image: url("/assets/solid_red_minus.png") !important;
 }
+

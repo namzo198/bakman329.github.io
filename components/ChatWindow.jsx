@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-
+import {resetChat} from '../utilities.js'
 import Button from './Button.jsx'
 
 class ChatWindow extends React.Component {

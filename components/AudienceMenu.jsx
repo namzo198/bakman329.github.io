@@ -25,6 +25,7 @@ class AudienceMenu extends React.Component {
     this.props.onChange(audience);
     this.setState({audience: audience});
 
+
     var settings = JSON.parse(localStorage.getItem('settings'));
     settings["post_audience_settings"][0] = audience;
     localStorage.setItem('settings', JSON.stringify(settings));
@@ -55,6 +56,12 @@ class AudienceMenu extends React.Component {
 
       case "custom":
         return ["Custom", "Include and exclude friends and lists"];
+      
+     case "everyone":
+        return ["Everyone",""];
+     
+     case "friends_of_friends":
+        return ["Friends of friends",""];
 
       default:
         return [option, ""];

@@ -40,7 +40,7 @@ onClickEdit(){
      /*var event={
         action:`Turned ${this.state.decision?"on":"off"} fame and app notifications`,
          context:"Game and app notifications",
-         name: "John Doe"
+         name: "Alex Doe"
      }
      
      return event;*/

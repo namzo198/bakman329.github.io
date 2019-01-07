@@ -21,7 +21,7 @@ class NewPostArea extends React.Component {
       var event = {
          action: 'Post Created',
          context: 'From NewsFeed',
-         name: 'John Doe'
+         name: 'Alex Doe'
      };
 
      if (this.state.value == '') {
@@ -30,8 +30,8 @@ class NewPostArea extends React.Component {
 
      var posts = JSON.parse(localStorage.getItem('posts'));
        
-     var post = {name: 'John Doe',
-                 img: './assets/profile_img.jpg',
+     var post = {name: 'Alex Doe',
+                 img: './assets/users/alex_profile_img.jpg',
                  content: this.state.value,
                  key: posts.length,
                  comments: [],
@@ -60,7 +60,7 @@ class NewPostArea extends React.Component {
       return (
          <div id='new-post-area'>
             <div id='new-post-area-content'>
-               <textarea rows='6'  placeholder="What's on your mind?" value={this.state.value} onChange={this.onChange} />
+               <textarea rows='6' placeholder="What's on your mind, Alex?" value={this.state.value} onChange={this.onChange} />
                <hr />
                <div id='actions'>
                   <Button type="confirm" onClick={this.onClick}>Post</Button>

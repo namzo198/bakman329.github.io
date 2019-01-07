@@ -1,28 +1,41 @@
 import React,{Component} from 'react';
 import Button from '../../Button.jsx';
+import EditInfoDisplay from './contactDisplays/EditInfoDisplay.jsx'
+import ExistingInfoDisplay from './contactDisplays/ExistingInfoDisplay.jsx'
+import AddInfoDisplay from './contactDisplays/AddInfoDisplay.jsx'
 import Automation from '../../../adaptations/Automation.jsx'
+import {getParsed,addToLocalStorageObject,saveVisitedAdapatation} from '../../../utilities.js'
 
 class ContactInfo extends Component {
   constructor(props){
     super(props)
 
+    
+      
+       let adapatation = getParsed('adaptations')
+       let existingInformation = getParsed('contactInfo')
+       let adaptationVisited = getParsed("visited");
+     
+      
+  
+    
     this.state = {
-      adaptationMethod:'',
-      usersessionId:'',
-
-      mobile:'',
-      address:'',
-      email:'',
-      key:'',
-      websites:'',
-      social:'',
-      dob:'',
-      year:'',
-      gender:'',
-      interest:'',
-      language:'',
-      religious:'',
-      political:'',
+      adapt:adapatation['contactInfo'], 
+      adaptationVisited:adaptationVisited,
+      contactInfoStored:existingInformation,   
+      mobile:existingInformation['mobile'],
+      address:existingInformation['address'],
+      email:existingInformation['email'],
+      key:existingInformation['key'],
+      websites:existingInformation['websites'],
+      social:existingInformation['social'],
+      dob:existingInformation['dob'],
+      year:existingInformation['year'],
+      gender:existingInformation['gender'],
+      interest:existingInformation['interest'],
+      language:existingInformation['language'],
+      religious:existingInformation['religious'],
+      political:existingInformation['political'],
 
       AddMobileInfo:false,
       AddAddressInfo:false,
@@ -38,23 +51,23 @@ class ContactInfo extends Component {
       AddReligiousInfo:false,
       AddPoliticalInfo:false,
 
-      BasicMobileAdded:false,
-      BasicAddressAdded:false,
-      BasicEmailAdded:false,
-      BasicKeyAdded:false,
-      BasicWebsitesAdded:false,
-      BasicSocialAdded:false,
-      BasicDobAdded:false,
-      BasicYearAdded:false,
-      BasicGenderAdded:false,
-      BasicInterestAdded:false,
-      BasicLanguageAdded:false,
-      BasicReligiousAdded:false,
-      BasicPoliticalAdded:false,
+      BasicMobileAdded:existingInformation['mobile'] !== undefined? true: false,
+      BasicAddressAdded:existingInformation['address'] !== undefined? true: false,
+      BasicEmailAdded:existingInformation['email'] !== undefined? true: false,
+      BasicKeyAdded:existingInformation['key'] !== undefined? true: false,
+      BasicWebsitesAdded:existingInformation['websites'] !== undefined? true: false,
+      BasicSocialAdded:existingInformation['social'] !== undefined? true: false,
+      BasicDobAdded:existingInformation['dob'] !== undefined? true: false,
+      BasicYearAdded:existingInformation['year'] !== undefined? true: false,
+      BasicGenderAdded:existingInformation['gender'] !== undefined? true: false,
+      BasicInterestAdded:existingInformation['interest'] !== undefined? true: false,
+      BasicLanguageAdded:existingInformation['language'] !== undefined? true: false,
+      BasicReligiousAdded:existingInformation['religious'] !== undefined? true: false,
+      BasicPoliticalAdded:existingInformation['political'] !== undefined? true: false,
 
       edit:false,
+      renderAuto:false,
       unhide_addedinfo:false,
-      ok_Auto:false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -62,47 +75,24 @@ class ContactInfo extends Component {
     this.onClickCancel = this.onClickCancel.bind(this);
     this.onClickToggle = this.onClickToggle.bind(this);
     this.onClickEdit = this.onClickEdit.bind(this);
-    this.automation = this.automation.bind(this);
-    this.onClickUndo = this.onClickUndo.bind(this);
+    this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
     this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
+    this.visitedAdaptation = this.visitedAdaptation.bind(this);
     this.display = this.display.bind(this);
+ 
   }
 
-  // TODO: Should this be moved to the initial state declaration?
-  componentWillMount() {
-    this.setState({
-      adaptationMethod:this.props.adapt,
-      userSessionId:this.props.userSession
-    });
-  } 
+    componentWillMount(){
 
-  firstChar_Upper(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-  // TODO: The usage of this method may be unnecessary, and may cause state synchronicity issues
-  componentDidMount() {
-    /*Display the info that might have already been input/changed  by user within current session*/
-    var allContact_BasicInfo = ["mobile","address","email","key","websites","social","dob","year","gender","interest","language","religious","political"];
-   
-    // var getInfo = JSON.parse(localStorage.getItem(stored_info));
-    allContact_BasicInfo.forEach((stored_info) => {
-      var getInfo = JSON.parse(localStorage.getItem(stored_info));
-
-      if(getInfo != null && (getInfo[stored_info] !== '')) {
-        var to_uppercase =  this.firstChar_Upper(stored_info);
-        var basic_added = 'Basic'+to_uppercase+'Added';
-        var add_info = 'Add'+to_uppercase+'Info';
-
-        this.setState({
-          [stored_info]:getInfo[stored_info],
-          [add_info]: getInfo[stored_info],
-          [basic_added]:getInfo[stored_info]
-        });
-      }
-    });   
-  }
-
+        if(!this.state.adaptationVisited["ContactInfo"]["automation"]&&this.state.adapt === 'auto'){
+            this.setState({
+                political:'Republican',
+                BasicPoliticalAdded:true,
+                renderAuto:true
+            })
+        }
+    }
+  
   handleChange(event) {
     /*Capture any of the user contact and basic information input*/
     event.preventDefault();
@@ -121,27 +111,35 @@ class ContactInfo extends Component {
     return inputfieldname;  
   }
 
+   visitedAdaptation(name){ 
+      this.state.adaptationVisited["ContactInfo"][name] = true
+      addToLocalStorageObject("visited",this.state.adaptationVisited)
+    }
+    
   onClickSave(infoAdded) {
     var inputfieldname = this.regex(infoAdded);
     var inputfieldname_lwrcse = inputfieldname.toLowerCase();
     var add = 'Add' + inputfieldname + 'Info';
-    var updateinfo;
+    //var updateinfo;
     var event;
-
+    
     /*when user tries to saves without any input..go back request to 'Add Info ...' */
     if(this.state[ inputfieldname_lwrcse] ==='') {
       event = {
         action: infoAdded,
-        context: 'Basic ' + inputfieldname + ' Information Edited and removed/Tried to be submitted',
-        name: 'John Doe'
+        context: 'Basic ' + inputfieldname + ' Contact Information Edited and removed/Tried to be submitted empty',
+        name: 'Alex Doe'
       };
-
-      updateinfo = {
+    
+      /*updateinfo = {
         [inputfieldname_lwrcse]:this.state[inputfieldname_lwrcse],
-        [add]:this.state[add],
-        [infoAdded]:false
+        //[add]:this.state[add],
+        //[infoAdded]:false
       };
-
+        
+        updateinfo = {
+        [inputfieldname_lwrcse]: this.state[inputfieldname_lwrcse]}*/
+        
       this.setState(prevState => ({
         [add]: prevState.add,
         edit:false
@@ -151,23 +149,34 @@ class ContactInfo extends Component {
       /*when user saves with new input*/
       event = {
         action: infoAdded,
-        context: 'Basic ' + inputfieldname + ' Information Added',
-        name: 'John Doe'
+        context: 'Basic ' + inputfieldname + ' Contact Information Added',
+        name: 'Alex Doe'
       };
             
-      updateinfo = {
-        [inputfieldname_lwrcse]: this.state[inputfieldname_lwrcse],
-        [add]: false,
-        [infoAdded]: !this.state[infoAdded]                   
+     /* updateinfo = {
+        //[inputfieldname_lwrcse]: this.state[inputfieldname_lwrcse],
+        //[add]: false,
+        //[infoAdded]: !this.state[infoAdded]                   
       };
+        
+        updateinfo = {
+        [inputfieldname_lwrcse]: this.state[inputfieldname_lwrcse]}*/
 
       this.setState(prevState => ({
         backup: this.state[inputfieldname_lwrcse],
         [infoAdded]: !prevState.infoAdded
       }));
     }
-
-    localStorage.setItem(inputfieldname_lwrcse, JSON.stringify(updateinfo));
+    
+    //For the highlight adaptation 
+    if(!this.state.adaptationVisited["ContactInfo"]["highlight"] && this.state.adapt === "high" && infoAdded === "BasicAddressAdded"){
+       this.visitedAdaptation("highlight")   
+    }
+      
+    this.state.contactInfoStored[inputfieldname_lwrcse] = this.state[inputfieldname_lwrcse] === ""?undefined:this.state[inputfieldname_lwrcse];
+            
+    addToLocalStorageObject('contactInfo',this.state.contactInfoStored)
+    //localStorage.setItem('contactInfo', JSON.stringify(this.state.contactInfoStored));
 
     return event;
   }
@@ -180,12 +189,12 @@ class ContactInfo extends Component {
     // When the edit button is pressed and the changes are cancelled
     if(this.state.edit) {
       var basic = 'Basic'+inputfieldname+'Added';
-      var original_input =  JSON.parse(localStorage.getItem(inputfieldname_lwrcse))
+      //var original_input =  JSON.parse(localStorage.getItem(inputfieldname_lwrcse))
        
       // If cancelled change is empty
       if(this.state[inputfieldname_lwrcse] !=='') {
         this.setState(prevState => ({
-          [inputfieldname_lwrcse]: original_input[inputfieldname_lwrcse],
+          [inputfieldname_lwrcse]: this.state.contactInfoStored[inputfieldname_lwrcse],
           [basic]: !prevState.basic,
           edit: false
         }));
@@ -194,7 +203,7 @@ class ContactInfo extends Component {
       // If cancelled change contains new/old info 
       if(this.state[inputfieldname_lwrcse] === '') {
         this.setState((prevState) => ({
-          [inputfieldname_lwrcse]:original_input[inputfieldname_lwrcse],
+          [inputfieldname_lwrcse]:this.state.contactInfoStored[inputfieldname_lwrcse],
           [basic]:!prevState.basic,
           edit:false
         }));
@@ -205,7 +214,6 @@ class ContactInfo extends Component {
       this.setState(prevState => ({[buttonname]: prevState.buttonname}));
     }
   }
-
 
   onClickToggle(linkname) {
     /*Toggles between displaying the prompt for adding new info and the already input information*/
@@ -225,43 +233,41 @@ class ContactInfo extends Component {
       edit: true
     }));
   }
+ 
 
-  onClickUndo() {
+  onClickUndo_Auto() {
     var event = {
-      action: 'Undo Political Views Set Post',
-      unhide: true
+      action: 'Undo Political Views set',
+      context: 'In Contact Info, automation was declined with the clicking of Undo',
+      renderAuto: false,
+      BasicPoliticalAdded:false,
     };
+    this.visitedAdaptation("automation")
     this.setState(event);
-
     return event;
   }
 
-  onClickOk_Auto(action) {
+  onClickOk_Auto() {
     var event = {
-      action: `Automatically set ${action} were/was accepted`,
-      auto_OK: true
+      action: 'Automatically set political views were accepted',
+      context: 'In Contact Info, automation was accepted with the clicking of OK',
+      renderAuto: false
     }
+    
+    this.onClickSave("BasicPoliticalAdded")
+    this.visitedAdaptation("automation")
     this.setState(event);
-
     return event;
   }
 
-  automation() {
-    return (
-      <div>
-        <p>{`Political Views:${this.state.political}`}</p>
-        <Automation Undobutton="Undo" label="Your political views were automatically set" onUndoClick={this.onClickUndo}  onOkClick={(e) => this. onClickAuto_Ok('BasicPoliticalView',e)} Okbutton={'Ok'}/>
-      </div>
-    )
-  }
 
-
-  display(Info,add_request,placeholder) {
+  display(Info,add_request,placeholder,adapt) {
     var basic_info = "Basic" + Info + "Added";
     var add_info = "Add" + Info + "Info";
     var info_lwercase = Info.toLowerCase();
     
-    if(this.state[basic_info]) {
+   
+    if(this.state[basic_info]){
       if(Info =='Social') {
         Info = "Social links"
       }
@@ -273,58 +279,41 @@ class ContactInfo extends Component {
       if(Info =='Dob') {
         Info = "Year of Birth"
       }
-      
-      return (
-        <div className = "details_2">
-          <div className = "edit">
-            <img src = '/assets/edit_icon.png'/>
-            <Button href ="javascript:void(0)" onClick={(e) => this.onClickEdit(basic_info)}>Edit</Button>
-          </div>
-
-          <div className = "response">
-            <label>{this.state[info_lwercase]}</label>
-          </div>
-
-          <li><label className="addedinfo_color">{Info}</label></li>
-        </div>
-      );
+        
+    return (
+        <ExistingInfoDisplay response = {this.state[info_lwercase]} onClick = {(e) => this.onClickEdit(basic_info)} infoName = {Info}/>
+      )
+    }else {
+        
+        if (this.state[add_info]){
+        
+            return (
+              <EditInfoDisplay placeholder = {placeholder} infoName = {info_lwercase} onChange = {this.handleChange} value = {this.state[info_lwercase]} onClickSave = {(e) => this.onClickSave(basic_info,e)} onClickCancel = {(e)=>this.onClickCancel(add_info,e)}/>
+            )
+        
+        }else {
+        
+            return (         
+                <AddInfoDisplay add_request={add_request} onClickToggle = {()=>this.onClickToggle(add_info)} adapt = {adapt}  add_Info={add_info}/>
+            );
+        }
     }
-    else {
-      if(this.state[add_info]) {
-        return (
-          <div className="display_inputform">
-            <input type="text"
-              placeholder={placeholder}
-              name={info_lwercase}
-              onChange={this.handleChange}
-              value={this.state[info_lwercase]} />
-            <Button href='javascript:void(0);'
-              onClick={(e) => this.onClickSave(basic_info,e)}
-              className="saveButton">Save Changes</Button>
-
-            <Button href='javacript:void(0);'
-              onClick={(e)=>this.onClickCancel(add_info,e)}>Cancel</Button> 
-          </div>
-        );
-      }
-      else {
-        return ( 
-         <div className = "details_2">
-            <li>
-              <Button href="#" onClick = {()=>this.onClickToggle(add_info)}>{add_request}</Button>
-            </li>
-         </div>
-        );
-      }
-    }
-  }
+   }
 
   render() {
+      
+    const shouldDisplayAutomation = this.state.renderAuto;
+      
     return (
         <div className="contact_section">
+        
+        {shouldDisplayAutomation && <div id='except-warning'>
+            <Automation Undobutton="Undo" Okbutton="Ok" onOkClick={this.onClickOk_Auto} label="Your political views were automatically set" onUndoClick={this.onClickUndo_Auto}/></div>}
+            
+         
           <div className="heading">Contact Information</div>
           {this.display("Mobile", "+ Add a mobile phone","enter mobile number")}
-          {this.display("Address", "+ Add your address","Address,Town/City,Zip,Neighbourhood")}
+          {this.display("Address", "+ Add your address","Address,Town/City,Zip,Neighbourhood",!this.state.adaptationVisited["ContactInfo"]["highlight"]?this.state.adapt:"")}
           {this.display("Email", "+ Add an Email address","enter email address")}
           {this.display("Key", "+ Add a public key","Enter a PGP public key")}
           <br/>
@@ -342,6 +331,9 @@ class ContactInfo extends Component {
           {this.display("Interest", "+ Add who you're interested in", "")}
           {this.display("Religious", "+ Add your religious view", "")}
           {this.display("Political", "+ Add your political views", "")}
+          
+          
+        
         </div>
     );
   }

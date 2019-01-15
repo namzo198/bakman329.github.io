@@ -59,10 +59,13 @@ class Button extends React.Component {
 
   render() {
     let inner = this.state.highlight ? <span style={highLight}>{this.props.children}</span> : this.props.children;
+    let disabled = (this.props.isDisabled) ? (this.props.isDisabled() ? " disabled" : "") : "";
+    // Type prop is one of {default, cancel, confirm}
     return (<a
       id={this.props.id} href={this.props.href ? this.props.href : "javascript:void(0)"}
+      style={this.props.style}
       onClick={this.onClick}
-      className={"button"  + ' ' + (this.props.type ? this.props.type : "default")}>{inner}</a>);
+      className={"button"  + ' ' + (this.props.type ? this.props.type : "default") + disabled}>{inner}</a>);
   }
 }
 

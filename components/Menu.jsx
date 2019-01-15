@@ -22,14 +22,41 @@ class Menu extends React.Component {
 
   onClick(e) {
     // Pass checkContains to keep the menu open if a click occurs within the menu options
-    if (!this.props.checkContains || !this.dropdownMenu.contains(e.target)) {
-      this.setState({showMenu: false}, () => {
-        document.removeEventListener('click', this.onClick);
+    if (this.props.checkContains && e.target.closest(".dropdown-menu")) { // this.dropdownMenu.contains(e.target)) {
+      return;
+    }
+
+    // Pass expandButtons with a list of element references to allow some buttons to be pressed without closing the list
+    let exit = false;
+    if (this.props.expandButtons) {
+      this.props.expandButtons.forEach((button) => {
+        if (button != undefined && button.contains(e.target)) {
+          exit = true;
+        }
       });
     }
+    if (exit) return;
+
+    this.setState({showMenu: false}, () => {
+      document.removeEventListener('click', this.onClick);
+      if (this.props.onClose) this.props.onClose();
+    });
   }
 
   render () {
+    {/* Icon prop is one of: {vert, horiz, gear, current}, vert is default */}
+    let button = null;
+    if (this.props.icon == "current") {
+      // this.props.current is a callback function which tells the menu what the currently selection option is
+      button = <Button type="cancel" onClick={this.showMenu} id="current-button">{this.props.current()}</Button>
+    }
+    else {
+      button = (
+          <Button onClick={this.showMenu}>
+            <span className={"menu-icon"  + ' ' + (this.props.icon ? this.props.icon : "vert")}></span>
+          </Button>
+        );
+    }
     return (
       <div className="menu">
         {
@@ -41,10 +68,7 @@ class Menu extends React.Component {
           ) : (null)
         }
 
-        <Button href='javascript:void(0)' onClick={this.showMenu}>
-          {/* Icon prop is one of: {vert, horiz, gear}, vert is default */}
-          <span className={"menu-icon"  + ' ' + (this.props.icon ? this.props.icon : "vert")}></span>
-        </Button>
+        {button}
 
         {
           (this.state.showMenu && !this.props.upwards) ?

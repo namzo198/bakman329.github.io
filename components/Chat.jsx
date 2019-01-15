@@ -90,18 +90,23 @@ class Chat extends React.Component {
     createTurnOffChatPopup() {
         this.setState({renderChatPopup: true});
     }
-        
+
     parseText(str) {
       var raw_list = str.split(",").map(function(item) {
-         return item.trim();
+        return item.trim();
       });
 
-      var friends = JSON.parse(localStorage.getItem('friends'));
+      var friends = JSON.parse(localStorage.getItem('users')).filter((user) => {
+        return user.friend;
+      }).map((item) => {
+        return item.name;
+      });
+
       return raw_list.filter((item) => {
-         return containsIgnoreCase(friends, item);
+        return containsIgnoreCase(friends, item);
       });
     }
-        
+
     updateSettings() {
         this.setState({turnOffChat: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0],
           except_contacts: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][1].join(", "),

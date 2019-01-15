@@ -37,6 +37,7 @@ class PostArea extends React.Component {
            index: count - index - 1,
            original_poster: post.original_poster,
            adapt:this.props.toAdapt,
+           photo: post.photo,
            render: render,
            audience: post.audience}, post.content);
       });

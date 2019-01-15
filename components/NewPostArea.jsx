@@ -1,32 +1,37 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import {indexPosts} from '../utilities.js'
 
 import Button from './Button.jsx'
 import AudienceMenu from './AudienceMenu.jsx'
 import PostArea from './PostArea.jsx'
-import Popup from './Popup.jsx'
+import UploadPopup from './UploadPopup.jsx'
 
 class NewPostArea extends React.Component {
    constructor(props) {
       super(props);
       
       this.state = {value: '',
+                    photo: '',
                     audience: 'public',
                     renderUploadPopup: false};
       this.onChange = this.onChange.bind(this);
       this.onClick = this.onClick.bind(this);
+      this.onClickPhoto = this.onClickPhoto.bind(this);
       this.onChangeAudience = this.onChangeAudience.bind(this);
    }
 
-   onClick(img) {
+  onClickPhoto(photo) {
+    this.setState({photo: photo, renderUploadPopup: false});
+  }
+
+   onClick() {
       var event = {
          action: 'Post Created',
          context: 'From NewsFeed',
          name: 'John Doe'
      };
 
-     if (this.state.value == '') {
+     if (this.state.value === '' && this.state.photo === '') {
          return null;
      }
 
@@ -35,6 +40,7 @@ class NewPostArea extends React.Component {
      var post = {name: 'John Doe',
                  img: './assets/profile_img.jpg',
                  content: this.state.value,
+                 photo: this.state.photo,
                  key: posts.length,
                  comments: [],
                  audience: this.state.audience};
@@ -42,7 +48,7 @@ class NewPostArea extends React.Component {
      localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
      indexPosts();
      PostArea.update();
-     this.state.value = '';
+     this.setState({value: '', photo: '', renderUploadPopup: false});
 
      return event;
    }
@@ -53,34 +59,21 @@ class NewPostArea extends React.Component {
 
    onChangeAudience(audience) {
       this.setState({audience: audience});
-
-      var settings = JSON.parse(localStorage.getItem('settings'));
-      var audience_settings = settings["post_audience_settings"][0];
    }
 
    render() {
-        var uploadPopup = (
-         <Popup title="Upload photo/video"
-            destroy={(cancel=false) => {
-              this.setState({renderUploadPopup: false});
-            }}
-            okay={() => {
+     var uploadPopup = <UploadPopup onClickPhoto={this.onClickPhoto} />;
 
-            }}
-            cancel={() => {}}>
-          <a onClick={() => {this.onClick(this.img_0)}}>
-          <img src='/assets/profile_img.jpg'
-            style={{width: 60, height: 60}}
-            ref={(img) => {this.img_0 = img}} />
-          </a>
-          <p>Me.jpg</p>
-          <img src='/assets/profile_img.jpg' style={{width: 60, height: 60}} />
-        </Popup>);
+      var photo = (this.state.photo) ?
+        <img src={this.state.photo}
+          style={{width: 60, height: 60}} />
+        : null;
 
       return (
          <div id='new-post-area'>
             <div id='new-post-area-content'>
                <textarea rows='6'  placeholder="What's on your mind?" value={this.state.value} onChange={this.onChange} />
+               {photo}
                <hr />
                <div id='actions'>
                   <Button type="confirm" onClick={this.onClick}>Post</Button>

@@ -244,6 +244,7 @@ class Post extends React.Component {
           </SuggestionPopup>);
       }
 
+      // TODO: Fix audience text for specific friends etc.
       return(
         <div>
           <div id='post-info'>
@@ -260,6 +261,7 @@ class Post extends React.Component {
             </Menu>
           </div>
           <p>{this.props.children}</p>
+          {this.props.photo ? <img src={this.props.photo} width="40px" height="40px"></img> : null}
           <hr />
         
           {this.actions()}

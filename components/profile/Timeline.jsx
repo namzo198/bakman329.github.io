@@ -13,9 +13,10 @@ class Timeline extends React.Component {
   }
 
   render() {
-    console.log(linkToName(this.props.match.params.user))
+   // console.log(linkToName(this.props.match.params.user))
+    //console.log("Timeline: The suggestion is "+this.props.displayContactInfoSuggestion)
     return (
-      <PostArea name={linkToName(this.props.match.params.user)} />
+      <PostArea name={linkToName(this.props.match.params.user)} displayContactInfoSuggestion = {this.props.displayContactInfoSuggestion}/>
     );
   }
 }

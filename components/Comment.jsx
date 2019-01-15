@@ -106,7 +106,7 @@ class Comment extends React.Component {
 
     actions() {
        var delete_if_user;
-       if (this.props.name === 'John Doe') {
+       if (this.props.name === 'Alex Doe') {
            delete_if_user = [
              <span id='comment-actions-dot' key={0}>·</span>,
              <Button href='javascript:void(0);' onClick={this.onClickDelete} key={1}>Delete</Button>

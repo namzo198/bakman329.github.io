@@ -18,15 +18,16 @@ class NewsFeed extends React.Component {
         <div id='page-content'>
           <ul id='left-navagation'>
             <li>
-              <img src='./assets/profile_img.jpg' />
-              <ProfileLink name='John Doe' fromNewsFeed={true} />
+              <img id="profile-pic" src='./assets/users/alex_profile_img.jpg' />
+                 <ProfileLink name='Alex Doe' fromNewsFeed={true} />
             </li>
+            
             {/* TODO make this link look like facebook's when we are on the newsfeed */}
             <li>
-              <img src='./assets/news_feed.jpg' />
-              <Link to='/'>News Feed</Link>
-            </li>
-            <li>
+              <img id="profile-pic" src='./assets/news_feed.jpg' />
+              <Link to='/'> <span id="left-navagation-words">News Feed</span></Link>
+             </li>
+              <li>
               <a href='javascript:void(0)' onClick={() => { resetAll() }}>Reset Posts(DEBUG)</a>
             </li>
             <li>

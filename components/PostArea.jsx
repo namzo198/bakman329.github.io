@@ -38,6 +38,7 @@ class PostArea extends React.Component {
            original_poster: post.original_poster,
            adapt:this.props.toAdapt,
            photo: post.photo,
+           displayContactInfoSuggestion: this.props.displayContactInfoSuggestion,
            render: render,
            audience: post.audience}, post.content);
       });
@@ -52,11 +53,11 @@ class PostArea extends React.Component {
    }
 
    render() {
+       //console.log("PostArea: The suggestion is"+ this.props.displayContactInfoSuggestion);
       return (
          <div id='post-area'>
             <NewPostArea postarea={this}/>
             {this.getPosts()}
-            {/*this.getAutomatic(2)*/}
          </div>);
    }
 }

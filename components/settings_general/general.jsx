@@ -15,28 +15,28 @@ render() {
 
     <div id="right_top">
       <span className="righttop_label"> Name </span>
-      <span className = "righttop_label_content"> John Doe </span>
+      <span className = "righttop_label_content"> Alex Doe </span>
       <a className="right_link" href="#"> Edit  </a>
     </div>
     <hr/>
 
     <div id="right_top">
       <span className="righttop_label"> Username </span>
-      <span className = "righttop_label_content"> facebook.com/johndoe </span>
+      <span className = "righttop_label_content"> facebook.com/Alexdoe </span>
       <a className="right_link" href="#"> Edit  </a>
     </div>
     <hr/>
 
     <div id="right_top">
       <span className="righttop_label"> Contact </span>
-      <span className = "righttop_label_content"> Primary: johndoe@gmail.com </span>
+      <span className = "righttop_label_content"> Primary: Alexdoe@gmail.com </span>
       <a className="right_link" href="#"> Edit  </a>
     </div>
     <hr/>
 
     <div id="right_top">
       <span className="righttop_label"> Ad Contact </span>
-      <span className = "righttop_label_content"> johndoe@gmail.com </span>
+      <span className = "righttop_label_content"> Alexdoe@gmail.com </span>
       <a className="right_link" href="#"> Edit  </a>
     </div>
     <hr/>

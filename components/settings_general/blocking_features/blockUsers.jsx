@@ -7,7 +7,8 @@ import {levenshteinDistance} from '../../../algorithms.js'
 class BlockUsers extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {username: '', renderPopup:false, friendsList:[],renderUltimateBlock:false,blockedUserslist:[],showUnblockPopup:false};
+    this.state = {username: '', renderPopup:false, friendsList:[],renderUltimateBlock:false,blockedUserslist:[],showUnblockPopup:false, friend_profile:{}};
+      
     this.handleChange = this.handleChange.bind(this);
     this.onClickBlock = this.onClickBlock.bind(this);
     this.onClickUltimateBlock = this.onClickUltimateBlock.bind(this);
@@ -21,12 +22,14 @@ class BlockUsers extends React.Component {
 componentDidMount(){
     var blockedUsers = JSON.parse(localStorage.getItem('blockedUsers'));
     var friends = JSON.parse(localStorage.getItem('friends'))
+    var friends_profile = JSON.parse(localStorage.getItem('friend_profile'))
     
     //console.log('The blocked'+  blockedUsers)
     
     this.setState({
        blockedUserslist: blockedUsers,
-       friendsList: friends
+       friendsList: friends,
+       friend_profile:friends_profile
     })
     
     //console.log('The state blocked' +this.state.blockedUserslist.length)
@@ -73,12 +76,13 @@ onClickUltimateBlock(user){
 
 UltimateBlock(){
      return (
-     <Popup title = {`Are you sure you want to block ${this.state.username}?`} cancel={()=>{this.cancel('second')}} 
-                
-        okay = {()=>{this.allowed()}} > 
+     <Popup title = {`Are you sure you want to block ${this.state.username}?`} cancel = {()=>{this.cancel('second')}} 
+     okay = {()=>{this.allowed()}} 
+      okButtonName = {`Block ${this.state.username.split(" ")[0]}`}> 
        <div>
           <div className="popup_imgwrap">
            <img src='../../assets/warning.png' width="53" height="48"/>
+           </div>
            <div className="popup_content">
                <div><h4>{this.state.username} will no longer be able to:</h4></div>
                <ul>
@@ -95,7 +99,7 @@ UltimateBlock(){
                <div className ="popup_content_border"> </div>
                
                <div className="popup_content_2">Instead, you may want to send {this.state.username} a message because he might not know he is bothering you.  <a href="">Let him know.</a></div>     
-           </div>
+           
            </div>
         </div>  
     </Popup>
@@ -123,7 +127,7 @@ BlockPopup(){
                             
         pop = (
             //Popup has no okay button, just the x button to cancel
-            <Popup title="Block People" cancel={()=>{this.cancel('first')}}>
+            <Popup title="Block People" cancel={()=>{this.cancel('first')}} noFooter={true} header_style={true} content_style={true} closeButton={true}>
                 
                 {!found? <div>No results found</div>:
 
@@ -132,7 +136,14 @@ BlockPopup(){
 
                         <ul className="BlockPopup">
                             {foundelements.map((element, index) => {
-                                return <li key={index}> {element} <Button href="javascript:void(0)" onClick={()=>{this.onClickUltimateBlock(element)}}> Block </Button> </li>
+                                var profile_image = this.state.friend_profile[element].profile_pic;
+                                
+                                
+                                
+                                return <li key={index}> {element} 
+                                <img src={`../../../assets/${profile_image}`}/> 
+                                
+                                <Button  type="cancel" href="javascript:void(0)" onClick={()=>{this.onClickUltimateBlock(element)}}> Block </Button> </li>
                             })}
 
                         </ul>
@@ -143,9 +154,8 @@ BlockPopup(){
          )
         
     }else{
-        console.log(' Invalid Search Query: Please type a valid query in the search box and try again')
         pop = (
-            <Popup title="Invalid Search Query" cancel={()=>{this.cancel('first')}}>
+            <Popup title="Invalid Search Query" cancel={()=>{this.cancel('first')}} width={900} height={10} closeButton= {true} closeButtonName="Close" content_style={true} header_style={true}>
                <p>Please type a valid query in the search box and try again</p> 
             </Popup>
         )
@@ -179,7 +189,7 @@ unblockUser(){
     
     return(
         
-        <Popup title={`Unblock ${user}`} cancel={()=>{this.cancel('third')}} okay={()=> this.allowUnblock()}>
+        <Popup title={`Unblock ${user}`} cancel={()=>{this.cancel('third')}} okay={()=> this.allowUnblock()} okButtonName ="Confirm">
         
              <div>Are you sure you want to unblock {user}</div>
                 
@@ -225,9 +235,9 @@ return (
             <span className="righttop_label"> Restricted List </span>
                 <a className="right_link" href="#"> Edit List </a>
                 <div className = "righttop_text">
-                  When you add a friend to your Restricted list, they won't see posts on Facebook that you share to Friends only.
+                  When you add a friend to your Restricted list, they won't see posts on Fakebook that you share to Friends only.
                   They may still see things that you share to Public or on a mutual friend's timeline, and posts that they're tagged in.
-                   Facebook doesn't notify your friends when you add them to your Restricted list. <a href="#">Learn more</a>
+                   Fakebook doesn't notify your friends when you add them to your Restricted list. <a href="#">Learn more</a>
                   </div>
             </div>
             <hr/>
@@ -244,7 +254,7 @@ return (
                     <label> Block users
                       <input id = "text" type="text" placeholder="Add name or email" onChange={this.handleChange} />
                     </label>
-                    <Button href="javascript:void(0)" onClick={this.onClickBlock}>Block </Button>
+                    <Button href="javascript:void(0)" type="confirm" onClick={this.onClickBlock}>Block </Button>
                     <br/>
                     
                     {this.state.renderPopup?this.BlockPopup():""}

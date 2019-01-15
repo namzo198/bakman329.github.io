@@ -37,16 +37,16 @@ class App extends React.Component {
     let userparams = this.getChildContext();
 
     let option_dict = {
-      "session_id": userparams.session_id
+      "session_id": userparams. session_id
     };
 
     let adaptations_dict = {
       "deletetimeline": userparams.deletetimeline,
       "liketimeline": userparams.liketimeline,
       "chatoffline": userparams.chatoffline,
-      "withholdcellphone": userparams.withholdcellphone
+      "contactInfo": userparams.contactInfo
     };
-
+    
     // If any change is made to localstorage, refreshes after update
     let update = false;
     Object.keys(option_dict).forEach(function(key) {
@@ -63,9 +63,10 @@ class App extends React.Component {
         update = true;
       }
     });
+      
     localStorage.setItem("adaptations", JSON.stringify(adaptations));
   
-    if (update) {
+      if (update) {
       window.location.href = "/";
     }
   }
@@ -80,7 +81,6 @@ class App extends React.Component {
     let result = {};
 
     pairs.forEach(function(pair) {
-      console.log(pair)
       pair = pair.split('=');
       result[pair[0]] = decodeURIComponent(pair[1] || '');
     });
@@ -91,19 +91,19 @@ class App extends React.Component {
   // Defines global variables
   getChildContext() {
     // Get the url parameters from JSON String
-    const {session_id,deletetimeline,liketimeline,chatoffline,withholdcellphone} = this.urlqueryStringToJSON();
+    const {session,deletetimeline,liketimeline,chatoffline,contactInfo} = this.urlqueryStringToJSON();
 
     // const {change}="Hello"
     // Assign url parameters to local variables
-    const current_session = {session_id,deletetimeline,liketimeline,chatoffline,withholdcellphone};
+    const current_session = {session,deletetimeline,liketimeline,chatoffline,contactInfo};
 
     // Assigns the local variables to the global variables 
     return {
-      session_id: current_session.session_id,
+      session_id: current_session.session,
       deletetimeline: current_session.deletetimeline,
       liketimeline: current_session.liketimeline,
       chatoffline: current_session.chatoffline,
-      withholdcellphone: current_session.withholdcellphone,
+      contactInfo: current_session.contactInfo,
       NewsFeed: true,
       Timeline: false
     };     
@@ -116,6 +116,7 @@ class App extends React.Component {
           <div>
             <Header />
             <Switch>
+             
               <Route exact path='/' component={NewsFeed} />
               <Route path='/profile/:user' component={Profile} />
               <Route path='/settings_general/:section' component={GeneralSettings} />
@@ -139,7 +140,7 @@ App.childContextTypes = {
   deletetimeline:PropTypes.string,
   chatoffline: PropTypes.string,
   liketimeline:PropTypes.string,
-  withholdcellphone: PropTypes.string,
+  contactInfo: PropTypes.string,
   BasicInfo:PropTypes.string,
 };
 

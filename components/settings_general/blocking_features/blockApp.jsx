@@ -49,7 +49,7 @@ class BlockApp extends React.Component {
          var event = {
            action: `Unblock ${app} from App blockage`,
            context: 'Block App',
-           name:'John Doe'
+           name:'Alex Doe'
         };
         return event;
     }
@@ -84,7 +84,7 @@ class BlockApp extends React.Component {
             <div id="right_bottom">
               <span className="rightbottom_label"> Block app  </span>
               <div className= "rightbottom_text">Once you've blocked an app,
-                it can no longer contact you or get non-public information about you through Facebook.
+                it can no longer contact you or get non-public information about you through Fakebook.
               <a href="#"> Learn more</a>  </div>
               
                <div id="right_bottom_form">

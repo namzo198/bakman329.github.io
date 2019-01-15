@@ -12,7 +12,7 @@ export const CreateEvent = (event_data)=>{
     
     //let session_number = "FROM COOKIE:MOSES AS PER NOW"; //Remember to change session id based on cookie.
     
-    console.log("Action "+action+", Details "+details+" Object"+object);
+    console.log(" Session_ID "+session+": Action "+action+", Details "+details+" Object "+object);
     
     //submit event_data to api
         $.ajax({

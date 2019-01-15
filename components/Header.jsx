@@ -13,21 +13,43 @@ class Header extends React.Component {
         
         <div id='user'>
           <Link to={{
-                pathname:'/profile/john_doe',
-                    state:{fromNewsFeed:true}}}><img id='profile-pic' src='../assets/profile_img.jpg'/><span id='header-text'>John Doe</span></Link>
+                pathname:'/profile/Alex_doe',
+                    state:{fromNewsFeed:true}}}><img id='profile-pic' src='/assets/users/alex_profile_img.jpg'/><span id='header-text'>  Alex</span></Link>
                     
+                    
+           
           <div id='header-text'>
+           
             <p><Link to={{
-                pathname:'/settings_profile/overview',
+                pathname:'/',
                     state:{fromNewsFeed:true}}}><span>Home</span></Link>
             </p> 
                  
-            <p>Find Friends</p>
+            <p>Create</p>
             
-            <p><Link to={{
-               pathname:'/settings_general/blockInvite',
-               state:{fromHeader:true}}}><span>Settings</span></Link>
+             <p>
+               <img id='profile-pic' src='/assets/findfriends.png'/> 
             </p>
+            
+             <p>
+               <img id='profile-pic' src='/assets/messages.png'/> 
+            </p>
+            
+             <p>
+               <img id='profile-pic' src='/assets/notifications.png'/> 
+            </p>
+            
+            <p>
+               <img id='profile-pic' src='/assets/quick_help.png'/> 
+            </p>
+            
+            <p>
+              <Link to={{
+               pathname:'/settings_general/blockInvite',
+               state:{fromHeader:true}}}>
+               <img id='profile-pic' src='/assets/settings.png'/>
+               </Link>
+              </p>
             
           </div>
         </div>

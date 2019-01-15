@@ -13,6 +13,7 @@ class Automation extends React.Component{
         <div>
             <label>{this.props.label}</label><Button id='undo' href='javascript:void(0)' onClick={this.props.onUndoClick}>{this.props.Undobutton}</Button>  
              {okButton_option}
+             
         </div>
     );
   }

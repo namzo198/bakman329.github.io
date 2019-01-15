@@ -1444,11 +1444,11 @@ function indexPosts() {
 
 // TODO: Maybe consolidate these defaults to a .JSON file
 function resetPosts() {
-  localStorage.setItem('posts', JSON.stringify([{ name: 'John Doe',
-    content: 'Hi, I\'m John',
+  localStorage.setItem('posts', JSON.stringify([{ name: 'Alex Doe',
+    content: 'Hi, I\'m Alex',
     comments: [{ name: 'Jack Roe',
-      img: './assets/profile_img.jpg',
-      content: 'Hi, John. I\'m Jack',
+      img: './assets/alex_profile_img.jpg',
+      content: 'Hi, Alex. I\'m Jack',
       liked: false }],
     hidden: false,
     key: 1 }, { name: 'Jack Roe',
@@ -1459,7 +1459,7 @@ function resetPosts() {
 }
 
 function resetChat() {
-  localStorage.setItem('incoming_messages', JSON.stringify({ 'Jack Roe': ['Hello, John', 'How\'re you doing?'] }));
+  localStorage.setItem('incoming_messages', JSON.stringify({ 'Jack Roe': ['Hello, Alex', 'How\'re you doing?'] }));
   localStorage.setItem('outgoing_messages', '{}');
 }
 
@@ -1473,14 +1473,14 @@ function resetSettings() {
 } */
 
 function resetUsers() {
-  localStorage.setItem('users', JSON.stringify([{ name: "John Doe",
-    profile_pic: 'profile_img.jpg',
+  localStorage.setItem('users', JSON.stringify([{ name: "Alex Doe",
+    profile_pic: 'alex_profile_img.jpg',
     friend: false }, { name: "Jack Roe",
-    profile_pic: 'profile_img.jpg',
+    profile_pic: 'alex_profile_img.jpg',
     friend: true }, { name: "Jim Mend",
-    profile_pic: 'profile_img.jpg',
+    profile_pic: 'alex_profile_img.jpg',
     friend: true }, { name: "Mike Booth",
-    profile_pic: 'profile_img.jpg',
+    profile_pic: 'alex_profile_img.jpg',
     friend: false }]));
 }
 
@@ -1495,7 +1495,7 @@ function resetSession() {
 function resetContactInfo() {
   localStorage.setItem('contactInfo', JSON.stringify({
     email: {
-      email: 'johndoe@gmail.com',
+      email: 'alexdoe@gmail.com',
       AddEmailInfo: false,
       BasicEmailAdded: true
     },
@@ -9151,7 +9151,7 @@ var NewCommentArea = function (_React$Component) {
                   content = this.props.replyto + ' ' + content;
                }
 
-               posts[post_index].comments.push({ 'name': 'John Doe', 'img': './assets/profile_img.jpg', 'content': content });
+               posts[post_index].comments.push({ 'name': 'Alex Doe', 'img': './assets/alex_profile_img.jpg', 'content': content });
                localStorage.posts = JSON.stringify(posts);
             }
 
@@ -13993,7 +13993,7 @@ var Comment = function (_React$Component) {
     key: 'actions',
     value: function actions() {
       var delete_if_user;
-      if (this.props.name === 'John Doe') {
+      if (this.props.name === 'Alex Doe') {
         delete_if_user = [_react2.default.createElement(
           'span',
           { id: 'comment-actions-dot', key: 0 },
@@ -14172,13 +14172,13 @@ var Header = function (_React$Component) {
           _react2.default.createElement(
             _reactRouterDom.Link,
             { to: {
-                pathname: '/profile/john_doe',
+                pathname: '/profile/alex_doe',
                 state: { fromNewsFeed: true } } },
-            _react2.default.createElement('img', { id: 'profile-pic', src: '../assets/profile_img.jpg' }),
+            _react2.default.createElement('img', { id: 'profile-pic', src: '../assets/alex_profile_img.jpg' }),
             _react2.default.createElement(
               'span',
               { id: 'header-text' },
-              'John Doe'
+              'Alex Doe'
             )
           ),
           _react2.default.createElement(
@@ -14289,7 +14289,7 @@ var NewPostArea = function (_React$Component) {
          var event = {
             action: 'Post Created',
             context: 'From NewsFeed',
-            name: 'John Doe'
+            name: 'Alex Doe'
          };
 
          if (this.state.value == '') {
@@ -14298,8 +14298,8 @@ var NewPostArea = function (_React$Component) {
 
          var posts = JSON.parse(localStorage.getItem('posts'));
 
-         var post = { name: 'John Doe',
-            img: './assets/profile_img.jpg',
+         var post = { name: 'Alex Doe',
+            img: './assets/alex_profile_img.jpg',
             content: this.state.value,
             key: posts.length,
             comments: [] };
@@ -14410,8 +14410,8 @@ var NewsFeed = function (_React$Component) {
           _react2.default.createElement(
             'li',
             null,
-            _react2.default.createElement('img', { src: './assets/profile_img.jpg' }),
-            _react2.default.createElement(_ProfileLink2.default, { name: 'John Doe', fromNewsFeed: true })
+            _react2.default.createElement('img', { src: './assets/alex_profile_img.jpg' }),
+            _react2.default.createElement(_ProfileLink2.default, { name: 'Alex Doe', fromNewsFeed: true })
           ),
           _react2.default.createElement(
             'li',
@@ -14620,7 +14620,7 @@ var Post = function (_React$Component) {
       };
 
       var posts = JSON.parse(localStorage.getItem('posts'));
-      var post = { name: 'John Doe',
+      var post = { name: 'Alex Doe',
         original_poster: this.props.name,
         content: this.props.children,
         comments: [],
@@ -14703,7 +14703,7 @@ var Post = function (_React$Component) {
       });
 
       var like_text = liked ? 'Unlike' : 'Like';
-      if (this.props.name == 'John Doe') {
+      if (this.props.name == 'Alex Doe') {
         // console.log("The delete button adaptation is", adaptMethod.deletepost)
         // Keep an array where I specify index and just loop  
         return _react2.default.createElement(
@@ -14843,7 +14843,7 @@ var Post = function (_React$Component) {
                 { onClick: this.onClickHide },
                 'Hide post'
               ),
-              this.props.name != "John Doe" ? _react2.default.createElement(
+              this.props.name != "Alex Doe" ? _react2.default.createElement(
                 _Button2.default,
                 null,
                 'Unfollow ',
@@ -15073,7 +15073,7 @@ var Profile = function (_React$Component) {
             _react2.default.createElement(
               'div',
               { className: 'profile_photo' },
-              _react2.default.createElement('img', { src: '/assets/profile_img.jpg' })
+              _react2.default.createElement('img', { src: '/assets/alex_profile_img.jpg' })
             ),
             _react2.default.createElement(
               'h2',
@@ -15492,7 +15492,7 @@ var ContactInfo = function (_Component) {
         event = {
           action: infoAdded,
           context: 'Basic ' + inputfieldname + ' Information Edited and removed/Tried to be submitted',
-          name: 'John Doe'
+          name: 'Alex Doe'
         };
 
         updateinfo = (_updateinfo = {}, _defineProperty(_updateinfo, inputfieldname_lwrcse, this.state[inputfieldname_lwrcse]), _defineProperty(_updateinfo, add, this.state[add]), _defineProperty(_updateinfo, infoAdded, false), _updateinfo);
@@ -15509,7 +15509,7 @@ var ContactInfo = function (_Component) {
         event = {
           action: infoAdded,
           context: 'Basic ' + inputfieldname + ' Information Added',
-          name: 'John Doe'
+          name: 'Alex Doe'
         };
 
         updateinfo = (_updateinfo2 = {}, _defineProperty(_updateinfo2, inputfieldname_lwrcse, this.state[inputfieldname_lwrcse]), _defineProperty(_updateinfo2, add, false), _defineProperty(_updateinfo2, infoAdded, !this.state[infoAdded]), _updateinfo2);
@@ -16168,7 +16168,7 @@ var Apps = function (_Component) {
             /*var event={
                action:`Turned ${this.state.decision?"on":"off"} fame and app notifications`,
                 context:"Game and app notifications",
-                name: "John Doe"
+                name: "Alex Doe"
             }
             
             return event;*/
@@ -16452,7 +16452,7 @@ var BlockApp = function (_React$Component) {
             var event = {
                 action: 'Unblock ' + app + ' from App blockage',
                 context: 'Block App',
-                name: 'John Doe'
+                name: 'Alex Doe'
             };
             return event;
         }
@@ -16636,7 +16636,7 @@ var BlockAppInvites = function (_React$Component) {
             var event = {
                 action: 'Unblock ' + friend + ' from App Invites',
                 context: 'Block app invites',
-                name: 'John Doe'
+                name: 'Alex Doe'
             };
             return event;
         }
@@ -16811,7 +16811,7 @@ var BlockEventInvites = function (_React$Component) {
             var event = {
                 action: 'Unblock ' + friend + ' from Event Invites',
                 context: 'Block event invites',
-                name: 'John Doe'
+                name: 'Alex Doe'
             };
             return event;
         }
@@ -17445,7 +17445,7 @@ var General = function (_Component) {
             _react2.default.createElement(
               "span",
               { className: "righttop_label_content" },
-              " John Doe "
+              " Alex Doe "
             ),
             _react2.default.createElement(
               "a",
@@ -17465,7 +17465,7 @@ var General = function (_Component) {
             _react2.default.createElement(
               "span",
               { className: "righttop_label_content" },
-              " facebook.com/johndoe "
+              " facebook.com/Alexdoe "
             ),
             _react2.default.createElement(
               "a",
@@ -17485,7 +17485,7 @@ var General = function (_Component) {
             _react2.default.createElement(
               "span",
               { className: "righttop_label_content" },
-              " Primary: johndoe@gmail.com "
+              " Primary: Alexdoe@gmail.com "
             ),
             _react2.default.createElement(
               "a",
@@ -17505,7 +17505,7 @@ var General = function (_Component) {
             _react2.default.createElement(
               "span",
               { className: "righttop_label_content" },
-              " johndoe@gmail.com "
+              " Alexdoe@gmail.com "
             ),
             _react2.default.createElement(
               "a",

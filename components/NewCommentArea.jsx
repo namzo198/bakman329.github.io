@@ -41,7 +41,7 @@ class NewCommentArea extends React.Component {
                 content = this.props.replyto + ' ' + content;
             }
 
-            posts[post_index].comments.push({'name': 'John Doe', 'img': './assets/profile_img.jpg', 'content': content});
+            posts[post_index].comments.push({'name': 'Alex Doe', 'img': './assets/users/alex_profile_img.jpg', 'content': content});
             localStorage.posts = JSON.stringify(posts);
          }
 

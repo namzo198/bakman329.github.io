@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {indexPosts, getProfilePic, audienceText} from '../utilities.js'
+import {indexPosts, getProfilePic, audienceText,getParsed,saveVisitedAdaptation} from '../utilities.js'
 
 import Button from './Button.jsx'
 import Comment from './Comment.jsx'
@@ -8,9 +8,13 @@ import NewCommentArea from './NewCommentArea.jsx'
 import PostArea from './PostArea.jsx'
 import Menu from './Menu.jsx'
 import Popup from './Popup.jsx'
+import ContactInfoSuggestion from './profile/settings/contactDisplays/ContactInfoSuggestion.jsx'
 import SuggestionPopup from '../adaptations/Suggestion.jsx'
 import Automation from '../adaptations/Automation.jsx'
 import ProfileLink from './ProfileLink.jsx'
+
+
+//TODO: Need to work adaptation rendering lifecycle
 
 class Post extends React.Component {
   constructor(props) {
@@ -36,7 +40,10 @@ class Post extends React.Component {
       value: '',
       showPostWhenHidden: false,
       renderSuggestion:false,
-      hidden: hidden
+      hidden: hidden,  
+      displayContactInfoSuggestion:true,
+      adaptations: getParsed('adaptations'),
+      adaptationVisited: getParsed('visited')
     };
 
     this.onClickDelete = this.onClickDelete.bind(this);
@@ -45,16 +52,34 @@ class Post extends React.Component {
     this.onClickComment = this.onClickComment.bind(this);
     this.onClickHide = this.onClickHide.bind(this);
     this.onClickUndo = this.onClickUndo.bind(this);
+    this.onClickAutoOk = this.onClickAutoOk.bind(this);
+    this.onDisplayContactInfoSuggestion = this.onDisplayContactInfoSuggestion.bind(this);
     this.show = this.show.bind(this);
   }
 
   componentDidMount() {
     // Set a time on when to display the Suggestion.
     if (!this.state.hidden) {
-      setTimeout(() => this.show(), 2000);
+      this.timerID = setTimeout(() => this.show(), 2000);
     }
   }
-
+    
+    
+   componentWillUnmount(){
+       clearInterval(this.timerID)
+   }
+    
+   visitedAdaptation(feature,name){
+     saveVisitedAdaptation(feature,name)
+   }
+    
+    //Dismount the Suggestion for Contact Info in timeline
+    onDisplayContactInfoSuggestion() {
+       //console.log("The contactInfo suggestion has been closed")
+        
+        this.setState({displayContactInfoSuggestion: false});
+         //this.setState({displayContactInfoSuggestion:false,})
+    }
   // Show the Suggestion
   show() {
     this.setState({
@@ -65,8 +90,8 @@ class Post extends React.Component {
   onClickDelete() {
       var event = {
         render: false,
-        action: 'Deleted',
-        context: this.state.context,
+        action: 'Deleted post '+this.props.index,
+        context: "Newsfeed",
         name: this.props.name + '\'s Post'
       };
 
@@ -80,7 +105,13 @@ class Post extends React.Component {
       });
       localStorage.setItem('posts', JSON.stringify(posts));
       indexPosts();
-
+    
+      //if the highlighted button has not been visited and there is a highlight adaptation
+     if(!this.state.adaptationVisited["DeletePost"]["highlight"] && this.state.adaptations['deletetimeline'] === "high"){
+         
+       this.visitedAdaptation("DeletePost","highlight");
+         
+     }
       return event;
   }
 
@@ -92,7 +123,7 @@ class Post extends React.Component {
       };
 
       var posts = JSON.parse(localStorage.getItem('posts'));
-      var post = {name: 'John Doe',
+      var post = {name: 'Alex Doe',
                   original_poster: this.props.name,
                   content: this.props.children,
                   comments: [],
@@ -105,7 +136,7 @@ class Post extends React.Component {
   }
 
   onClickLike() {
-    var posts = JSON.parse(localStorage.getItem('posts'));
+    var posts = getParsed('posts');
     var new_state = false;
     posts.some((post, index, array) => {
       if (post.key == this.props.index) {
@@ -120,7 +151,7 @@ class Post extends React.Component {
       name: this.props.name + '\'s Post'
     }
 
-    var posts = JSON.parse(localStorage.getItem('posts'));
+    var posts = getParsed('posts');
     posts.some((post, index, array) => {
       if (post.key == this.props.index) {
         post.liked = new_state;
@@ -130,6 +161,13 @@ class Post extends React.Component {
     localStorage.setItem('posts', JSON.stringify(posts));
     indexPosts();
     PostArea.update();
+      
+      //if the highlighted button has not been visited and there is a highlight adaptation
+     if(!this.state.adaptationVisited["LikePost"]["highlight"] && this.state.adaptations['liketimeline'] === "high"){
+         
+       this.visitedAdaptation("LikePost","highlight");
+         
+     }
 
     return event;
   }
@@ -154,9 +192,13 @@ class Post extends React.Component {
   }
 
   actions() {
-    let adaptations = JSON.parse(localStorage.adaptations);
-    var posts = JSON.parse(localStorage.getItem('posts'));
+    //let adaptations = getParsed('adaptations');
+    //let adaptationVisited = getParsed("visited");
+      
+    var posts = getParsed('posts');
+      
     var liked = false;
+      
     posts.some((post, index, array) => {
       if (post.key == this.props.index) {
         liked = post.liked;
@@ -165,20 +207,21 @@ class Post extends React.Component {
     });
 
     var like_text = ((liked) ? 'Unlike' : 'Like')
-    if (this.props.name == 'John Doe') {
+    
+    if (this.props.name == 'Alex Doe') {
       // console.log("The delete button adaptation is", adaptMethod.deletepost)
       // Keep an array where I specify index and just loop  
       return(
         <div id='actions'>
-          <Button href='javascript:void(0);' onClick={this.onClickLike} adapt={adaptations['liketimeline']}>{like_text}</Button>
+          <Button href='javascript:void(0);' onClick={this.onClickLike} adapt={!this.state.adaptationVisited["LikePost"]["highlight"] && this.props.index === 3?this.state.adaptations['liketimeline']:""}>{like_text}</Button>
           <a href='javascript:void(0);' onClick={this.onClickComment}>Comment</a>
-          <Button href='javascript:void(0);' onClick={this.onClickDelete} adapt={adaptations['deletetimeline']}>Delete</Button>
+          <Button href='javascript:void(0);' onClick={this.onClickDelete} adapt={!this.state.adaptationVisited["DeletePost"]["highlight"] && this.props.index === 6?this.state.adaptations['deletetimeline']:""}>Delete</Button>
         </div>);
     }
     else {
       return(
         <div id='actions'>
-          <Button href='javascript:void(0);' onClick={this.onClickLike} adapt={adaptations['liketimeline']}>{like_text}</Button>
+          <Button href='javascript:void(0);' onClick={this.onClickLike} adapt={this.state.adaptations['liketimeline']}>{like_text}</Button>
           <a href='javascript:void(0);' onClick={this.onClickComment}>Comment</a>
           <Button href='javascript:void(0);' onClick={this.onClickShare}>Share</Button>
         </div>);
@@ -194,21 +237,40 @@ class Post extends React.Component {
       showPostWhenHidden: true
     };
     this.setState(event);
-
+    
+    this.visitedAdaptation("DeletePost","automation");
     return event;
-  }
+   }
+    
+    onClickAutoOk(){
+        var event = {
+      render: false,
+      action: 'Ok With Automatic Deletion of Post',
+      context: this.state.context,
+      name: this.props.name + '\'s Post',
+      showPostWhenHidden: true
+    };
+    this.setState(event);
+    this.visitedAdaptation("DeletePost","automation");
+        
+    return event; 
+    }
 
   renderPost(comments,post_title) {
-    let adaptations = JSON.parse(localStorage.adaptations);
-    if (adaptations['deletetimeline'] === 'auto' && !this.state.showPostWhenHidden) {
+    let adaptations = getParsed('adaptations');
+    let adaptationVisited = getParsed("visited");
+      
+    if (!this.state.adaptationVisited["DeletePost"]["automation"] && adaptations['deletetimeline'] === 'auto' && !this.state.showPostWhenHidden && this.props.index === 9) {
       return (
-        <Automation Undobutton="Undo" label="This post was automatically deleted" onUndoClick={this.onClickUndo} />
+              
+              <Automation Undobutton="Undo" Okbutton="Ok" onOkClick={this.onClickAutoOk} label="This post was automatically deleted" onUndoClick={this.onClickUndo} />
+             
       );
     }
     else {
       // Suggestion adaptation for the delete method
       var Suggestion_Popup;
-      if (adaptations['deletetimeline'] === 'sugst' && this.props.index === 2) {
+      if (!this.state.adaptationVisited["DeletePost"]["suggestion"] && adaptations['deletetimeline'] === 'sugst' && this.props.index === 6) {
         {/*TO DO: Delete post on click of'OK' and record edb event*/}
 
         var Suggestion_Popup=(
@@ -222,6 +284,8 @@ class Post extends React.Component {
               };
               this.setState(event);
                     
+              //if the suggestion has not been visited/engaged with yet
+              this.visitedAdaptation("DeletePost","suggestion");
               return event;
             }}
 
@@ -234,12 +298,16 @@ class Post extends React.Component {
                 renderSuggestion:false
               };
               this.setState(event);
+            
+              //if the suggestion has not been visited/engaged with yet
+              this.visitedAdaptation("DeletePost","suggestion");
               
               return event;
             }}>
-            
+                
+                
             <label>
-                I think you should delete {post_title}'s Post that states  "{this.props.children}."
+                Hi {this.props.name.split(" ")[0]} - I think you should delete the post that states "<strong>{this.props.children} </strong>" This sounds like hate speech. Furthermore, did you know your current audience is set to <strong>{this.props.audience}</strong> meaning anyone on Fakebook can see this post.<a href="https://www.facebook.com/communitystandards/hate_speech"> Learn More</a> 
             </label>
           </SuggestionPopup>);
       }
@@ -256,7 +324,7 @@ class Post extends React.Component {
             </div>
             <Menu icon='horiz'>
               <Button onClick={this.onClickHide}>Hide post</Button>
-              {(this.props.name != "John Doe") ? <Button>Unfollow {this.props.name}</Button> : null}
+              {(this.props.name != "Alex Doe") ? <Button>Unfollow {this.props.name}</Button> : null}
             </Menu>
           </div>
           <p>{this.props.children}</p>
@@ -273,7 +341,6 @@ class Post extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     if (!this.state.render) {
       return null;
     }
@@ -322,13 +389,31 @@ class Post extends React.Component {
     comments = (comments) ? comments : [];
 
     const Children = this.props.children
-
+    let adaptations = JSON.parse(localStorage.adaptations);
+      
+     
+      
     return(
+        
       <div id='post'>
+      {console.log("In Post Props"+this.props.displayContactInfoSuggestion +" State"+this.state.displayContactInfoSuggestion)}
+      
+       {!this.state.adaptationVisited["DeletePost"]["automation"] && adaptations['deletetimeline'] === 'auto'&& this.props.index === 9?
+        <div id='except-warning'> 
+          <p>{/*this.props.children*/}</p> 
+          {this.renderPost(comments,post_title)}
+         
+          {this.props.displayContactInfoSuggestion && this.state.displayContactInfoSuggestion && this.props.index === 0 && <ContactInfoSuggestion username = {this.props.name.split(" ")[0]} destroy = {this.onDisplayContactInfoSuggestion} />}
+          
+        </div>:
         <div id='post-content'> 
           <p>{/*this.props.children*/}</p> 
           {this.renderPost(comments,post_title)}
+          
+          {this.props.displayContactInfoSuggestion && this.state.displayContactInfoSuggestion && this.props.index === 0 && <ContactInfoSuggestion username = {this.props.name} destroy = {this.onDisplayContactInfoSuggestion}/>}
+          
         </div>
+        }
       </div>);
   }
 }

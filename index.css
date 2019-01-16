@@ -882,7 +882,7 @@ basicInfo-hr {
 .display_inputform {
     border-bottom: 1px solid #e9ebee;
     border-top:1px solid #e9ebee;
-    margin -13px -24px;
+    margin: -13px -24px;
     padding: 12px 24px;
     position: relative;
 }

@@ -9,6 +9,8 @@
   "author": "moses",
   "license": "ISC",
   "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
     "express": "^4.15.3",
     "history": "^1.17.0",
     "jquery": "^3.2.1",
@@ -18,12 +20,14 @@
     "react-dom": "^15.5.4",
     "react-popup": "^0.9.3",
     "react-router": "^4.2.0",
+    "react-router-dom": "^4.3.1",
     "webpack": "^2.5.1",
     "webpack-dev-server": "^2.4.5"
   },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
     "babel-preset-latest": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
     "classnames": "^2.2.6",
     "eslint": "^4.0.0",
     "polyfills": "^2.1.1",

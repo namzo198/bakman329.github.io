@@ -96,15 +96,9 @@ class Popup extends React.Component {
          <div className="popup" style={style}>
             <div className="popup-header" style={header_style}>
               {this.props.title}
-              {(this.props.dismissButton) ? <Button onClick={() => {this.props.cancel(); this.props.destroy(true);}} style={{float: "right", paddingRight: "8px", color: "#b5b5b5"}}>X</Button> : ''}
+              {close_button}
             </div>
-            <div className="popup-content"><div id={(this.props.noPadding) ? "popup-no-padding" : ""}>{this.props.children}</div></div>
-            {footer}
-            <div className={headerColor}>
-            {this.props.title}
-            {  close_button }
-            </div>
-            <div className={contentStyle}><div>{this.props.children}</div></div>
+            <div className="popup-content" className={contentStyle}><div id={(this.props.noPadding) ? "popup-no-padding" : ""}>{this.props.children}</div></div>
             {!this.props.noFooter?footer:""}
          </div>
       )

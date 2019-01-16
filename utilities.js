@@ -240,7 +240,7 @@ export function resetAdaptationDisplay(){
         },
         Privacy:{
             suggestion:false,
-            highlight
+            highlight:false
         }
     }))
 }

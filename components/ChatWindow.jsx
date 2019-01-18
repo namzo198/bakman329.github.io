@@ -1,7 +1,7 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import {resetChat} from '../utilities.js'
 import Button from './Button.jsx'
+import ProfileLink from './ProfileLink.jsx';
 
 class ChatWindow extends React.Component {
    constructor(props) {
@@ -68,7 +68,7 @@ class ChatWindow extends React.Component {
          <div id='chat-window'>
             <div id='chat-header'>
                {/* TODO: Add option to turn chat back on from here */}
-               <a id='chat-name' href='#'>{this.props.name}</a>
+               <ProfileLink name={this.props.name} />
                <Button id='chat-close' onClick={this.destroyWindow}>&#10005;</Button>
             </div>
             <div id='chat-content'>

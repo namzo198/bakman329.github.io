@@ -16,9 +16,7 @@ class UploadPopup extends React.Component {
   render() {
     return (
       <Popup title="Upload photo/video"
-           destroy={(cancel=false) => {
-             this.setState({renderUploadPopup: false});
-           }}
+           destroy={this.props.destroy}
            okay={() => {}}
            cancel={() => {}} >
         <Button onClick={() => {this.onClickPhoto('/assets/profile_img.jpg')}}>

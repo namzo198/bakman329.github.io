@@ -47,7 +47,7 @@ class NewPostArea extends React.Component {
        
      localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
      indexPosts();
-     PostArea.update();
+     this.props.postarea.update();
      this.setState({value: '', photo: '', renderUploadPopup: false});
 
      return event;
@@ -62,7 +62,9 @@ class NewPostArea extends React.Component {
    }
 
    render() {
-     var uploadPopup = <UploadPopup onClickPhoto={this.onClickPhoto} />;
+     var uploadPopup = <UploadPopup
+       onClickPhoto={this.onClickPhoto}
+       destroy={() => {this.setState({renderUploadPopup: false})}} />;
 
       var photo = (this.state.photo) ?
         <img src={this.state.photo}

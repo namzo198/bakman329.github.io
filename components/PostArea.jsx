@@ -15,7 +15,7 @@ class PostArea extends React.Component {
          resetPosts();
       }
 
-      PostArea.update = PostArea.update.bind(this);
+      this.update = this.update.bind(this);
    }
 
    getPosts() {
@@ -48,7 +48,7 @@ class PostArea extends React.Component {
    }
      
 
-   static update() {
+   update() {
       this.forceUpdate();
    }
 

@@ -237,7 +237,7 @@ class ContactInfo extends Component {
 
   onClickUndo_Auto() {
     var event = {
-      action: 'Undo Political Views set',
+      action: 'Undo_Automatic Political Views set',
       context: 'In Contact Info, automation was declined with the clicking of Undo',
       renderAuto: false,
       BasicPoliticalAdded:false,
@@ -308,12 +308,12 @@ class ContactInfo extends Component {
         <div className="contact_section">
         
         {shouldDisplayAutomation && <div id='except-warning'>
-            <Automation Undobutton="Undo" Okbutton="Ok" onOkClick={this.onClickOk_Auto} label="Your political views were automatically set" onUndoClick={this.onClickUndo_Auto}/></div>}
+            <Automation undoButton="Undo" okButton="Ok" onOkClick={this.onClickOk_Auto} label="Your political views were automatically set" onUndoClick={this.onClickUndo_Auto}/></div>}
             
          
           <div className="heading">Contact Information</div>
           {this.display("Mobile", "+ Add a mobile phone","enter mobile number")}
-          {this.display("Address", "+ Add your address","Address,Town/City,Zip,Neighbourhood",!this.state.adaptationVisited["ContactInfo"]["highlight"]?this.state.adapt:"")}
+          {this.display("Address", "+ Add your address","Address,Town/City,Zip,Neighbourhood",!this.state.adaptationVisited["ContactInfo"]["highlight"]?this.state.adapt:null)}
           {this.display("Email", "+ Add an Email address","enter email address")}
           {this.display("Key", "+ Add a public key","Enter a PGP public key")}
           <br/>

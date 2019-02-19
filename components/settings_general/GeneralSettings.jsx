@@ -5,14 +5,34 @@ import Apps from './apps_and_websites.jsx'
 import TimelineandTagging from './timeline_and_tagging.jsx'
 import Privacy from './privacy.jsx'
 import General from './general.jsx'
+import {getParsed} from '../../utilities.js'
+import {highLightExtended,noHighLight} from '../../adaptations/Highlight.js'
 
 
 class GeneralSettings extends React.Component{
     constructor(props) {
         super(props)
         
+        let adaptation = getParsed("adaptations")
+        let adaptationVisited = getParsed("visited");
+        
+        this.state = {
+         adaptationVisited:adaptationVisited,
+        highlightPrivacy: !adaptationVisited["Privacy_futureRequests"]["highlight"]&& (adaptation["privacy_futureRequests"] === "high")?highLightExtended:noHighLight,
+        };
+        
         this.sidemenu = this.sidemenu.bind(this);
         this.getSelection = this.getSelection.bind(this);
+        this.changeStyle = this.changeStyle.bind(this);
+        
+    }
+    
+    changeStyle(){
+        if(!this.state.adaptationVisited["Privacy_futureRequests"]['highlight']){
+            this.setState({
+             highlightPrivacy:noHighLight
+            })    
+        }
     }
     
     sidemenu(){
@@ -27,12 +47,13 @@ class GeneralSettings extends React.Component{
                              </div> 
                           </div> 
                            <br/>
-                       
+                       <div style={this.state.highlightPrivacy}>
                         <div className = "imgwrap_2"> 
                             <div className ="link" > 
-                                <li> <Link to="/settings_general/privacy"> Privacy </Link> </li> 
+                                <li > <Link to="/settings_general/privacy" onClick = {this.changeStyle}> Privacy </Link> </li> 
                              </div> 
                           </div> 
+                          </div>
                            <br/>
                            
                             <div className = "imgwrap_3"> 

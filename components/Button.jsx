@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {CreateEvent} from '../controller/databaseFunctions.js';
 import  PropTypes from 'prop-types';
-import {highLight,No_highLight } from '../adaptations/Highlight.js';
+import {highLight,highLightExtended,No_highLight } from '../adaptations/Highlight.js';
 import {Link} from 'react-router-dom'
 
 //Get the hashId session index.htm/:sessionid=theidisthisone
@@ -56,17 +56,24 @@ class Button extends React.Component {
   }
 
   render() {
-    let inner = this.state.highlight ? <span style={highLight}>{this.props.children}</span> : this.props.children;
+      let inner = this.state.highlight ? <span style={this.props.width?highLightExtended:highLight}>{this.props.children}</span>
+      : this.props.children;
       if(this.props.routeTo){
         return(
         <Link id={this.props.id} onClick={this.onClick} to={this.props.routeTo} className={"button"  + ' ' + (this.props.type ? this.props.type : "default")}>{inner}</Link>
         )  
       }
     // Type prop is one of {default, cancel, confirm}
-    return (<a
+    return (
+        
+     
+        <a
       id={this.props.id} href={this.props.href ? this.props.href : "javascript:void(0)"}
       onClick={this.onClick}
-      className={"button"  + ' ' + (this.props.type ? this.props.type : "default")}>{inner}</a>);
+      className={"button"  + ' ' + (this.props.type ? this.props.type : "default")}>{inner}</a>
+     
+      );
+     
   }
 }
 

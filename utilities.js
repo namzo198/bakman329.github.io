@@ -152,9 +152,27 @@ export function resetSettings() {
   localStorage.setItem('settings', JSON.stringify({"turn_off_chat": ["someContacts", [], []], "post_audience_settings": ["public", [], [], [[], []]]}));
 }
 
-/* export function resetFriends() {
+/*export function resetFriends() {
   localStorage.setItem('friends', JSON.stringify(["Jack Roe", "Jim Mend"]));
-} */
+}*/ 
+
+export function friendsList() {
+    
+    var friends = [];
+    
+    JSON.parse(localStorage.getItem('users')).forEach((user, index, array) => {
+      if (user.friend) {
+        friends.push(user)
+      } 
+     // var name = user.name;
+       /// console.log (name);
+     
+    });
+           
+    //console.log(friends);
+   return friends;
+}
+
 
 export function resetUsers() {
   localStorage.setItem('users', JSON.stringify(
@@ -238,14 +256,22 @@ export function resetAdaptationDisplay(){
             highlight:false, 
             automation:false
         },
-        Privacy:{
+        Privacy_futureRequests:{
             suggestion:false,
-            highlight
+            highlight:false,
+            automation:false,
+        },
+        Timeline_seePost:{
+            suggestion: false,
+            highlight:false,
+            automation:false
         }
     }))
 }
 
 export function resetBlockedUsers(){
+    
+    
     localStorage.setItem('blockedUsers',JSON.stringify(["Richard Roe", "Jane Appleeseed"]))
 }
 
@@ -287,7 +313,7 @@ export function verifyLocalStorage() {
     resetSettings();
     location.reload();
   }
-
+ 
   if (!localStorage.users) {
     resetUsers();
     location.reload();
@@ -335,7 +361,10 @@ export function getParsed(name){
     return JSON.parse(localStorage.getItem(name));
 }
 
+
 export function addToLocalStorageObject (name,value){
+    
+    
     return localStorage.setItem(name, JSON.stringify(value));   
 }
 
@@ -350,13 +379,13 @@ export function containsIgnoreCase(arr, str) {
 }
 
 export function getProfilePic(name) {
+    
   let users = JSON.parse(localStorage.users);
-
-  let pic = "/assets/default_pic.jpg";
+//TODO: Fix the default image when their is an update to the 'users' localStorage
+  let pic = "/assets/users/alex_profile_img.jpg";
   users.some((element) => {
     if (element.name.toLocaleLowerCase() == name.toLocaleLowerCase()) {
       pic = "/assets/users/" + element.profile_pic;
-      return true;
     }
   });
 
@@ -405,3 +434,4 @@ export function audienceText(audience) {
 
   return text;
 }
+

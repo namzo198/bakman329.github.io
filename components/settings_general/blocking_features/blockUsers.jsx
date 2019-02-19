@@ -2,12 +2,23 @@ import React,{Component} from 'react';
 import Button from '../../Button.jsx';
 import Popup from '../../Popup.jsx'
 import {levenshteinDistance} from '../../../algorithms.js'
+import {friendsList,addToLocalStorageObject,getProfilePic} from '../../../utilities.js';
 
+/**
+So, the users_friendship is being updated based on the current changes being made to it,  however it is gotten from the friendsList function that keeps getting updated based on the users being blocked. I therefore need to find a way to keep the original list in sysnc with the updated list without shortening the users list.
+**/
 
 class BlockUsers extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {username: '', renderPopup:false, friendsList:[],renderUltimateBlock:false,blockedUserslist:[],showUnblockPopup:false, friend_profile:{}};
+   
+    this.state = {username: '', 
+                  renderPopup:false, 
+                  friendsList:friendsList(),
+                  renderUltimateBlock:false,
+                  blockedUserslist:JSON.parse(localStorage.getItem('blockedUsers')),
+                  showUnblockPopup:false, 
+            };
       
     this.handleChange = this.handleChange.bind(this);
     this.onClickBlock = this.onClickBlock.bind(this);
@@ -20,16 +31,17 @@ class BlockUsers extends React.Component {
   }
 
 componentDidMount(){
-    var blockedUsers = JSON.parse(localStorage.getItem('blockedUsers'));
-    var friends = JSON.parse(localStorage.getItem('friends'))
-    var friends_profile = JSON.parse(localStorage.getItem('friend_profile'))
+    //var blockedUsers = JSON.parse(localStorage.getItem('blockedUsers'));
+    
+    //var friends = JSON.parse(localStorage.getItem('friends'))
+   // var friends_profile = JSON.parse(localStorage.getItem('friend_profile'))
     
     //console.log('The blocked'+  blockedUsers)
     
     this.setState({
-       blockedUserslist: blockedUsers,
-       friendsList: friends,
-       friend_profile:friends_profile
+      // blockedUserslist: blockedUsers,
+      // friendsList: friends,
+       //friend_profile:friends_profile
     })
     
     //console.log('The state blocked' +this.state.blockedUserslist.length)
@@ -48,20 +60,36 @@ cancel(what){
     if(what ==='first'){
         this.setState({renderPopup:false})  
     }else if (what === 'second'){
-        this.setState({renderUltimateBlock:false })
+        this.setState({renderUltimateBlock:false,
+                      friendsList:friendsList(),})
     }else if(what =='third'){
         this.setState({showUnblockPopup:false})
     }
 }
   
-setLocalStorage(){
- localStorage.setItem('blockedUsers',JSON.stringify(this.state.blockedUserslist))  
-}
+/*setLocalStorage(){
+ //localStorage.setItem('blockedUsers',JSON.stringify(this.state.blockedUserslist))  
+    addToLocalStorageObject('blockedUsers',this.state.blockedUserslist);
+}*/
     
 allowed(){
    
-    this.state.blockedUserslist.push(this.state.username)
-    this.setLocalStorage(); 
+    var blockedFriend = this.state.username;
+    this.state.blockedUserslist.push(blockedFriend)
+    
+    //Change friendship status in users localStorage
+    this.state.friendsList.forEach((element,index) => {
+     
+        if(element.name === blockedFriend){
+            element['friend'] = false;
+        }
+        
+        
+    });
+     addToLocalStorageObject('users', this.state.friendsList);
+    addToLocalStorageObject('blockedUsers',this.state.blockedUserslist);
+
+    //this.setLocalStorage(); 
     
     this.cancel('second')
     this.cancel('first')
@@ -71,7 +99,7 @@ allowed(){
 onClickUltimateBlock(user){
    this.setState({
        renderUltimateBlock:true, 
-       username:user}) 
+       username:user})
 }
 
 UltimateBlock(){
@@ -116,17 +144,24 @@ BlockPopup(){
         var foundelements = [];
         var found = false;
         
-        this.state.friendsList.map((element, index) => {           
-        var editdistance = levenshteinDistance(user,element);
+        console.log("The friendlist is as follows:");
+        console.log(this.state.friendsList);
+        this.state.friendsList.forEach((element,index) => { 
+            
+
+            
+        var editdistance = levenshteinDistance(user,element.name);
             //I choose 7 for username input where it takes atleast 7 edits to arrive to exising usernames 
+            
             if (editdistance <= 7 ){
                  found = true;
-                 foundelements.push(element)
+                 foundelements.push(element.name)
               } 
           })
                             
         pop = (
             //Popup has no okay button, just the x button to cancel
+            
             <Popup title="Block People" cancel={()=>{this.cancel('first')}} noFooter={true} header_style={true} content_style={true} closeButton={true}>
                 
                 {!found? <div>No results found</div>:
@@ -136,12 +171,15 @@ BlockPopup(){
 
                         <ul className="BlockPopup">
                             {foundelements.map((element, index) => {
-                                var profile_image = this.state.friend_profile[element].profile_pic;
+                                
+                                var profile_image = getProfilePic(element);
+                                //var profile_image = this.state.friend_profile[element].profile_pic;
+                                //src={`../../../assets/users/${profile_image}`
                                 
                                 
                                 
                                 return <li key={index}> {element} 
-                                <img src={`../../../assets/${profile_image}`}/> 
+                                <img src={profile_image}/> 
                                 
                                 <Button  type="cancel" href="javascript:void(0)" onClick={()=>{this.onClickUltimateBlock(element)}}> Block </Button> </li>
                             })}
@@ -166,11 +204,28 @@ BlockPopup(){
 
 }
 
-allowUnblock(){
+allowUnblock(user){
    var Index = this.state.blockedUserslist.indexOf(user);
     this.state.blockedUserslist.splice(Index,1);
     
-    this.setLocalStorage(); 
+    console.log('The user is'+user);
+    //Change friendship status in users localStorage
+    this.state.friendsList.forEach((element,index) => {
+     
+        
+        if(element.name === user){
+            element['friend'] = true;
+            console.log("The element name is"+element.name+"User is "+user);
+        }
+        
+        
+    });
+    
+    addToLocalStorageObject('users', this.state.friendsList);
+    addToLocalStorageObject('blockedUsers',this.state.blockedUserslist);
+
+    
+    //this.setLocalStorage(); 
     this.cancel('third')
                 
 }
@@ -189,7 +244,7 @@ unblockUser(){
     
     return(
         
-        <Popup title={`Unblock ${user}`} cancel={()=>{this.cancel('third')}} okay={()=> this.allowUnblock()} okButtonName ="Confirm">
+        <Popup title={`Unblock ${user}`} cancel={()=>{this.cancel('third')}} okay={()=> this.allowUnblock(user)} okButtonName ="Confirm" destroy={void(0)}>
         
              <div>Are you sure you want to unblock {user}</div>
                 
@@ -257,9 +312,9 @@ return (
                     <Button href="javascript:void(0)" type="confirm" onClick={this.onClickBlock}>Block </Button>
                     <br/>
                     
-                    {this.state.renderPopup?this.BlockPopup():""}
-                    {this.state.renderUltimateBlock?this.UltimateBlock():""}
-                    {this.state.showUnblockPopup?this.unblockUser():""}
+                    {this.state.renderPopup?this.BlockPopup():null}
+                    {this.state.renderUltimateBlock?this.UltimateBlock():null}
+                    {this.state.showUnblockPopup?this.unblockUser():null}
                     {this. showBlockedUsers()} 
                 </div>
           </div>

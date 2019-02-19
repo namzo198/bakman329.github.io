@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {audienceText} from '../utilities.js'
+import {audienceText,saveVisitedAdaptation} from '../utilities.js'
 
 import Button from './Button.jsx'
 import Menu from './Menu.jsx'
@@ -24,8 +24,12 @@ class AudienceMenu extends React.Component {
   setAudience(audience) {
     this.props.onChange(audience);
     this.setState({audience: audience});
-
-
+   
+      // For adaptation: if one of the friends audience option is highlighted and selected 
+    if(this.props.adapt == "high" && audience == "friends"){
+      saveVisitedAdaptation("Privacy_futureRequests","highlight");
+    }
+     
     var settings = JSON.parse(localStorage.getItem('settings'));
     settings["post_audience_settings"][0] = audience;
     localStorage.setItem('settings', JSON.stringify(settings));
@@ -147,7 +151,7 @@ class AudienceMenu extends React.Component {
 
         default:
           buttons.push(
-            <Button onClick={() => {this.setAudience(option)}} key={i}>
+            <Button onClick={() => {this.setAudience(option)}} key={i} adapt={text[0]=="Friends"&&this.props.adapt}>
               {text[0]}
               {subtext}
             </Button>

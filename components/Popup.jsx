@@ -31,7 +31,7 @@ class Popup extends React.Component {
       let footer = null;
       let close_button = null;
       
-      console.log(this.props.okButtonName)
+     // console.log(this.props.okButtonName)
       
       let style = {
         top: top,
@@ -65,7 +65,7 @@ class Popup extends React.Component {
           <div className="popup-footer">
             <Button type="cancel" onClick={() => {this.props.cancel(); 
             this.props.destroy(true)}}>Cancel</Button>
-            <Button type="confirm" onClick={() => {this.props.okay(); this.props.destroy();}}>{Okay}</Button>
+            <Button type="confirm" onClick={() => {this.props.okay(); this.props.destroy()}}>{Okay}</Button>
           </div>;
       }
        

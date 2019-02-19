@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {indexPosts, getProfilePic, audienceText,getParsed,saveVisitedAdaptation} from '../utilities.js'
-
+import {highLight,highLightExtended,No_highLight } from '../adaptations/Highlight.js';
 import Button from './Button.jsx'
 import Comment from './Comment.jsx'
 import NewCommentArea from './NewCommentArea.jsx'
@@ -263,7 +263,7 @@ class Post extends React.Component {
     if (!this.state.adaptationVisited["DeletePost"]["automation"] && adaptations['deletetimeline'] === 'auto' && !this.state.showPostWhenHidden && this.props.index === 9) {
       return (
               
-              <Automation Undobutton="Undo" Okbutton="Ok" onOkClick={this.onClickAutoOk} label="This post was automatically deleted" onUndoClick={this.onClickUndo} />
+              <Automation undoButton="Undo" okButton="Ok" onOkClick={this.onClickAutoOk} label="This post was automatically deleted" onUndoClick={this.onClickUndo} />
              
       );
     }
@@ -396,7 +396,7 @@ class Post extends React.Component {
     return(
         
       <div id='post'>
-      {console.log("In Post Props"+this.props.displayContactInfoSuggestion +" State"+this.state.displayContactInfoSuggestion)}
+      {console.log("In Component/Post file Props"+this.props.displayContactInfoSuggestion +"    State"+this.state.displayContactInfoSuggestion)}
       
        {!this.state.adaptationVisited["DeletePost"]["automation"] && adaptations['deletetimeline'] === 'auto'&& this.props.index === 9?
         <div id='except-warning'> 

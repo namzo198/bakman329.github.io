@@ -6,12 +6,12 @@ class Automation extends React.Component{
    var okButton_option;
    
    if (this.props.onOkClick !== undefined) {
-      okButton_option = <Button id='undo' href='javascript:void(0)' onClick={this.props.onOkClick}>{this.props.Okbutton}</Button>;
+      okButton_option = <Button id='undo' href='javascript:void(0)' onClick={this.props.onOkClick}>{this.props.okButton}</Button>;
     }
      
     return(
         <div>
-            <label>{this.props.label}</label><Button id='undo' href='javascript:void(0)' onClick={this.props.onUndoClick}>{this.props.Undobutton}</Button>  
+            <label>{this.props.label}</label><Button id='undo' href='javascript:void(0)' onClick={this.props.onUndoClick}>{this.props.undoButton}</Button>  
              {okButton_option}
              
         </div>

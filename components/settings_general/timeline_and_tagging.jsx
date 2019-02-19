@@ -4,7 +4,12 @@ import {Link} from 'react-router-dom';
 import Button from '../Button.jsx';
 import Edit from './Functions/Edit.jsx';
 import ProfileLink from '../ProfileLink.jsx';
-import {nameToLink} from '../../utilities.js';
+import {nameToLink,getParsed,addToLocalStorageObject,saveVisitedAdapatation} from '../../utilities.js';
+import AutomationBoilerplate from '../../adaptations/Automation/AutomationBoilerplate.jsx'
+
+
+
+
 
 
 
@@ -12,6 +17,8 @@ class TimelineandTagging extends Component {
     constructor(props){
         super(props)
        
+         let adaptation = getParsed('adaptations');
+        let adaptationVisited = getParsed("visited");
         
         this.state = {
             timeline_post:'',
@@ -19,11 +26,19 @@ class TimelineandTagging extends Component {
             tag_post:'',
             tag_audience:'', 
             review_posts:'',
-            review_tags:''
+            review_tags:'',
+            automation: !adaptationVisited ["Timeline_seePost"]["automation"]&& (adaptation["timeline_seePost"] === "auto"),
+            displayAutomationPopup:true,
+            
+            action: "Timeline_seePost, Check to see if the audience was changed/unchanged to the suggested audience i.e \"Friends\"",
+            context:"Timeline_seePost",
+            label_Auto:"The grayed out and underlined option's audience was automatically changed",
         }
         
         
         this.changeAudience = this.changeAudience.bind(this);
+        this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
+        this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
         //this.editDialog= this.editDialog.bind(this)
         
         
@@ -48,6 +63,19 @@ class TimelineandTagging extends Component {
        })
    }
     
+    /*Methods for the Automation Adaptation */
+    onClickOk_Auto(){
+        this.setState({
+            displayAutomationPopup:false
+        })
+    }
+    
+    onClickUndo_Auto(){
+        this.setState({
+            displayAutomationPopup:false,
+            timeline_see:"Friends"
+        })
+    }
     
    displayEdit(section,description,edit_description,audienceSelectionMethod,closeEditDialog){
        
@@ -142,13 +170,18 @@ render(){
           </div>
             <hr/>
           <br/>
+          
+        {/*The Automation Adaptation*/ 
+          this.state.displayAutomationPopup && this.state.automation && <AutomationBoilerplate action = {this.state.action} context = {this.state.context} label={this.state.label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this.onClickUndo_Auto}/>
+        }
+          
         <div id="right_top">
             <span className="righttop_label">Timeline </span>   
             {/*this.displayNormal("Who can post on your timeline?","timeline_post")*/}
             <Edit description="Who can post on your timeline?" audienceType="timeline_post" audience={this.state.timeline_post} changeAudience={this.changeAudience} renderEditForm={this.displayEdit} renderNormal={this.displayNormal} />
             <hb/>
 
-            <Edit description="Who can see what others post on your timeline?" audienceType="timeline_see" audience={this.state.timeline_see} changeAudience={this.changeAudience} renderEditForm={this.displayEdit} renderNormal={this.displayNormal} />
+            <Edit description="Who can see what others post on your timeline?" audienceType="timeline_see" audience={this.state.timeline_see} changeAudience={this.changeAudience} renderEditForm={this.displayEdit} renderNormal={this.displayNormal} automate={this.state.displayAutomationPopup && this.state.automation}/>
 
         </div>
          <hr/>

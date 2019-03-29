@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {indexPosts, getProfilePic, audienceText,getParsed,saveVisitedAdaptation} from '../utilities.js'
+import {indexPosts, getProfilePic, audienceText,getParsed,saveVisitedAdaptation, namesToLinks} from '../utilities.js'
 
 import Button from './Button.jsx'
 import Comment from './Comment.jsx'
@@ -40,7 +40,8 @@ class Post extends React.Component {
       value: '',
       showPostWhenHidden: false,
       renderSuggestion:false,
-      hidden: hidden,  
+      hidden: hidden,
+      tagRemoved: this.props.tagRemoved,
       displayContactInfoSuggestion:true,
       adaptations: getParsed('adaptations'),
       adaptationVisited: getParsed('visited')
@@ -51,6 +52,7 @@ class Post extends React.Component {
     this.onClickLike = this.onClickLike.bind(this);
     this.onClickComment = this.onClickComment.bind(this);
     this.onClickHide = this.onClickHide.bind(this);
+    this.onClickRemoveTag = this.onClickRemoveTag.bind(this);
     this.onClickUndo = this.onClickUndo.bind(this);
     this.onClickAutoOk = this.onClickAutoOk.bind(this);
     this.onDisplayContactInfoSuggestion = this.onDisplayContactInfoSuggestion.bind(this);
@@ -191,6 +193,19 @@ class Post extends React.Component {
     });
   }
 
+  // TODO: Consider adding undo based on what Facebook does
+  onClickRemoveTag() {
+    var posts = JSON.parse(localStorage.getItem('posts'));
+    posts.some((post, index, array) => {
+      if (post.key == this.props.index) {
+        posts[index].tagRemoved = true;
+        localStorage.setItem('posts', JSON.stringify(posts));
+        this.setState({tagRemoved: true});
+        return true;
+      }
+    });
+  }
+
   actions() {
     //let adaptations = getParsed('adaptations');
     //let adaptationVisited = getParsed("visited");
@@ -312,38 +327,6 @@ class Post extends React.Component {
           </SuggestionPopup>);
       }
 
-      // Builds a regular expression matching the name of any user case insensitively
-      let regex_str = '(';
-      let users = JSON.parse(localStorage.users);
-      users.forEach((user, index) => {
-        regex_str += user.name;
-        if (index != users.length - 1) regex_str += '|';
-      });
-      regex_str += ')';
-
-      // Find indices and lengths of matches, and produce a JSX object replacing names with links
-      let match;
-      let matches = [];
-      let regex = new RegExp(regex_str, 'gi');
-      while ((match = regex.exec(this.props.children)) != null) {
-        matches.push(match);
-      }
-      console.log(matches);
-      let end_index = 0;
-      let content = (
-        <span>
-        {[matches, 0].map((match, index) => {
-          if (match == 0) {
-            console.log("FF", <span>{this.props.children.substr(end_index, this.props.children.length)}</span>);
-            return <span key={index}>{this.props.children.substr(end_index, this.props.children.length)}</span>;
-          }
-          console.log(match.index, <span key={index}>{this.props.children.substr(end_index, match.index)}<ProfileLink name={match[0]} /></span>)
-          return <span key={index}>{this.props.children.substr(end_index, match.index)}<ProfileLink name={match[0]} /></span>;
-          end_index = match.index + match[0].length;
-        })}
-        </span>);
-      console.log("AAA", content);
-
       // TODO: Fix audience text for specific friends etc.
       return(
         <div>
@@ -357,10 +340,12 @@ class Post extends React.Component {
             </div>
             <Menu icon='horiz'>
               <Button onClick={this.onClickHide}>Hide post</Button>
+              {(!this.state.tagRemoved && this.props.children.includes("Alex Doe"))
+                  ? <Button onClick={this.onClickRemoveTag}>Remove tag</Button> : null}
               {(this.props.name != "Alex Doe") ? <Button>Unfollow {this.props.name}</Button> : null}
             </Menu>
           </div>
-          <p>{content}</p>
+          <p>{namesToLinks(this.props.children, this.state.tagRemoved)}</p>
           {this.props.photo ? <img src={this.props.photo} width="40px" height="40px"></img> : null}
           <hr />
         

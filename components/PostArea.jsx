@@ -40,7 +40,8 @@ class PostArea extends React.Component {
            photo: post.photo,
            displayContactInfoSuggestion: this.props.displayContactInfoSuggestion,
            render: render,
-           audience: post.audience}, post.content);
+           audience: post.audience,
+           tagRemoved: post.tagRemoved || false}, post.content);
       });
  
       //console.log("Post Area "+this.props.toAdapt)

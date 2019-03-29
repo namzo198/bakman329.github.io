@@ -1,3 +1,6 @@
+import React from 'react'
+import ProfileLink from './components/ProfileLink.jsx'
+
 export function indexPosts() {
    var posts = JSON.parse(localStorage.getItem('posts'));
    JSON.parse(localStorage.getItem('posts')).forEach((post, index, array) => {
@@ -408,4 +411,38 @@ export function audienceText(audience) {
   }
 
   return text;
+}
+
+export function namesToLinks(str, omitUser=false) {
+  // Builds a regular expression matching the name of any user case insensitively
+  let regex_str = '(';
+  let users = JSON.parse(localStorage.users);
+  users.forEach((user, index) => {
+    regex_str += user.name;
+    if (index != users.length - 1) regex_str += '|';
+  });
+  regex_str += ')';
+
+  // Find indices and lengths of matches, and produce a JSX object replacing names with links
+  let match;
+  let matches = [];
+  let regex = new RegExp(regex_str, 'gi');
+  while ((match = regex.exec(str)) != null) {
+    if (omitUser && match[0] == "Alex Doe") continue;
+    matches.push(match);
+  }
+  let end_index = 0;
+  // Null-terminate to fill in end of string
+  matches.push(null);
+  return (
+    <span>
+    {matches.map((match, index) => {
+      if (match == null) {
+        return <span key={index}>{str.substr(end_index)}</span>;
+      }
+      let out = <span key={index}>{str.substr(end_index, (match.index - end_index))}<ProfileLink name={match[0]} /></span>;
+      end_index = match.index + match[0].length;
+      return out;
+    })}
+    </span>);
 }

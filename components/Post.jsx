@@ -312,6 +312,38 @@ class Post extends React.Component {
           </SuggestionPopup>);
       }
 
+      // Builds a regular expression matching the name of any user case insensitively
+      let regex_str = '(';
+      let users = JSON.parse(localStorage.users);
+      users.forEach((user, index) => {
+        regex_str += user.name;
+        if (index != users.length - 1) regex_str += '|';
+      });
+      regex_str += ')';
+
+      // Find indices and lengths of matches, and produce a JSX object replacing names with links
+      let match;
+      let matches = [];
+      let regex = new RegExp(regex_str, 'gi');
+      while ((match = regex.exec(this.props.children)) != null) {
+        matches.push(match);
+      }
+      console.log(matches);
+      let end_index = 0;
+      let content = (
+        <span>
+        {[matches, 0].map((match, index) => {
+          if (match == 0) {
+            console.log("FF", <span>{this.props.children.substr(end_index, this.props.children.length)}</span>);
+            return <span key={index}>{this.props.children.substr(end_index, this.props.children.length)}</span>;
+          }
+          console.log(match.index, <span key={index}>{this.props.children.substr(end_index, match.index)}<ProfileLink name={match[0]} /></span>)
+          return <span key={index}>{this.props.children.substr(end_index, match.index)}<ProfileLink name={match[0]} /></span>;
+          end_index = match.index + match[0].length;
+        })}
+        </span>);
+      console.log("AAA", content);
+
       // TODO: Fix audience text for specific friends etc.
       return(
         <div>
@@ -328,7 +360,7 @@ class Post extends React.Component {
               {(this.props.name != "Alex Doe") ? <Button>Unfollow {this.props.name}</Button> : null}
             </Menu>
           </div>
-          <p>{this.props.children}</p>
+          <p>{content}</p>
           {this.props.photo ? <img src={this.props.photo} width="40px" height="40px"></img> : null}
           <hr />
         

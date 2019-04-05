@@ -55,7 +55,7 @@ class BlockApp extends React.Component {
     }
     
     showBlockedApps(){
-        console.log('The length '+this.state.blockedAppsList.length)
+        //console.log('The length '+this.state.blockedAppsList.length)
         if(this.state.blockedAppsList.length > 0){
             return (
                 <div>

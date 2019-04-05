@@ -265,6 +265,26 @@ export function resetAdaptationDisplay(){
             suggestion: false,
             highlight:false,
             automation:false
+        },
+        Block_User:{
+            suggestion:false,
+            highlight:false,
+            automation:false
+        },
+        Block_Event:{
+            suggestion:false,
+            highlight:false,
+            automation:false
+        },
+        Block_App:{
+            suggestion:false,
+            highlight:false,
+            automation:false
+        },
+        Block_AppInvite:{
+            suggestion:false,
+            highlight:false,
+            automation:false
         }
     }))
 }
@@ -284,7 +304,7 @@ export function resetBlockedAppInvites(){
 }
 
 export function resetBlockedEventInvites(){
-    localStorage.setItem('blockedEventInvites',JSON.stringify([]))
+    localStorage.setItem('blockedEventInvites',JSON.stringify(["Richard Midor"]))
 }
 
 export function resetAll() {

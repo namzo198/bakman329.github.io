@@ -5,7 +5,7 @@ import CheckBox from './Functions/CheckBox.jsx'
 import AudienceMenu from '../AudienceMenu.jsx'
 import SuggestionBoilerplate from '../../adaptations/Suggestion/SuggestionBoilerplate.jsx'
 import AutomationBoilerplate from '../../adaptations/Automation/AutomationBoilerplate.jsx'
-import {getParsed,addToLocalStorageObject,saveVisitedAdapatation} from '../../utilities.js'
+import {getParsed,addToLocalStorageObject} from '../../utilities.js'
 
 
 
@@ -239,7 +239,8 @@ class body extends Component {
       
        
        {/*The Suggestion Adaptation*/
-                  this.state.displaySuggestionPopup && this.state.suggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label} agree={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>}
+                  this.state.displaySuggestionPopup && this.state.suggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label} agree={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>
+        }
        
         <div id="right_top">
           <span className="righttop_label">Your activity </span>

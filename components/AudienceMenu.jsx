@@ -61,11 +61,17 @@ class AudienceMenu extends React.Component {
       case "custom":
         return ["Custom", "Include and exclude friends and lists"];
       
-     case "everyone":
+      case "everyone":
         return ["Everyone",""];
      
-     case "friends_of_friends":
+      case "friends_of_friends":
         return ["Friends of friends",""];
+            
+      case "enabled":
+        return ["Enabled",""];
+     
+      case "disabled":
+        return ["Disabled",""];
 
       default:
         return [option, ""];

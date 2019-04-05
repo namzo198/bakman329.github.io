@@ -1402,6 +1402,30 @@ header #logo {
   padding-top: 10px;
 }
 
+/*CSS for the highlight in Block Users, Block App Invites, Block Event Invites, Block App */
+#right_bottom_form label input ::value{
+    background-color: yellow;
+    color:red;
+    
+}
+
+.autocomplete input.block_high{
+    background-color: yellow;
+    color:red;
+}
+
+#right_bottom_form label input.block_value_high{
+    background-color: yellow;
+    color:red;
+}
+
+#right_bottom_form label input.block_value{
+    background-color: white;
+    color:black;
+}
+
+
+
 .righttop_text {
 color: #90949c;
 font-size: 13px;
@@ -1515,6 +1539,7 @@ width: 230px;
 font-size: 12px;
 font-weight: 400;
 }
+
 .right {
   padding-top:35px;
 }

@@ -1,13 +1,22 @@
 import React from 'react'
 import AutocompleteInput from '../../AutocompleteInput.jsx'
 import Button from '../../Button.jsx';
+import {friendsList,addToLocalStorageObject,getProfilePic,getParsed,saveVisitedAdaptation} from '../../../utilities.js'
 
 class BlockAppInvites extends React.Component {
     constructor(props){
     super(props);
+    
+    let friends = friendsList();
+    var friendslist = [];    
+        friends.forEach((element, index) =>{
+            friendslist.push(element.name);
+        })
+        
     this.state = {  
       username: "",
-      blockedFriendsList: []
+      blockedFriendsList: [],
+      friendsList: friendslist,
     }
         
      this.handleChange = this.handleChange.bind(this);
@@ -73,12 +82,13 @@ class BlockAppInvites extends React.Component {
     
    render(){
        
+       
        var autocomplete = <AutocompleteInput
        commaSeperated
        onChange={(value) => this.handleChange(value)}
        defaultValue =""
        placeholder = "Type the name of a friend"
-       list = {JSON.parse(localStorage.getItem('friends'))}
+       list = {this.state.friendsList}
        onEnter = {this.onEnter}
        />
            

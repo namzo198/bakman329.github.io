@@ -19,7 +19,11 @@ class GeneralSettings extends React.Component{
         this.state = {
          adaptationVisited:adaptationVisited,
         highlightPrivacy: !adaptationVisited["Privacy_futureRequests"]["highlight"]&& (adaptation["privacy_futureRequests"] === "high")?highLightExtended:noHighLight,
-        };
+        highlightTimeline: !adaptationVisited ["Timeline_seePost"]["highlight"]&& (adaptation["timeline_seePost"] === "high")?highLightExtended:noHighLight,
+        highlightBlocking:!adaptationVisited["Block_User"]["highlight"] && (adaptation["block_User"] == "high")?highLightExtended:noHighLight,
+            
+        }
+       
         
         this.sidemenu = this.sidemenu.bind(this);
         this.getSelection = this.getSelection.bind(this);
@@ -27,12 +31,29 @@ class GeneralSettings extends React.Component{
         
     }
     
-    changeStyle(){
-        if(!this.state.adaptationVisited["Privacy_futureRequests"]['highlight']){
+    changeStyle(section){
+        //Privacy Setting
+        if(!this.state.adaptationVisited["Privacy_futureRequests"]['highlight'] && section == "Privacy" ){
             this.setState({
              highlightPrivacy:noHighLight
             })    
         }
+        
+        //Timelime and Tagging
+         if(!this.state.adaptationVisited["Timeline_seePost"]['highlight'] && section == "Timeline" ){
+            this.setState({
+             highlightTimeline:noHighLight
+            })    
+        }
+        
+        
+        //Blocking
+         if(!this.state.adaptationVisited["Block_User"]['highlight'] && section == "Blocking"){
+            this.setState({
+             highlightBlocking:noHighLight
+            })    
+        }
+        
     }
     
     sidemenu(){
@@ -50,23 +71,27 @@ class GeneralSettings extends React.Component{
                        <div style={this.state.highlightPrivacy}>
                         <div className = "imgwrap_2"> 
                             <div className ="link" > 
-                                <li > <Link to="/settings_general/privacy" onClick = {this.changeStyle}> Privacy </Link> </li> 
+                                <li > <Link to="/settings_general/privacy" onClick = {()=> this.changeStyle("Privacy")}> Privacy </Link> </li> 
                              </div> 
                           </div> 
                           </div>
                            <br/>
                            
+                           <div style = {this.state.highlightTimeline}>
                             <div className = "imgwrap_3"> 
                                     <div className ="link" >
-                                         <li><Link to="/settings_general/timeline_and_tagging"> Timeline and Tagging </Link></li> 
+                                         <li><Link to="/settings_general/timeline_and_tagging" onClick = {()=> this.changeStyle("Timeline")}> Timeline and Tagging </Link></li> 
                                     </div>
                                 </div> 
+                            </div>
                               <br/>
                               
+                            <div style = {this.state.highlightBlocking}> 
                             <div className = "imgwrap_4">  
                               <div className ="link" > 
-                                  <li> <Link to="/settings_general/blocking"> Blocking </Link> </li> 
+                                  <li> <Link to="/settings_general/blocking" onClick = {()=> this.changeStyle("Blocking")}> Blocking </Link> </li> 
                                </div>    
+                            </div> 
                             </div> 
                             <br/>
 

@@ -12,7 +12,7 @@ class Header extends React.Component {
         this.state = {
             adaptation:adaptation,
             adaptationVisited:adaptationVisited,
-            highlight: !adaptationVisited["Privacy_futureRequests"]["highlight"]&&(adaptation["privacy_futureRequests"] == "high")? true: false,
+            highlight: !adaptationVisited["Privacy_futureRequests"]["highlight"]&&(adaptation["privacy_futureRequests"] == "high") || !adaptationVisited ["Timeline_seePost"]["highlight"]&& (adaptation["timeline_seePost"] === "high") || !adaptationVisited["Block_User"]["highlight"] && (adaptation["block_User"] == "high")? true: false,
             
         }
         

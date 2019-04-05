@@ -1221,6 +1221,7 @@ header #logo {
     padding: 10px;
     background-color: #fff9d7;
     border: 1px solid #e2c822;
+    margin-bottom: 20px;
 }
 
 .popup-note {
@@ -1299,8 +1300,8 @@ header #logo {
 
 .imgwrap_1 {
     background-position: -16px -18px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yj/r/5mN3n2EorbT.png);
-    background-size: 34px 308px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
+    background-size: 33px 308px;
     background-repeat: no-repeat;
     display: inline-block;
     height: 16px;
@@ -1311,8 +1312,8 @@ header #logo {
 
 .imgwrap_2 {
     background-position: 0 -236px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yj/r/5mN3n2EorbT.png);
-    background-size: 34px 308px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
+    background-size: 33px 308px;
     background-repeat: no-repeat;
     display: inline-block;
     height: 16px;
@@ -1324,8 +1325,8 @@ header #logo {
 
 .imgwrap_3 {
     background-position: 0 -290px; 
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yj/r/5mN3n2EorbT.png);
-    background-size: 34px 308px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
+    background-size: 33px 308px;
     background-repeat: no-repeat;
     display: inline-block;
     height: 16px;
@@ -1338,7 +1339,7 @@ header #logo {
 .imgwrap_4 {
     height: 16px;
     background-position: -18px -56px; 
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yj/r/5mN3n2EorbT.png);
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
     background-size: 34px 308px;
     background-repeat: no-repeat;
     display: inline-block;
@@ -1349,7 +1350,7 @@ header #logo {
 
 .imgwrap_5 {
     background-position: 0 -182px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yj/r/5mN3n2EorbT.png);
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
     background-size: 34px 308px;
     background-repeat: no-repeat;
     display: inline-block;
@@ -1423,6 +1424,30 @@ header #logo {
   padding-top: 10px;
 }
 
+/*CSS for the highlight in Block Users, Block App Invites, Block Event Invites, Block App */
+#right_bottom_form label input ::value{
+    background-color: yellow;
+    color:red;
+    
+}
+
+.autocomplete input.block_high{
+    background-color: yellow;
+    color:red;
+}
+
+#right_bottom_form label input.block_value_high{
+    background-color: yellow;
+    color:red;
+}
+
+#right_bottom_form label input.block_value{
+    background-color: white;
+    color:black;
+}
+
+
+
 .righttop_text {
 color: #90949c;
 font-size: 13px;
@@ -1430,7 +1455,13 @@ padding-bottom: 10px;
 padding-right: 30px;
 line-height: 18px;
 margin-left: 155px;
+}
 
+.righttop_text_onAutomation{
+color: black;
+background-color:rgb(220,220,220);
+opacity: 0.6;
+text-decoration: underline;   
 }
 
 .rightbottom_text{
@@ -1469,8 +1500,8 @@ font-size: 13px;
 color: #365899;
 float: right;
 padding-left: 30px;
-padding-right: 5px;
-text-align: right;
+padding-right: 30px;
+text-align: center;
 }
 
 .edit_audience_selected{
@@ -1530,6 +1561,7 @@ width: 230px;
 font-size: 12px;
 font-weight: 400;
 }
+
 .right {
   padding-top:35px;
 }

@@ -30,7 +30,7 @@ class Popup extends React.Component {
       let Okay = (this.props.okButtonName)? this.props.okButtonName: "Okay";
       let close_button = null;
       
-      console.log(this.props.okButtonName);
+     // console.log(this.props.okButtonName)
       
       let style = {
         top: top,

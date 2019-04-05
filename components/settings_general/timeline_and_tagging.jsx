@@ -4,7 +4,14 @@ import {Link} from 'react-router-dom';
 import Button from '../Button.jsx';
 import Edit from './Functions/Edit.jsx';
 import ProfileLink from '../ProfileLink.jsx';
-import {nameToLink} from '../../utilities.js';
+import {nameToLink,getParsed,addToLocalStorageObject} from '../../utilities.js';
+import AutomationBoilerplate from '../../adaptations/Automation/AutomationBoilerplate.jsx';
+import SuggestionBoilerplate from '../../adaptations/Suggestion/SuggestionBoilerplate.jsx';
+import AudienceMenu from '../AudienceMenu.jsx'
+
+
+
+
 
 
 
@@ -12,6 +19,8 @@ class TimelineandTagging extends Component {
     constructor(props){
         super(props)
        
+         let adaptation = getParsed('adaptations');
+        let adaptationVisited = getParsed("visited");
         
         this.state = {
             timeline_post:'',
@@ -19,11 +28,25 @@ class TimelineandTagging extends Component {
             tag_post:'',
             tag_audience:'', 
             review_posts:'',
-            review_tags:''
+            review_tags:'',
+            highlight:!adaptationVisited ["Timeline_seePost"]["highlight"]&& (adaptation["timeline_seePost"] === "high")?"high":null,
+            suggestion: !adaptationVisited ["Timeline_seePost"]["suggestion"]&& (adaptation["timeline_seePost"] === "sugst"),
+            automation: !adaptationVisited ["Timeline_seePost"]["automation"]&& (adaptation["timeline_seePost"] === "auto"),
+            displayAutomationPopup:true,
+            displaySuggestionPopup:true,
+            
+            action: "Timeline_seePost, Check to see if the audience was changed/unchanged to the suggested audience i.e \"Friends\"",
+            context:"Timeline_seePost",
+            label_Sugst:"I think you should change \"Who can see what others post on your timeline?\" to Public.",
+            label_Auto:"The grayed out and underlined option's audience was automatically changed",
         }
         
         
         this.changeAudience = this.changeAudience.bind(this);
+        this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
+        this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
+        this.onClickDestroySuggestion = this.onClickDestroySuggestion.bind(this);
+        this.onClickOK_Suggestion = this.onClickOK_Suggestion.bind(this);
         //this.editDialog= this.editDialog.bind(this)
         
         
@@ -33,7 +56,7 @@ class TimelineandTagging extends Component {
         //set all the variables that exist
         this.setState({
             timeline_post:"Friends",
-            timeline_see:"Everyone",
+            timeline_see:"Friends",
             tag_post: "Everyone",
             tag_audience:"Friends",
             review_posts:"On",
@@ -48,8 +71,34 @@ class TimelineandTagging extends Component {
        })
    }
     
+    /*Methods for the Suggestion Adaptation*/
+    onClickDestroySuggestion() {
+        this.setState({
+            displaySuggestionPopup:false
+        })
+    }
     
-   displayEdit(section,description,edit_description,audienceSelectionMethod,closeEditDialog){
+    onClickOK_Suggestion(){
+        this.changeAudience("timeline_see","Public")
+        this.setState({
+          displaySuggestionPopup:false
+        })
+    }
+    /*Methods for the Automation Adaptation */
+    onClickOk_Auto(){
+        this.setState({
+            displayAutomationPopup:false
+        })
+    }
+    
+    onClickUndo_Auto(){
+        this.setState({
+            displayAutomationPopup:false,
+            timeline_see:"Friends"
+        })
+    }
+    
+   displayEdit(section,description,edit_description,audienceSelectionMethod,closeEditDialog, adapt_Highlight){
        
            switch(section){
                    
@@ -70,7 +119,13 @@ class TimelineandTagging extends Component {
                          Note: This only controls what's allowed on your timeline. Posts you're tagged in still appear in search, News Feed and other places on Fakebook
                      </div>
                      
-                     <div className="audience_selection">(TODO:Replace with Enable/Disable)</div>
+                        {/*<div className="audience_selection">(TODO:Replace with Enable/Disable)</div>*/}
+                        
+                      <AudienceMenu onChange={audienceSelectionMethod}
+                      className="audience_selection"
+                      options={["enabled","disabled"]}
+                      />
+                      
                      <div><img className="review_image" src="/assets/timeline_review.png"/></div>
                      
                       </div>
@@ -91,7 +146,12 @@ class TimelineandTagging extends Component {
                      <div>
                          Remember: When you approve a tag, the person tagged and their friends may be able to see your post.
                      </div>
-                     <div className="audience_selection">(TODO:Replace with Enable/Disable)</div>
+                     
+                     <AudienceMenu onChange={audienceSelectionMethod}
+                      className="audience_selection"
+                      options={["enabled","disabled"]}
+                      />
+                        {/*<div className="audience_selection">(TODO:Replace with Enable/Disable)</div>*/}
                      <div><img className="review_image" src="/assets/timeline_tag.png"/></div>
                      
                       </div>
@@ -110,7 +170,13 @@ class TimelineandTagging extends Component {
                 <br/>
                 
                 <div className="audience_selection">
-                    <Button onClick={audienceSelectionMethod}>(TODO:Replace with the Audience Selector)</Button>
+                   
+                    <AudienceMenu onChange={audienceSelectionMethod}
+                      className="audience_selection"
+                      options={["everyone","friends_of_friends", "friends", "specific_friends", "only_me", "custom"]}
+                      adapt = {adapt_Highlight}
+                      />
+                    {/*<Button onClick={audienceSelectionMethod}>(TODO:Replace with the Audience Selector)</Button>*/}
                 </div>
             </div>)
            }
@@ -142,16 +208,27 @@ render(){
           </div>
             <hr/>
           <br/>
+          
+        {/*The Suggestion Adaptation */
+            
+            this.state.displaySuggestionPopup && this.state.suggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label_Sugst} agree={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>       
+        }
+          
+        {/*The Automation Adaptation*/ 
+          this.state.displayAutomationPopup && this.state.automation && <AutomationBoilerplate action = {this.state.action} context = {this.state.context} label={this.state.label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this.onClickUndo_Auto}/>
+        }
+          
         <div id="right_top">
             <span className="righttop_label">Timeline </span>   
             {/*this.displayNormal("Who can post on your timeline?","timeline_post")*/}
             <Edit description="Who can post on your timeline?" audienceType="timeline_post" audience={this.state.timeline_post} changeAudience={this.changeAudience} renderEditForm={this.displayEdit} renderNormal={this.displayNormal} />
             <hb/>
 
-            <Edit description="Who can see what others post on your timeline?" audienceType="timeline_see" audience={this.state.timeline_see} changeAudience={this.changeAudience} renderEditForm={this.displayEdit} renderNormal={this.displayNormal} />
-
+            <Edit description="Who can see what others post on your timeline?" audienceType="timeline_see" audience={this.state.timeline_see} changeAudience={this.changeAudience} renderEditForm={this.displayEdit} renderNormal={this.displayNormal} adapt = {this.state.highlight} automate={this.state.displayAutomationPopup && this.state.automation}/>
+         
         </div>
-         <hr/>
+        <hr/> {/*This borderline needs correcting*/}
+       
 
         <div id="right_bottom">
         

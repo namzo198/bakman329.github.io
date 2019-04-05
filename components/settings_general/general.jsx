@@ -22,7 +22,7 @@ render() {
 
     <div id="right_top">
       <span className="righttop_label"> Username </span>
-      <span className = "righttop_label_content"> facebook.com/Alexdoe </span>
+      <span className = "righttop_label_content"> fakebook.com/Alexdoe </span>
       <a className="right_link" href="#"> Edit  </a>
     </div>
     <hr/>

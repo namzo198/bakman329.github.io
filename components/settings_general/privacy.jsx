@@ -3,7 +3,10 @@ import Button from '../Button.jsx';
 import Edit from './Functions/Edit.jsx'
 import CheckBox from './Functions/CheckBox.jsx'
 import AudienceMenu from '../AudienceMenu.jsx'
-import {getParsed,addToLocalStorageObject,saveVisitedAdapatation} from '../../utilities.js'
+import SuggestionBoilerplate from '../../adaptations/Suggestion/SuggestionBoilerplate.jsx'
+import AutomationBoilerplate from '../../adaptations/Automation/AutomationBoilerplate.jsx'
+import {getParsed,addToLocalStorageObject} from '../../utilities.js'
+
 
 
 class body extends Component {
@@ -11,27 +14,38 @@ class body extends Component {
     constructor(props){
         super(props)
         
-        //let adaptation = getParsed('adaptations');
-        //let adaptationVisited = getParsed("visited");
+        let adaptation = getParsed('adaptations');
+        let adaptationVisited = getParsed("visited");
         
         this.state = {
-            adaptation:getParsed('adaptations'),
-            adaptationVisited:getParsed("visited"),
-            future_posts:'',
-            friend_request:'',
-            friend_list:'',
-            email_lookup:'',
-            phone_lookup:'',
-            search_index:''
-                     
+            adapt:adaptation['privacy_futureRequests'], //"high"/"sugst"/"automation"
+            adaptationVisited:adaptationVisited,
+            highlight:!adaptationVisited ["Privacy_futureRequests"]["highlight"]&& (adaptation["privacy_futureRequests"] === "high")?"high":null,
+             suggestion: !adaptationVisited ["Privacy_futureRequests"]["suggestion"]&& (adaptation["privacy_futureRequests"] === "sugst"),
+            automation:!adaptationVisited ["Privacy_futureRequests"]["automation"]&& (adaptation["privacy_futureRequests"] === "auto"),
+            future_requests:!adaptationVisited ["Privacy_futureRequests"]["automation"]&& (adaptation["privacy_futureRequests"] === "auto")?"Friends":"Public",
+            friend_request:"Friends",
+            friend_list:"Everyone",
+            email_lookup:"Friends",
+            phone_lookup:"Everyone",
+            search_index:"No",
+            displaySuggestionPopup:true,
+            displayAutomationPopup:true,
+            
+             //for the Suggestion Boilerplate code
+             action: "Privacy_futureRequests, Check to see if the audience was changed/unchanged to the suggested audience i.e \"Friends\"",
+              context:"Privacy_futureRequests",
+              label:"I think you should change \"Who can see your future requests?\" to Friends",
+              label_Auto:"The grayed out and underlined option's audience was automatically changed."
         }
-        
-       // !this.state.adaptationVisited["Privacy"]["highlight"]&&this.state.adaptation["privacy_future_requests"]
-        
         this.changeAudience = this.changeAudience.bind(this);
+        this.onClickDestroySuggestion = this.onClickDestroySuggestion.bind(this);
+        this.onClickOK_Suggestion = this.onClickOK_Suggestion.bind(this);
+        this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
+        this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
     }
     
-    componentDidMount(){
+    /**componentDidMount(){
             //set all the variables to all that currently exist
         this.setState({
             future_posts:"Friends",
@@ -41,7 +55,10 @@ class body extends Component {
             phone_lookup:"Everyone",
             search_index:"No"
         })
-    }
+        
+        
+    }*/
+    
     
     changeAudience(the_audience,newAudience){
         
@@ -54,9 +71,34 @@ class body extends Component {
   
     }
     
+    /*Methods for the Suggestion Adaptation*/
+    onClickDestroySuggestion() {
+        this.setState({
+            displaySuggestionPopup:false
+        })  
+        
+    }
     
+    onClickOK_Suggestion(){
+        this.changeAudience("future_requests","friends")
+    }
     
-    displayEdit(section,description,edit_description,audienceSelectionMethod,closeEditDialog){
+    /*Methods for the Automation Adaptation */
+     onClickOk_Auto(){
+        this.setState({
+            displayAutomationPopup:false
+        })
+    }
+    
+    onClickUndo_Auto(){
+     
+        this.setState({
+            future_requests:"Public",
+            displayAutomationPopup:false
+        })
+    }
+    
+    displayEdit(section,description,edit_description,audienceSelectionMethod,closeEditDialog, adapt_Highlight){
         
         switch(section){
                 
@@ -80,6 +122,7 @@ class body extends Component {
                           more={["specific_friends","only_me","see_all"]}
                           see_all={["custom"]}
                           title="Who should see this?"
+                          adapt={adapt_Highlight}
                           />
                            
                            
@@ -175,7 +218,10 @@ class body extends Component {
         }
      }
 
+   
+    
     render() {
+    
       return (
 
         <div id="wrapper_right">
@@ -185,10 +231,21 @@ class body extends Component {
           </div>
         <hr/>
       <br/>
+      
+     
+      {/*The Automation Adaptation*/ 
+          this.state.displayAutomationPopup && this.state.automation && <AutomationBoilerplate action = {this.state.action} context = {this.state.context} label={this.state.label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this.onClickUndo_Auto}/>
+        }
+      
+       
+       {/*The Suggestion Adaptation*/
+                  this.state.displaySuggestionPopup && this.state.suggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label} agree={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>
+        }
+       
         <div id="right_top">
           <span className="righttop_label">Your activity </span>
           
-          <Edit description="Who can see your future requests?" edit_description="You decide who can see your posts each time you create a new post. Fakebook will use that audience for future posts unless you change it." audienceType="friend_posts" audience={this.state.friend_posts} changeAudience={this.changeAudience} renderEditForm={this.displayEdit} />
+          <Edit description="Who can see your future requests?" edit_description="You decide who can see your posts each time you create a new post. Fakebook will use that audience for future posts unless you change it." audienceType="friend_posts" audience={this.state.future_requests} changeAudience={this.changeAudience} renderEditForm={this.displayEdit} adapt = {this.state.highlight} automate={this.state.displayAutomationPopup && this.state.automation}/>
            <hb/>
            
             <div>

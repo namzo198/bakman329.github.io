@@ -1,6 +1,7 @@
  import React from 'react'
 import ReactDOM from 'react-dom'
 
+
 import {containsIgnoreCase} from '../utilities.js'
 
 class AutocompleteInput extends React.Component {
@@ -42,6 +43,8 @@ class AutocompleteInput extends React.Component {
         }
   }
 
+  
+    
   componentWillUnmount() {
     document.removeEventListener('click', this.onClick);
   }
@@ -70,6 +73,7 @@ class AutocompleteInput extends React.Component {
     var items = [];
     this.items = [];
     var n_added = 0;
+    
     this.props.list.forEach((element, index) => {
       if (element.substr(0, last_value.length).toLocaleLowerCase() == last_value.toLocaleLowerCase()
         && !containsIgnoreCase(raw_list, element)) {
@@ -128,13 +132,16 @@ class AutocompleteInput extends React.Component {
       new_focus = this.verifyFocus(this.state.current_focus - 1);
     } else if (e.keyCode == 13) { // Enter key
 
-      if (this.state.current_focus > -1 && this.items[this.state.current_focus]) {
-       
+        
+      if (this.state.current_focus >-1 && this.items[this.state.current_focus]) {
           this.items[this.state.current_focus]();
+         
           
-       
-          
-          
+      }else if( this.state.current_focus == -1 && this.state.value != "") {
+           console.log("He pressed me"+this.state.value)
+          this.props.onEnter(this.state.value);
+          this.setState({value:""})
+        
       }
     
         
@@ -147,12 +154,14 @@ class AutocompleteInput extends React.Component {
       
       
   }
-
+    
 	render() {
+           
     var container;
 		return (
-			<div className="autocomplete">
+       <div className="autocomplete">
         <input id="text" type='text' placeholder={this.props.placeholder}
+              className = {this.props.className}
                rows={this.props.rows ? this.props.rows : '1'}
                cols={this.props.cols ? this.props.cols : '65'}
                ref={(element) => {this.input = element}}

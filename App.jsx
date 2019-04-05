@@ -44,7 +44,13 @@ class App extends React.Component {
       "deletetimeline": userparams.deletetimeline,
       "liketimeline": userparams.liketimeline,
       "chatoffline": userparams.chatoffline,
-      "contactInfo": userparams.contactInfo
+      "contactInfo": userparams.contactInfo,
+        "privacy_futureRequests":userparams.privacy_futureRequests,
+        "timeline_seePost":userparams.timeline_seePost,
+        "block_User":userparams.block_User,
+        "block_Event":userparams.block_Event,
+        "block_App":userparams.block_App,
+        "block_AppInvite":userparams.block_AppInvite,
     };
     
     // If any change is made to localstorage, refreshes after update
@@ -91,11 +97,11 @@ class App extends React.Component {
   // Defines global variables
   getChildContext() {
     // Get the url parameters from JSON String
-    const {session,deletetimeline,liketimeline,chatoffline,contactInfo} = this.urlqueryStringToJSON();
+    const {session,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite} = this.urlqueryStringToJSON();
 
     // const {change}="Hello"
     // Assign url parameters to local variables
-    const current_session = {session,deletetimeline,liketimeline,chatoffline,contactInfo};
+    const current_session = {session,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite};
 
     // Assigns the local variables to the global variables 
     return {
@@ -104,6 +110,12 @@ class App extends React.Component {
       liketimeline: current_session.liketimeline,
       chatoffline: current_session.chatoffline,
       contactInfo: current_session.contactInfo,
+      privacy_futureRequests:current_session.privacy_futureRequests,
+      timeline_seePost:current_session.timeline_seePost, 
+      block_User:current_session.block_User,  
+      block_Event:current_session.block_Event,
+      block_App:current_session.block_App,
+      block_AppInvite:current_session.block_AppInvite,
       NewsFeed: true,
       Timeline: false
     };     
@@ -142,6 +154,13 @@ App.childContextTypes = {
   liketimeline:PropTypes.string,
   contactInfo: PropTypes.string,
   BasicInfo:PropTypes.string,
+  privacy_futureRequests:PropTypes.string,  
+  timeline_seePost:PropTypes.string,
+  block_User: PropTypes.string,
+  block_Event:PropTypes.string,
+  block_App:PropTypes.string,    
+  block_AppInvite: PropTypes.string,
+ 
 };
 
 

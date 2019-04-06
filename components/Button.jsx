@@ -44,7 +44,7 @@ class Button extends React.Component {
 
     var event = { action : state.action,
                   details : state.context,
-                  object : 'Alex Doe', //state.name,
+                  object : state.object,    //'Alex Doe', //state.name,
                   session_id: localStorage.session_id
                 };
     

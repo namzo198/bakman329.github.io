@@ -4,8 +4,8 @@ import Button from '../../Button.jsx';
 import {friendsList,addToLocalStorageObject,getProfilePic,getParsed,saveVisitedAdaptation} from '../../../utilities.js';
 import AutomationBoilerplate from '../../../adaptations/Automation/AutomationBoilerplate.jsx'
 import SuggestionBoilerplate from '../../../adaptations/Suggestion/SuggestionBoilerplate.jsx'
-import {Event} from '../../../adaptations/Event.jsx'
-import classNames from 'classnames'
+import {createEvent} from '../../../adaptations/Event.jsx'
+
 
 class BlockEventInvites extends React.Component {
     
@@ -15,6 +15,7 @@ class BlockEventInvites extends React.Component {
     let adaptation = getParsed('adaptations');
     let blockedFriends = getParsed('blockedEventInvites');     
     let adaptationVisited = getParsed("visited");
+         
     let friends = friendsList();
     var friendslist = [];    
     
@@ -23,20 +24,22 @@ class BlockEventInvites extends React.Component {
         })     
       
     this.state = {  
-      username: "",
-      blockedFriendsList:blockedFriends,
-      friendsList:friendslist,   
+        username: "",
+        blockedFriendsList:blockedFriends,
+        friendsList:friendslist,   
         
-     highlight: !adaptationVisited["Block_Event"]["highlight"] && (adaptation["block_Event"] == "high")?true:false,
-    suggestion: !adaptationVisited ["Block_Event"]["suggestion"]&& (adaptation["block_Event"] === "sugst"),
-    automation:!adaptationVisited ["Block_Event"]["automation"]&& (adaptation["block_Event"] === "auto"),
-    displayAutomationPopup:true,
-    displaySuggestionPopup:true,
-                  
-    action:"Block_Event, Check to see if the suggested users were blocked/unblocked (for undo_automation)",
-    context:"Block_Event",
-    label_Sugst:" I think you should block \"Kyle Parker\" from sending you event invites", 
-    label_Auto: "The grayed out and underlined entries were automatically blocked",  
+         highlight: !adaptationVisited["Block_Event"]["highlight"] && (adaptation["block_Event"] == "high")?true:false,
+        suggestion: !adaptationVisited ["Block_Event"]["suggestion"]&& (adaptation["block_Event"] === "sugst"),
+        automation:!adaptationVisited ["Block_Event"]["automation"]&& (adaptation["block_Event"] === "auto"),
+        displayAutomationPopup:true,
+        displaySuggestionPopup:true,
+
+        action:"Block_Event Invitations",    
+        context:"Block_Event",
+        object:" blocking of Richard Midor", 
+        objectSugst: "block Kyle Parker",    
+        label_Sugst:" I think you should block \"Kyle Parker\" from sending you event invites", 
+        label_Auto: "The grayed out and underlined entries were automatically blocked",  
     }
         
      this.handleChange = this.handleChange.bind(this);
@@ -93,13 +96,18 @@ class BlockEventInvites extends React.Component {
     
       
     onEnter(friendname){
-        
+        var event;
         
         
         this.state.blockedFriendsList.push(friendname)
         this.setLocalStorage();
         
-       
+       event = {
+             action: `Block event invites`,
+             object: `Pressed the Enter key`,
+             context: `Block ${friendname} from sending event invites.Participant did this on their own`,
+             
+        };
         
        
         //When adaptation is highligh and enter is pressed
@@ -109,19 +117,17 @@ class BlockEventInvites extends React.Component {
             
             saveVisitedAdaptation("Block_Event","highlight");
             
-        var event = {
-           action: `Followed highlight and blocked ${friendname} from Event Invites`,
-            context: 'Block Event invites',
-            name: 'Alex Doe'
+        event = {
+             action: `Block event invites`,
+             object: `Pressed the Enter key to block friend`,
+             context: `Block ${friendname} from sending event invites as highlighted by the Highlight adaptation`,
+             
         };
       
-        
-         Event(event);
-         
         }
         
        
-       
+       createEvent(event);
        
     }
     
@@ -134,9 +140,10 @@ class BlockEventInvites extends React.Component {
         this.setLocalStorage();
         
         var event = {
-           action: `Unblock ${friend} from Event Invites`,
-           context: 'Block event invites',
-            name: 'Alex Doe'
+           action: `Unblock Event Invites `,
+           object: 'Pressed the UnBlock button to unblock friend',
+           context: `Unblock ${friend} from Event Invites.Participant did this on their own`,
+            
         };
         return event;
     }
@@ -179,7 +186,7 @@ class BlockEventInvites extends React.Component {
                 </ul>
                 
                 {/*The Automation Adaptation Popup*/ 
-                this.state.displayAutomationPopup && this.state.automation && <AutomationBoilerplate action = {this.state.action} context = {this.state.context} label={this.state.label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this.onClickUndo_Auto}/>
+                this.state.displayAutomationPopup && this.state.automation && <AutomationBoilerplate action = {this.state.action} context = {this.state.context} object ={this.state.object} label={this.state.label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this.onClickUndo_Auto}/>
                }
             </div>
             )
@@ -214,7 +221,7 @@ class BlockEventInvites extends React.Component {
             </div>
             
                {/*The Suggestion Adaptation*/
-                 this.state.displaySuggestionPopup && this.state.suggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label_Sugst} agree={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>
+                 this.state.displaySuggestionPopup && this.state.suggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label_Sugst} object={this.state.objectSugst} agree={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>
                 }
                 
           </div>

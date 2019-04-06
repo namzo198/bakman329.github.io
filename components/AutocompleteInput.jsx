@@ -138,7 +138,7 @@ class AutocompleteInput extends React.Component {
          
           
       }else if( this.state.current_focus == -1 && this.state.value != "") {
-           console.log("He pressed me"+this.state.value)
+           //console.log("He pressed me"+this.state.value)
           this.props.onEnter(this.state.value);
           this.setState({value:""})
         

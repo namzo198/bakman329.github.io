@@ -20,7 +20,7 @@ class GeneralSettings extends React.Component{
          adaptationVisited:adaptationVisited,
         highlightPrivacy: !adaptationVisited["Privacy_futureRequests"]["highlight"]&& (adaptation["privacy_futureRequests"] === "high")?highLightExtended:noHighLight,
         highlightTimeline: !adaptationVisited ["Timeline_seePost"]["highlight"]&& (adaptation["timeline_seePost"] === "high")?highLightExtended:noHighLight,
-        highlightBlocking:!adaptationVisited["Block_User"]["highlight"] && (adaptation["block_User"] == "high")?highLightExtended:noHighLight,
+        highlightBlocking:!adaptationVisited["Block_User"]["highlight"] && (adaptation["block_User"] == "high")||!adaptationVisited["Block_Event"]["highlight"] && (adaptation["block_Event"] == "high")||!adaptationVisited["Block_AppInvite"]["highlight"] && (adaptation["block_AppInvite"] == "high")||!adaptationVisited["Block_App"]["highlight"] && (adaptation["block_App"] == "high")?highLightExtended:noHighLight,
             
         }
        

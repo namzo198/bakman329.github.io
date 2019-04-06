@@ -400,7 +400,7 @@ render(){
     })
   
     //console.log("The highlight state is "+ this.state.highlight)
-        console.log("The highlight name is "+ this.state.high_username)
+       // console.log("The highlight name is "+ this.state.high_username)
 return (
     
         <div>

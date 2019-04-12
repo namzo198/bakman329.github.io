@@ -3,12 +3,12 @@ import {CreateEvent} from '../controller/databaseFunctions.js';
 
 
 
-export function Event (props) {
+export function createEvent (props) {
     
   var event = {
       action: props.action,
+      object:props.object,
       details: props.context,
-      object: 'Alex Doe',
       session_id:localStorage.session_id
       
   }; 
@@ -16,4 +16,4 @@ export function Event (props) {
     CreateEvent(event);
 }
 
-export default Event;
+export default createEvent;

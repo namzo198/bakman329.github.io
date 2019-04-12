@@ -299,11 +299,11 @@ export function resetBlockedUsers(){
 }
 
 export function resetBlockedApps(){
-    localStorage.setItem('blockedApps',JSON.stringify(["Yahoo","Uber"]))
+    localStorage.setItem('blockedApps',JSON.stringify(["Yahoo"]))
 }
 
 export function resetBlockedAppInvites(){
-    localStorage.setItem('blockedAppInvites',JSON.stringify([]))
+    localStorage.setItem('blockedAppInvites',JSON.stringify(["Mike Rogers"]))
 }
 
 export function resetBlockedEventInvites(){

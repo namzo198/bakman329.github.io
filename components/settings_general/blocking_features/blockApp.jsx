@@ -1,19 +1,50 @@
 import React from 'react'
 import AutocompleteInput from '../../AutocompleteInput.jsx'
 import Button from '../../Button.jsx';
+import {friendsList,addToLocalStorageObject,getProfilePic,getParsed,saveVisitedAdaptation} from '../../../utilities.js';
+import AutomationBoilerplate from '../../../adaptations/Automation/AutomationBoilerplate.jsx'
+import SuggestionBoilerplate from '../../../adaptations/Suggestion/SuggestionBoilerplate.jsx'
+import {createEvent} from '../../../adaptations/Event.jsx'
+
 
 class BlockApp extends React.Component {
      constructor(props){
     super(props);
+         
+    let adaptation = getParsed('adaptations');
+    let blockedApps = getParsed('blockedApps');     
+    let adaptationVisited = getParsed("visited"); 
+         
     this.state = {  
       appName: "",
-      blockedAppsList:[]
+      blockedAppsList:blockedApps,
+        
+      highlight: !adaptationVisited["Block_App"]["highlight"] && (adaptation["block_App"] == "high")?true:false,
+        suggestion: !adaptationVisited ["Block_App"]["suggestion"]&& (adaptation["block_App"] === "sugst"),
+        automation:!adaptationVisited ["Block_App"]["automation"]&& (adaptation["block_App"] === "auto"),
+        displayAutomationPopup:true,
+        displaySuggestionPopup:true,
+
+        action:"Block_App ",    
+        context:"Block_App",
+        object:" blocking of Yahoo", 
+        objectSugst: "block Yahoo",    
+        label_Sugst:" I think you should block the \"Yahoo\" app", 
+        label_Auto: "The grayed out and underlined apps were automatically blocked", 
     }
         
      this.handleChange = this.handleChange.bind(this);
      this.onEnter = this.onEnter.bind(this);
      this.showBlockedApps = this.showBlockedApps.bind(this);
-     this.onClickUnblock = this.onClickUnblock.bind(this);
+     this.onClickUnBlock = this.onClickUnBlock.bind(this);
+         
+     /*Suggestion functions*/
+    this.onClickDestroySuggestion = this.onClickDestroySuggestion.bind(this);
+    this.onClickOK_Suggestion = this.onClickOK_Suggestion.bind(this);
+         
+    /*Automation functions*/
+    this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
+    this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
    
   }
     
@@ -34,12 +65,59 @@ class BlockApp extends React.Component {
      localStorage.setItem('blockedApps',JSON.stringify(this.state.blockedAppsList))  
    }
     
-    onEnter(app){
-      this.state.blockedAppsList.push(app)
-      this.setLocalStorage(); 
+        /*Methods for the Suggestion Adaptation*/
+    onClickDestroySuggestion() {
+        this.setState({
+            displaySuggestionPopup:false
+        })  
+        
     }
     
-    onClickUnblock(app){
+    onClickOK_Suggestion(){
+        //this.changeAudience("future_requests","friends")
+        this.state.blockedAppsList.push("Yahoo");
+        
+        this.setState({
+             displaySuggestionPopup:false
+        })  
+    }
+    
+    onEnter(app){
+      var event; 
+      this.state.blockedAppsList.push(app)
+      this.setLocalStorage(); 
+      
+         event = {
+             action: `Block apps`,
+             object: `Pressed the Enter key to the block app`,
+             context: `Blocked ${app} app.Participant did this on their own`,
+             
+        };
+        
+       
+        //When adaptation is highligh and enter is pressed
+        if(this.state.highlight){
+            
+            this.setState({highlight:false})
+            
+            saveVisitedAdaptation("Block_App","highlight");
+            
+        event = {
+             action: `Block apps `,
+             object: `Pressed the Enter key to the block app`,
+             context: `Blocked ${app} app as highlighted by the Highlight adaptation`,
+             
+        };
+      
+        }
+        
+       
+       createEvent(event);
+       
+        
+    }
+    
+    onClickUnBlock(app){
      //console.log('I am parent function is now:'+ this.state.blockedAppsList) 
      var Index = this.state.blockedAppsList.indexOf(app);
      this.state.blockedAppsList.splice(Index,1); 
@@ -48,10 +126,32 @@ class BlockApp extends React.Component {
         
          var event = {
            action: `Unblock ${app} from App blockage`,
-           context: 'Block App',
-           name:'Alex Doe'
+            object: `Pressed the UnBlock button to unblock app`,
+            context: `Blocked ${app} App. Participant did this on their own`,
+           
         };
         return event;
+    }
+    
+      //Methods for the Automation Adaptation
+   onClickOk_Auto(){
+        this.setState({
+            displayAutomationPopup:false
+        })
+    }
+    
+   onClickUndo_Auto(){
+        
+       
+       var list_Length = this.state.blockedAppsList.length;
+       this.onClickUnBlock(this.state.blockedAppsList[list_Length - 1]);
+       
+       if(this.state.blockedAppsList.length === 0){
+            this.setState({
+                //blockedUserslist: unblockUsers,
+                displayAutomationPopup:false
+            })
+       }
     }
     
     showBlockedApps(){
@@ -61,9 +161,21 @@ class BlockApp extends React.Component {
                 <div>
                     <ul>
                         {this.state.blockedAppsList.map((app,index)=>{
-                            return <li key={index}>{app}<Button href="javascript:void(0)" onClick={()=>this.onClickUnblock(app)}>Unblock</Button></li>
+                            
+                            
+                        if(this.state.displayAutomationPopup && this.state.automation) {
+                            
+                            return (<li key={index}><span className="righttop_text_onAutomation">{app}</span> <Button href="javascript:void(0)" onClick={()=>this.onClickUnBlock(app)}>Unblock</Button></li>)
+                            
+                        }else {
+                            return (<li key={index}>{app}<Button href="javascript:void(0)" onClick={()=>this.onClickUnBlock(app)}>Unblock</Button></li>)}
                         })}
                     </ul>
+                    
+                     {/*The Automation Adaptation Popup*/ 
+                        this.state.displayAutomationPopup && this.state.automation && <AutomationBoilerplate action = {this.state.action} context = {this.state.context} object ={this.state.object} label={this.state.label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this.onClickUndo_Auto}/>
+                      }
+               
                 </div>
             )
         }
@@ -71,11 +183,12 @@ class BlockApp extends React.Component {
    render(){
        
        var autocomplete = <AutocompleteInput
+       className = {this.state.highlight? "block_high":null}
        commaSeperated
        onChange={(value) => this.handleChange(value)}
-       defaultValue = ""
+       defaultValue = {this.state.highlight? "Yahoo":""}
        placeholder='Type the name of an app...'
-       list={["Yahoo", "Skype", "Quora"]} //Will come from localStorage
+       list={["Skype", "Quora", "Lyft"]} //Will come from localStorage
        onEnter={this.onEnter}
        
        />
@@ -96,6 +209,10 @@ class BlockApp extends React.Component {
                   <br/>
               
               </div>
+              
+              {/*The Suggestion Adaptation*/
+                 this.state.displaySuggestionPopup && this.state.suggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label_Sugst} object={this.state.objectSugst} agree={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>
+                }
             </div>
        )
    } 

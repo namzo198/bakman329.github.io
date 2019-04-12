@@ -19,9 +19,9 @@ class AutomationBoilerplate extends Component {
     
     onClickOk_Auto() {
         var event = {
-            action: `User concurs with the Automation for ${this.props.action}`,
+            action: `Participant concurs with the Automation for ${this.props.action}`,
             context:  this.props.context,
-            name: 'Alex Doe'
+            object: `Agreed with the automated ${(this.props.object !=undefined?this.props.object:'Alex Doe')}`
         }
          
         this.props.onClickOK_Auto();    
@@ -31,9 +31,9 @@ class AutomationBoilerplate extends Component {
     
     onClickUndo_Auto(){
         var event = {
-            action: `User Undid the Automation for ${this.props.action}`,
+            action: `Participant Undid the Automation for ${this.props.action}`,
             context:this.props.context, 
-            name: 'Alex Doe'
+            object: `Disagreed with the automatic ${(this.props.object !=undefined?this.props.object:'Alex Doe')}`,
         }
         
         this.props.onClickUnDo_Auto();

@@ -2,10 +2,7 @@ import React,{Component} from 'react';
 import Button from '../../Button.jsx';
 import Popup from '../../Popup.jsx'
 import {levenshteinDistance} from '../../../algorithms.js'
-import {friendsList,addToLocalStorageObject,getProfilePic,getParsed,saveVisitedAdaptation} from '../../../utilities.js';
-import AutomationBoilerplate from '../../../adaptations/Automation/AutomationBoilerplate.jsx'
-import SuggestionBoilerplate from '../../../adaptations/Suggestion/SuggestionBoilerplate.jsx'
-import classNames from 'classnames'
+import {friendsList,addToLocalStorageObject,getProfilePic} from '../../../utilities.js';
 
 /**
 So, the users_friendship is being updated based on the current changes being made to it,  however it is gotten from the friendsList function that keeps getting updated based on the users being blocked. I therefore need to find a way to keep the original list in sysnc with the updated list without shortening the users list.
@@ -14,123 +11,54 @@ So, the users_friendship is being updated based on the current changes being mad
 class BlockUsers extends React.Component {
   constructor(props) {
     super(props);
-      
-    let adaptation = getParsed('adaptations');
-    let adaptationVisited = getParsed("visited");
-      
-    this.state = {username: '', 
-                  high_username:'Jack Scout',
-                  renderPopup:false, 
+
+    this.state = {username: '',
+                  renderPopup:false,
                   friendsList:friendsList(),
                   renderUltimateBlock:false,
                   blockedUserslist:JSON.parse(localStorage.getItem('blockedUsers')),
-                  showUnblockPopup:false, 
-                  highlight: !adaptationVisited["Block_User"]["highlight"] && (adaptation["block_User"] == "high")?true:false,
-                  suggestion: !adaptationVisited ["Block_User"]["suggestion"]&& (adaptation["block_User"] === "sugst"),
-                  automation:!adaptationVisited ["Block_User"]["automation"]&& (adaptation["block_User"] === "auto"),
-                  displayAutomationPopup:true,
-                  displaySuggestionPopup:true,
-                  
-                  action:"Block_User, Check to see if the suggested users were blocked/unblocked (for undo_automation)",
-                  context:"Block_User",
-                  label_Sugst:" I think that you should block \"Jack Scout\"",
-                  label_Auto: "The grayed out and underlined entries were automatically blocked",
+                  showUnblockPopup:false,
             };
-      
+
     this.handleChange = this.handleChange.bind(this);
-    this.handleChange_high = this.handleChange_high.bind(this);
     this.onClickBlock = this.onClickBlock.bind(this);
     this.onClickUltimateBlock = this.onClickUltimateBlock.bind(this);
     this.onClickUnblock = this.onClickUnblock.bind(this);
-    this.showBlockedUsers = this.showBlockedUsers.bind(this);
-      
-    this.onClickDestroySuggestion = this.onClickDestroySuggestion.bind(this);
-    this.onClickOK_Suggestion = this.onClickOK_Suggestion.bind(this);
-      
-    this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
-    this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
-      
-      
+      this.
+  showBlockedUsers = this.showBlockedUsers.bind(this);
+
+
   }
 
 componentDidMount(){
     //var blockedUsers = JSON.parse(localStorage.getItem('blockedUsers'));
-    
+
     //var friends = JSON.parse(localStorage.getItem('friends'))
    // var friends_profile = JSON.parse(localStorage.getItem('friend_profile'))
-    
+
     //console.log('The blocked'+  blockedUsers)
-    
+
     this.setState({
       // blockedUserslist: blockedUsers,
       // friendsList: friends,
        //friend_profile:friends_profile
     })
-    
+
     //console.log('The state blocked' +this.state.blockedUserslist.length)
 }
-    
-    
- /*Methods for the Suggestion Adaptation*/
-    onClickDestroySuggestion() {
-        this.setState({
-            displaySuggestionPopup:false
-        })  
-        
-    }
-    
-    onClickOK_Suggestion(){
-        //this.changeAudience("future_requests","friends")
-        
-        this.setState({
-            username:'Jack Scout'
-        })
-        
-        this.onClickBlock()
-    }
-    
-//Methods for the Automation Adaptation
-   onClickOk_Auto(){
-        this.setState({
-            displayAutomationPopup:false
-        })
-    }
-    
-   onClickUndo_Auto(){
-        
-       
-       var list_Length = this.state.blockedUserslist.length;
-       this.onClickUnblock(this.state.blockedUserslist[list_Length - 1]);
-       
-       if(this.state.blockedUserslist.length === 0){
-            this.setState({
-                //blockedUserslist: unblockUsers,
-                displayAutomationPopup:false
-            })
-       }
-    }
-    
-    
+
 handleChange(email) {
- 
    this.setState({username: email.target.value});
-    
-   // console.log("In the handleChange" +username)
  }
 
-handleChange_high(name){
-    this.setState({high_username:name.target.value})
-    
-}
-    
 onClickBlock(){
-    this.setState({renderPopup:true})                  
+    this.setState({renderPopup:true})
 }
-    
+
 cancel(what){
 
     if(what ==='first'){
-        this.setState({renderPopup:false})  
+        this.setState({renderPopup:false})
     }else if (what === 'second'){
         this.setState({renderUltimateBlock:false,
                       friendsList:friendsList(),})
@@ -138,66 +66,47 @@ cancel(what){
         this.setState({showUnblockPopup:false})
     }
 }
-  
+
 /*setLocalStorage(){
- //localStorage.setItem('blockedUsers',JSON.stringify(this.state.blockedUserslist))  
+ //localStorage.setItem('blockedUsers',JSON.stringify(this.state.blockedUserslist))
     addToLocalStorageObject('blockedUsers',this.state.blockedUserslist);
 }*/
-    
-allowed(event){
-   
+
+allowed(){
+
     var blockedFriend = this.state.username;
     this.state.blockedUserslist.push(blockedFriend)
-    
+
     //Change friendship status in users localStorage
     this.state.friendsList.forEach((element,index) => {
-     
+
         if(element.name === blockedFriend){
             element['friend'] = false;
         }
-        
-        
+
+
     });
      addToLocalStorageObject('users', this.state.friendsList);
     addToLocalStorageObject('blockedUsers',this.state.blockedUserslist);
 
-    //this.setLocalStorage(); 
-    
+    //this.setLocalStorage();
+
     this.cancel('second')
     this.cancel('first')
-    
-    //if highlight Adaptation, clear the input value
-    if (this.state.highlight) {
-      
-        
-        this.setState({
-            highlight:false,
-            high_username:'',
-        })
-        
-        console.log("I cleared the input")
-        
-        saveVisitedAdaptation("Block_User","highlight");
-       
-    }
-    
- 
-   
-//saveVisitedAdaptation("Privacy_futureRequests","highlight");
-                 
+
 }
-     
+
 onClickUltimateBlock(user){
    this.setState({
-       renderUltimateBlock:true, 
+       renderUltimateBlock:true,
        username:user})
 }
 
 UltimateBlock(){
      return (
-     <Popup title = {`Are you sure you want to block ${this.state.username}?`} cancel = {()=>{this.cancel('second')}} 
-     okay = {()=>{this.allowed()}} 
-      okButtonName = {`Block ${this.state.username.split(" ")[0]}`} destroy = {() => {null}}> 
+     <Popup title = {`Are you sure you want to block ${this.state.username}?`} cancel = {()=>{this.cancel('second')}}
+     okay = {()=>{this.allowed()}}
+      okButtonName = {`Block ${this.state.username.split(" ")[0]}`}>
        <div>
           <div className="popup_imgwrap">
            <img src='../../assets/warning.png' width="53" height="48"/>
@@ -212,55 +121,49 @@ UltimateBlock(){
                    <li>Add you as a friend</li>
                </ul>
                <div className="popup_content_2">If you're friends, blocking {this.state.username} will also unfriend him.</div>
-               
-              <div className="popup_content_2">If you just want to limit what you share with {this.state.username} or see less of him on Fakebook, you cacn <a href="javascript:void(0)">take a break</a> from him instead </div> 
-              
+
+              <div className="popup_content_2">If you just want to limit what you share with {this.state.username} or see less of him on Fakebook, you cacn <a href="javascript:void(0)">take a break</a> from him instead </div>
+
                <div className ="popup_content_border"> </div>
-               
-               <div className="popup_content_2">Instead, you may want to send {this.state.username} a message because he might not know he is bothering you.  <a href="">Let him know.</a></div>     
-           
+
+               <div className="popup_content_2">Instead, you may want to send {this.state.username} a message because he might not know he is bothering you.  <a href="">Let him know.</a></div>
+
            </div>
-        </div>  
+        </div>
     </Popup>
-     )   
+     )
 }
-    
+
 BlockPopup(){
-    
+
     var pop;
-    
-    if(this.state.username !== ''|| (this.state.highlight)) {
-          var user;
-        //this is hard coded for the highlight adaptation
-        if (this.state.highlight) {
-          user = this.state.high_username;
-        } else {
-          user = this.state.username;
-        }
-        
+
+    if(this.state.username !== '') {
+
+        var user = this.state.username;
         var foundelements = [];
         var found = false;
-        
-        //console.log("The friendlist is as follows:");
-        //console.log(this.state.friendsList);
-        this.state.friendsList.forEach((element,index) => { 
-            
 
-            
+        console.log("The friendlist is as follows:");
+        console.log(this.state.friendsList);
+        this.state.friendsList.forEach((element,index) => {
+
+
+
         var editdistance = levenshteinDistance(user,element.name);
-            //I choose 7 for username input where it takes atleast 7 edits to arrive to exising usernames 
-            
+            //I choose 7 for username input where it takes atleast 7 edits to arrive to exising usernames
+
             if (editdistance <= 7 ){
                  found = true;
                  foundelements.push(element.name)
-              } 
+              }
           })
-                            
+
         pop = (
             //Popup has no okay button, just the x button to cancel
-            
+
             <Popup title="Block People" cancel={()=>{this.cancel('first')}} noFooter={true} header_style={true} content_style={true} closeButton={true}>
-                
+
                 {!found? <div>No results found</div>:
 
                     <div>
@@ -268,35 +171,36 @@ BlockPopup(){
 
                         <ul className="BlockPopup">
                             {foundelements.map((element, index) => {
-                                
+
                                 var profile_image = getProfilePic(element);
                                 //var profile_image = this.state.friend_profile[element].profile_pic;
-                                //src={`../../../assets/users/${profile_image}`
-                                
-                                
-                                
-                                return <li key={index}> {element} 
-                                <img src={profile_image}/> 
-                                
+                                //return <div> <img src={`../../../assets/${profile_image}`}/>
+                                //<b key={index}>{element}</b>
+                                //remove the below return and img tags for pic display
+
+
+                                return <li key={index}> {element}
+                                <img src={profile_image}/>
+
                                 <Button  type="cancel" href="javascript:void(0)" onClick={()=>{this.onClickUltimateBlock(element)}}> Block </Button> </li>
                             })}
 
                         </ul>
-                    </div> 
+                    </div>
                 }
-                
+
             </Popup>
          )
-        
+
     }else{
         pop = (
             <Popup title="Invalid Search Query" cancel={()=>{this.cancel('first')}} width={900} height={10} closeButton= {true} closeButtonName="Close" content_style={true} header_style={true}>
-               <p>Please type a valid query in the search box and try again</p> 
+               <p>Please type a valid query in the search box and try again</p>
             </Popup>
         )
     }
-    
-    
+
+
     return pop;
 
 }
@@ -304,29 +208,29 @@ BlockPopup(){
 allowUnblock(user){
    var Index = this.state.blockedUserslist.indexOf(user);
     this.state.blockedUserslist.splice(Index,1);
-    
-    //console.log('The user is'+user);
+
+    console.log('The user is'+user);
     //Change friendship status in users localStorage
     this.state.friendsList.forEach((element,index) => {
-     
-        
+
+
         if(element.name === user){
             element['friend'] = true;
-            //console.log("The element name is"+element.name+"User is "+user);
+            console.log("The element name is"+element.name+"User is "+user);
         }
-        
-        
+
+
     });
-    
+
     addToLocalStorageObject('users', this.state.friendsList);
     addToLocalStorageObject('blockedUsers',this.state.blockedUserslist);
 
-    
-    //this.setLocalStorage(); 
+
+    //this.setLocalStorage();
     this.cancel('third')
-                
+
 }
-  
+
 onClickUnblock(user){
     this.setState({
         showUnblockPopup:true,
@@ -335,74 +239,48 @@ onClickUnblock(user){
  }
 
 unblockUser(){
-    
-    //Find the index of the user from the array and then delete it from the array. 
+
+    //Find the index of the user from the array and then delete it from the array.
     var user = this.state.username;
-    
+
     return(
-        
+
         <Popup title={`Unblock ${user}`} cancel={()=>{this.cancel('third')}} okay={()=> this.allowUnblock(user)} okButtonName ="Confirm" destroy={void(0)}>
-        
+
              <div>Are you sure you want to unblock {user}</div>
-                
+
                  <ul>
                      <li>{user} may be able to see your timeline or contact you, depending on your privacy settings</li>
                      <li>Tags you and {user} previously added of each other may be restored</li>
                      <li>You can remove tags of yourself on your activity log</li>
                  </ul>
 
-             <div>Please remember you'll have to wait 48 hour before you can re-block {user}.</div> 
-             
+             <div>Please remember you'll have to wait 48 hour before you can re-block {user}.</div>
+
         </Popup>
-        )   
+        )
     }
-  
+
   showBlockedUsers(){
-      
+
      if(this.state.blockedUserslist.length > 0){
         return (
            <div>
                <ul>
                 {this.state.blockedUserslist.map((user,index)=>{
-                   if(this.state.displayAutomationPopup && this.state.automation){
-                       return (
-                           <li key={index}><span className="righttop_text_onAutomation">{user}</span><Button href="javascript:void(0)" onClick={()=>{this.onClickUnblock(user)}}>Unblock</Button>    
-                           </li>
-                       )
-                       
-                   }else {
-                       return (
-                           <li key={index}>{user}
-                              <Button href="javascript:void(0)" onClick={()=>{this.onClickUnblock(user)}}>Unblock</Button>
-                            </li>)
-                 }
-                    
-                      
+                   return <li key={index}>{user} <Button href="javascript:void(0)" onClick={()=>{this.onClickUnblock(user)}}>Unblock</Button></li>
                 })}
                 </ul>
-                
-                {/*The Automation Adaptation Popup*/ 
-                this.state.displayAutomationPopup && this.state.automation && <AutomationBoilerplate action = {this.state.action} context = {this.state.context} label={this.state.label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this.onClickUndo_Auto}/>
-               }
             </div>
           )
-         
-         
        }
-      
-  }     
-    
+
+  }
+
 render(){
-    
-    var block_value_high_style = classNames({
-        'block_value': !this.state.highlight,
-        'block_value_high': this.state.highlight,
-    })
-  
-    //console.log("The highlight state is "+ this.state.highlight)
-       // console.log("The highlight name is "+ this.state.high_username)
+
 return (
-    
+
         <div>
             <div>
             <h2 className = "right_header"> Manage blocking </h2>
@@ -422,38 +300,27 @@ return (
 
             <div id="right_bottom">
                 <span className="rightbottom_label"> Block users </span>
-                <div className= "rightbottom_text"> 
+                <div className= "rightbottom_text">
                      Once you block someone, that person can no longer see things you post on your timeline, tag you, invite
                       you to events or groups,start a conversation with you, or add you as a friend.
                       Note: Does not include apps, games or groups you both participate in.
                 </div>
-                
+
                 <div id="right_bottom_form">
                     <label> Block users
-                    
-                        {/*<input id = "text" type="text"className = {block_value_high_style} placeholder = "Add name or email"defaultValue={this.state.highlight?this.state.high_username:""} onChange={this.handleChange_high} />*/}
-                     
-                     
-                     {this.state.highlight?
-                       <input id = "text" className = {block_value_high_style} type="text"   defaultValue ={this.state.high_username} onChange ={this.handleChange_high} /> 
-                      :<input id = "text" type="text" placeholder = "Add name or email" onChange = {this.handleChange} />
-                    }
-                      
+                      <input id = "text" type="text" placeholder="Add name or email" onChange={this.handleChange} />
                     </label>
                     <Button href="javascript:void(0)" type="confirm" onClick={this.onClickBlock}>Block </Button>
                     <br/>
-                    
+
                     {this.state.renderPopup?this.BlockPopup():null}
                     {this.state.renderUltimateBlock?this.UltimateBlock():null}
                     {this.state.showUnblockPopup?this.unblockUser():null}
-                    {this. showBlockedUsers()} 
-                    {   /*The Suggestion Adaptation*/
-                        this.state.displaySuggestionPopup && this.state.suggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label_Sugst} agree={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>
-                   }
+                    {this. showBlockedUsers()}
                 </div>
           </div>
         </div>
-   
+
   );
  }
 }

@@ -22,9 +22,9 @@ class SuggestionBoilerplate extends Component{
     
     okay(){
         var event={
-            action: `Participant followed and agreed with the Suggestion for ${this.props.action}`,
+            action: `Followed and agreed with the Suggestion for ${this.props.action}`,
             context: this.props.context,
-            object: `Agreed with the suggestion to ${(this.props.object !=undefined?this.props.object:'Alex Doe')}`
+            name: 'Alex_Doe'
         };
         
         this.props.agree();
@@ -34,9 +34,9 @@ class SuggestionBoilerplate extends Component{
     
     destroy(){
         var event = {
-            action:`Participant refused to follow the Suggestion for ${this.props.context}`,
+            action:`Rather Not\\Declined to follow the Suggestion for ${this.props.context}`,
             context:this.props.context,
-            object: `Disagreed with the suggestion to ${(this.props.object !=undefined?this.props.object:'Alex Doe')}`
+            name:'Alex_doe'
         };
         
         this.visited(this.props.context, "suggestion");

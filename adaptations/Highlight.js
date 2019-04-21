@@ -1,13 +1,13 @@
 //The highlighlight palette
 
 
-const yellow = 'rgb(240,207,41)'
+const inner_yellow = 'rgb(255,255,153)'
 const black = 'rgb(0,0,0)'
 const white = 'rgb(240,240,240)'
 const blue = 'rgb(66,103,178)'
 
 export const highLightStyle = {
-  yellow: yellow,
+  yellow: inner_yellow,
   black: black,
   blue:blue,
 };
@@ -16,22 +16,22 @@ export const highLightStyle = {
 export const highLight = {
   backgroundColor:highLightStyle.yellow,
   //color:highLightStyle.black,
-  boxShadow:'3px 3px',
+  boxShadow:'3px 3px #999900',
   display:'inline-block',
-  padding:'12px 20px 12px 20px',
-  borderRadius:'25px'
-    
+  //padding:'1px',
+  borderRadius:'5px'
+
 }
 
 export const highLightExtended = {
   backgroundColor:highLightStyle.yellow,
   color:highLightStyle.black,
-  boxShadow:'3px 3px',
-  display:'inline-block',
-  //width:'100px',
+  boxShadow:'3px 3px #999900',
+  //display:'inline-block',
+  width:'100px',
   //height:'20px',
-  padding:'12px 20px 12px 20px',
-  borderRadius:'5px'
+  padding:'10px 10px 10px 10px',
+  borderRadius:'5px',
 }
 
 

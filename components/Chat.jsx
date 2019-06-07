@@ -88,6 +88,9 @@ class Chat extends React.Component {
     }
 
     createTurnOffChatPopup() {
+        let visited = JSON.parse(localStorage.featuresVisited);
+        visited.chat.settings = true;
+        localStorage.setItem("featuresVisited", JSON.stringify(visited));
         this.setState({renderChatPopup: true});
     }
 

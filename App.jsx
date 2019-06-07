@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { browserHistory } from 'react-router';
 import {BrowserRouter, Link, Switch, Route} from 'react-router-dom'
 import PropTypes from 'prop-types';
 
@@ -116,7 +117,6 @@ class App extends React.Component {
           <div>
             <Header />
             <Switch>
-             
               <Route exact path='/' component={NewsFeed} />
               <Route path='/profile/:user' component={Profile} />
               <Route path='/settings_general/:section' component={GeneralSettings} />

@@ -261,6 +261,22 @@ export function resetBlockedEventInvites(){
     localStorage.setItem('blockedEventInvites',JSON.stringify([]))
 }
 
+export function resetFeaturesVisited() {
+  // As per https://docs.google.com/spreadsheets/d/19BlSfiV7xRTI9TtcAvVFC9B9TlZB1l9CUGx7-jcg_Dk/edit#gid=157833438
+  // TODO: Should we include visitation of things like settings, where we might want to value visitation over actual changes
+  localStorage.setItem('featuresVisited', JSON.stringify({
+    chat: {settings: false},
+    untag: {self: false},
+    friends: {follow: false},
+    notifications: {app: false, event: false},
+    posts: {create_post: false, delete: false, share: false, like: false, comment: false, reply: false, hide: false},
+    info: {withhold_basic: false, contact: false},
+    categories: {create_custom: false, use_custom: false},
+    block: {app: false, user: false},
+    audience: {restrict_timeline: false, restrict_albums: false}
+  }));
+}
+
 export function resetAll() {
   resetPosts();
   resetChat();
@@ -274,6 +290,7 @@ export function resetAll() {
   resetBlockedApps();
   resetBlockedAppInvites();
   resetBlockedEventInvites();
+  resetFeaturesVisited();
   location.reload();
 }
 

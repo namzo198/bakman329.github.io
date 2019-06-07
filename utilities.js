@@ -1,3 +1,6 @@
+import React from 'react'
+import ProfileLink from './components/ProfileLink.jsx'
+
 export function indexPosts() {
    var posts = JSON.parse(localStorage.getItem('posts'));
    JSON.parse(localStorage.getItem('posts')).forEach((post, index, array) => {
@@ -152,9 +155,27 @@ export function resetSettings() {
   localStorage.setItem('settings', JSON.stringify({"turn_off_chat": ["someContacts", [], []], "post_audience_settings": ["public", [], [], [[], []]]}));
 }
 
-/* export function resetFriends() {
+/*export function resetFriends() {
   localStorage.setItem('friends', JSON.stringify(["Jack Roe", "Jim Mend"]));
-} */
+}*/ 
+
+export function friendsList() {
+    
+    var friends = [];
+    
+    JSON.parse(localStorage.getItem('users')).forEach((user, index, array) => {
+      if (user.friend) {
+        friends.push(user)
+      } 
+     // var name = user.name;
+       /// console.log (name);
+     
+    });
+           
+    //console.log(friends);
+   return friends;
+}
+
 
 export function resetUsers() {
   localStorage.setItem('users', JSON.stringify(
@@ -238,27 +259,55 @@ export function resetAdaptationDisplay(){
             highlight:false, 
             automation:false
         },
-        Privacy:{
+        Privacy_futureRequests:{
             suggestion:false,
-            highlight:false
+            highlight:false,
+            automation:false,
+        },
+        Timeline_seePost:{
+            suggestion: false,
+            highlight:false,
+            automation:false
+        },
+        Block_User:{
+            suggestion:false,
+            highlight:false,
+            automation:false
+        },
+        Block_Event:{
+            suggestion:false,
+            highlight:false,
+            automation:false
+        },
+        Block_App:{
+            suggestion:false,
+            highlight:false,
+            automation:false
+        },
+        Block_AppInvite:{
+            suggestion:false,
+            highlight:false,
+            automation:false
         }
     }))
 }
 
 export function resetBlockedUsers(){
+    
+    
     localStorage.setItem('blockedUsers',JSON.stringify(["Richard Roe", "Jane Appleeseed"]))
 }
 
 export function resetBlockedApps(){
-    localStorage.setItem('blockedApps',JSON.stringify(["Yahoo","Uber"]))
+    localStorage.setItem('blockedApps',JSON.stringify(["Yahoo"]))
 }
 
 export function resetBlockedAppInvites(){
-    localStorage.setItem('blockedAppInvites',JSON.stringify([]))
+    localStorage.setItem('blockedAppInvites',JSON.stringify(["Mike Rogers"]))
 }
 
 export function resetBlockedEventInvites(){
-    localStorage.setItem('blockedEventInvites',JSON.stringify([]))
+    localStorage.setItem('blockedEventInvites',JSON.stringify(["Richard Midor"]))
 }
 
 export function resetFeaturesVisited() {
@@ -304,7 +353,7 @@ export function verifyLocalStorage() {
     resetSettings();
     location.reload();
   }
-
+ 
   if (!localStorage.users) {
     resetUsers();
     location.reload();
@@ -352,7 +401,10 @@ export function getParsed(name){
     return JSON.parse(localStorage.getItem(name));
 }
 
+
 export function addToLocalStorageObject (name,value){
+    
+    
     return localStorage.setItem(name, JSON.stringify(value));   
 }
 
@@ -367,13 +419,13 @@ export function containsIgnoreCase(arr, str) {
 }
 
 export function getProfilePic(name) {
+    
   let users = JSON.parse(localStorage.users);
-
-  let pic = "/assets/default_pic.jpg";
+//TODO: Fix the default image when their is an update to the 'users' localStorage
+  let pic = "/assets/users/alex_profile_img.jpg";
   users.some((element) => {
     if (element.name.toLocaleLowerCase() == name.toLocaleLowerCase()) {
       pic = "/assets/users/" + element.profile_pic;
-      return true;
     }
   });
 
@@ -425,4 +477,38 @@ export function audienceText(audience) {
   }
 
   return text;
+}
+
+export function namesToLinks(str, omitUser=false) {
+  // Builds a regular expression matching the name of any user case insensitively
+  let regex_str = '(';
+  let users = JSON.parse(localStorage.users);
+  users.forEach((user, index) => {
+    regex_str += user.name;
+    if (index != users.length - 1) regex_str += '|';
+  });
+  regex_str += ')';
+
+  // Find indices and lengths of matches, and produce a JSX object replacing names with links
+  let match;
+  let matches = [];
+  let regex = new RegExp(regex_str, 'gi');
+  while ((match = regex.exec(str)) != null) {
+    if (omitUser && match[0] == "Alex Doe") continue;
+    matches.push(match);
+  }
+  let end_index = 0;
+  // Null-terminate to fill in end of string
+  matches.push(null);
+  return (
+    <span>
+    {matches.map((match, index) => {
+      if (match == null) {
+        return <span key={index}>{str.substr(end_index)}</span>;
+      }
+      let out = <span key={index}>{str.substr(end_index, (match.index - end_index))}<ProfileLink name={match[0]} /></span>;
+      end_index = match.index + match[0].length;
+      return out;
+    })}
+    </span>);
 }

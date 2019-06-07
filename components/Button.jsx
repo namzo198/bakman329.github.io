@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {CreateEvent} from '../controller/databaseFunctions.js';
 import  PropTypes from 'prop-types';
-import {highLight,No_highLight } from '../adaptations/Highlight.js';
+import {highLight,highLightExtended,No_highLight } from '../adaptations/Highlight.js';
 import {Link} from 'react-router-dom'
 
 //Get the hashId session index.htm/:sessionid=theidisthisone
@@ -44,7 +44,7 @@ class Button extends React.Component {
 
     var event = { action : state.action,
                   details : state.context,
-                  object : 'Alex Doe', //state.name,
+                  object : state.object,    //'Alex Doe', //state.name,
                   session_id: localStorage.session_id
                 };
     
@@ -64,7 +64,10 @@ class Button extends React.Component {
       )
     }
     // Type prop is one of {default, cancel, confirm}
-    return (<a
+    return (
+        
+     
+        <a
       id={this.props.id} href={this.props.href ? this.props.href : "javascript:void(0)"}
       style={this.props.style}
       onClick={this.onClick}

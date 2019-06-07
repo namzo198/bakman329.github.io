@@ -2,83 +2,111 @@ import React,{Component} from 'react';
 import Button from '../../Button.jsx';
 import Popup from '../../Popup.jsx'
 import {levenshteinDistance} from '../../../algorithms.js'
+import {friendsList,addToLocalStorageObject,getProfilePic} from '../../../utilities.js';
 
+/**
+So, the users_friendship is being updated based on the current changes being made to it,  however it is gotten from the friendsList function that keeps getting updated based on the users being blocked. I therefore need to find a way to keep the original list in sysnc with the updated list without shortening the users list.
+**/
 
 class BlockUsers extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {username: '', renderPopup:false, friendsList:[],renderUltimateBlock:false,blockedUserslist:[],showUnblockPopup:false, friend_profile:{}};
-      
+
+    this.state = {username: '',
+                  renderPopup:false,
+                  friendsList:friendsList(),
+                  renderUltimateBlock:false,
+                  blockedUserslist:JSON.parse(localStorage.getItem('blockedUsers')),
+                  showUnblockPopup:false,
+            };
+
     this.handleChange = this.handleChange.bind(this);
     this.onClickBlock = this.onClickBlock.bind(this);
     this.onClickUltimateBlock = this.onClickUltimateBlock.bind(this);
     this.onClickUnblock = this.onClickUnblock.bind(this);
-      this. 
+      this.
   showBlockedUsers = this.showBlockedUsers.bind(this);
-      
-      
+
+
   }
 
 componentDidMount(){
-    var blockedUsers = JSON.parse(localStorage.getItem('blockedUsers'));
-    var friends = JSON.parse(localStorage.getItem('friends'))
-    var friends_profile = JSON.parse(localStorage.getItem('friend_profile'))
-    
+    //var blockedUsers = JSON.parse(localStorage.getItem('blockedUsers'));
+
+    //var friends = JSON.parse(localStorage.getItem('friends'))
+   // var friends_profile = JSON.parse(localStorage.getItem('friend_profile'))
+
     //console.log('The blocked'+  blockedUsers)
-    
+
     this.setState({
-       blockedUserslist: blockedUsers,
-       friendsList: friends,
-       friend_profile:friends_profile
+      // blockedUserslist: blockedUsers,
+      // friendsList: friends,
+       //friend_profile:friends_profile
     })
-    
+
     //console.log('The state blocked' +this.state.blockedUserslist.length)
 }
-    
+
 handleChange(email) {
    this.setState({username: email.target.value});
  }
 
 onClickBlock(){
-    this.setState({renderPopup:true})                  
+    this.setState({renderPopup:true})
 }
-    
+
 cancel(what){
 
     if(what ==='first'){
-        this.setState({renderPopup:false})  
+        this.setState({renderPopup:false})
     }else if (what === 'second'){
-        this.setState({renderUltimateBlock:false })
+        this.setState({renderUltimateBlock:false,
+                      friendsList:friendsList(),})
     }else if(what =='third'){
         this.setState({showUnblockPopup:false})
     }
 }
-  
-setLocalStorage(){
- localStorage.setItem('blockedUsers',JSON.stringify(this.state.blockedUserslist))  
-}
-    
+
+/*setLocalStorage(){
+ //localStorage.setItem('blockedUsers',JSON.stringify(this.state.blockedUserslist))
+    addToLocalStorageObject('blockedUsers',this.state.blockedUserslist);
+}*/
+
 allowed(){
-   
-    this.state.blockedUserslist.push(this.state.username)
-    this.setLocalStorage(); 
-    
+
+    var blockedFriend = this.state.username;
+    this.state.blockedUserslist.push(blockedFriend)
+
+    //Change friendship status in users localStorage
+    this.state.friendsList.forEach((element,index) => {
+
+        if(element.name === blockedFriend){
+            element['friend'] = false;
+        }
+
+
+    });
+     addToLocalStorageObject('users', this.state.friendsList);
+    addToLocalStorageObject('blockedUsers',this.state.blockedUserslist);
+
+    //this.setLocalStorage();
+
     this.cancel('second')
     this.cancel('first')
-                 
+
 }
-     
+
 onClickUltimateBlock(user){
    this.setState({
-       renderUltimateBlock:true, 
-       username:user}) 
+       renderUltimateBlock:true,
+       username:user})
 }
 
 UltimateBlock(){
      return (
-     <Popup title = {`Are you sure you want to block ${this.state.username}?`} cancel = {()=>{this.cancel('second')}} 
-     okay = {()=>{this.allowed()}} 
-      okButtonName = {`Block ${this.state.username.split(" ")[0]}`}> 
+     <Popup title = {`Are you sure you want to block ${this.state.username}?`} cancel = {()=>{this.cancel('second')}}
+     okay = {()=>{this.allowed()}}
+      okButtonName = {`Block ${this.state.username.split(" ")[0]}`}>
        <div>
           <div className="popup_imgwrap">
            <img src='../../assets/warning.png' width="53" height="48"/>
@@ -93,42 +121,49 @@ UltimateBlock(){
                    <li>Add you as a friend</li>
                </ul>
                <div className="popup_content_2">If you're friends, blocking {this.state.username} will also unfriend him.</div>
-               
-              <div className="popup_content_2">If you just want to limit what you share with {this.state.username} or see less of him on Fakebook, you cacn <a href="javascript:void(0)">take a break</a> from him instead </div> 
-              
+
+              <div className="popup_content_2">If you just want to limit what you share with {this.state.username} or see less of him on Fakebook, you cacn <a href="javascript:void(0)">take a break</a> from him instead </div>
+
                <div className ="popup_content_border"> </div>
-               
-               <div className="popup_content_2">Instead, you may want to send {this.state.username} a message because he might not know he is bothering you.  <a href="">Let him know.</a></div>     
-           
+
+               <div className="popup_content_2">Instead, you may want to send {this.state.username} a message because he might not know he is bothering you.  <a href="">Let him know.</a></div>
+
            </div>
-        </div>  
+        </div>
     </Popup>
-     )   
+     )
 }
-    
+
 BlockPopup(){
-    
+
     var pop;
-    
+
     if(this.state.username !== '') {
-        
+
         var user = this.state.username;
         var foundelements = [];
         var found = false;
-        
-        this.state.friendsList.map((element, index) => {           
-        var editdistance = levenshteinDistance(user,element);
-            //I choose 7 for username input where it takes atleast 7 edits to arrive to exising usernames 
+
+        console.log("The friendlist is as follows:");
+        console.log(this.state.friendsList);
+        this.state.friendsList.forEach((element,index) => {
+
+
+
+        var editdistance = levenshteinDistance(user,element.name);
+            //I choose 7 for username input where it takes atleast 7 edits to arrive to exising usernames
+
             if (editdistance <= 7 ){
                  found = true;
-                 foundelements.push(element)
-              } 
+                 foundelements.push(element.name)
+              }
           })
-                            
+
         pop = (
             //Popup has no okay button, just the x button to cancel
+
             <Popup title="Block People" cancel={()=>{this.cancel('first')}} noFooter={true} header_style={true} content_style={true} closeButton={true}>
-                
+
                 {!found? <div>No results found</div>:
 
                     <div>
@@ -136,45 +171,66 @@ BlockPopup(){
 
                         <ul className="BlockPopup">
                             {foundelements.map((element, index) => {
-                                var profile_image = this.state.friend_profile[element].profile_pic;
-                                
-                                
-                                
-                                return <li key={index}> {element} 
-                                <img src={`../../../assets/${profile_image}`}/> 
-                                
+
+                                var profile_image = getProfilePic(element);
+                                //var profile_image = this.state.friend_profile[element].profile_pic;
+                                //return <div> <img src={`../../../assets/${profile_image}`}/>
+                                //<b key={index}>{element}</b>
+                                //remove the below return and img tags for pic display
+
+
+                                return <li key={index}> {element}
+                                <img src={profile_image}/>
+
                                 <Button  type="cancel" href="javascript:void(0)" onClick={()=>{this.onClickUltimateBlock(element)}}> Block </Button> </li>
                             })}
 
                         </ul>
-                    </div> 
+                    </div>
                 }
-                
+
             </Popup>
          )
-        
+
     }else{
         pop = (
             <Popup title="Invalid Search Query" cancel={()=>{this.cancel('first')}} width={900} height={10} closeButton= {true} closeButtonName="Close" content_style={true} header_style={true}>
-               <p>Please type a valid query in the search box and try again</p> 
+               <p>Please type a valid query in the search box and try again</p>
             </Popup>
         )
     }
-    
-    
+
+
     return pop;
 
 }
 
-allowUnblock(){
+allowUnblock(user){
    var Index = this.state.blockedUserslist.indexOf(user);
     this.state.blockedUserslist.splice(Index,1);
-    
-    this.setLocalStorage(); 
+
+    console.log('The user is'+user);
+    //Change friendship status in users localStorage
+    this.state.friendsList.forEach((element,index) => {
+
+
+        if(element.name === user){
+            element['friend'] = true;
+            console.log("The element name is"+element.name+"User is "+user);
+        }
+
+
+    });
+
+    addToLocalStorageObject('users', this.state.friendsList);
+    addToLocalStorageObject('blockedUsers',this.state.blockedUserslist);
+
+
+    //this.setLocalStorage();
     this.cancel('third')
-                
+
 }
-  
+
 onClickUnblock(user){
     this.setState({
         showUnblockPopup:true,
@@ -183,30 +239,30 @@ onClickUnblock(user){
  }
 
 unblockUser(){
-    
-    //Find the index of the user from the array and then delete it from the array. 
+
+    //Find the index of the user from the array and then delete it from the array.
     var user = this.state.username;
-    
+
     return(
-        
-        <Popup title={`Unblock ${user}`} cancel={()=>{this.cancel('third')}} okay={()=> this.allowUnblock()} okButtonName ="Confirm">
-        
+
+        <Popup title={`Unblock ${user}`} cancel={()=>{this.cancel('third')}} okay={()=> this.allowUnblock(user)} okButtonName ="Confirm" destroy={void(0)}>
+
              <div>Are you sure you want to unblock {user}</div>
-                
+
                  <ul>
                      <li>{user} may be able to see your timeline or contact you, depending on your privacy settings</li>
                      <li>Tags you and {user} previously added of each other may be restored</li>
                      <li>You can remove tags of yourself on your activity log</li>
                  </ul>
 
-             <div>Please remember you'll have to wait 48 hour before you can re-block {user}.</div> 
-             
+             <div>Please remember you'll have to wait 48 hour before you can re-block {user}.</div>
+
         </Popup>
-        )   
+        )
     }
-  
+
   showBlockedUsers(){
-      
+
      if(this.state.blockedUserslist.length > 0){
         return (
            <div>
@@ -218,13 +274,13 @@ unblockUser(){
             </div>
           )
        }
-      
-  }     
-    
+
+  }
+
 render(){
-  
+
 return (
-    
+
         <div>
             <div>
             <h2 className = "right_header"> Manage blocking </h2>
@@ -244,27 +300,27 @@ return (
 
             <div id="right_bottom">
                 <span className="rightbottom_label"> Block users </span>
-                <div className= "rightbottom_text"> 
+                <div className= "rightbottom_text">
                      Once you block someone, that person can no longer see things you post on your timeline, tag you, invite
                       you to events or groups,start a conversation with you, or add you as a friend.
                       Note: Does not include apps, games or groups you both participate in.
                 </div>
-                
+
                 <div id="right_bottom_form">
                     <label> Block users
                       <input id = "text" type="text" placeholder="Add name or email" onChange={this.handleChange} />
                     </label>
                     <Button href="javascript:void(0)" type="confirm" onClick={this.onClickBlock}>Block </Button>
                     <br/>
-                    
-                    {this.state.renderPopup?this.BlockPopup():""}
-                    {this.state.renderUltimateBlock?this.UltimateBlock():""}
-                    {this.state.showUnblockPopup?this.unblockUser():""}
-                    {this. showBlockedUsers()} 
+
+                    {this.state.renderPopup?this.BlockPopup():null}
+                    {this.state.renderUltimateBlock?this.UltimateBlock():null}
+                    {this.state.showUnblockPopup?this.unblockUser():null}
+                    {this. showBlockedUsers()}
                 </div>
           </div>
         </div>
-   
+
   );
  }
 }

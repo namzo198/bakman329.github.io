@@ -7,7 +7,7 @@ class AutomationBoilerplate extends Component {
         super(props)
 
         this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
-        this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
+       this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
         this.visited = this.visited.bind(this);
 
     }
@@ -26,7 +26,7 @@ class AutomationBoilerplate extends Component {
 
         this.props.onClickOK_Auto();
         this.visited(this.props.context, "automation")
-        return event;
+        //return event;
     }
 
     onClickUndo_Auto(){

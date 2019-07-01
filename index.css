@@ -367,6 +367,24 @@ background-position: -250px -330px;
   padding-right: 15px;
 }
 
+.dropbtn_1_highlight{
+  color: #4b4f56;
+  background-color:rgb(255,255,153) ;
+  line-height: 26px;
+  cursor: pointer;
+  font-weight: bold;
+  border:1px solid #ced0d4;
+  border-radius: 2px;
+  text-align: center;
+  font-size: 12px;
+  padding-left:15px;
+  padding-right: 15px;
+}
+
+.high1 {
+     background-color:rgb(255,255,153) ;
+}
+
 .btn{
   color: #4b4f56;
   background-color: #f5f6f7;
@@ -409,6 +427,7 @@ background-position: -250px -330px;
   display: block;
   font-size: 12px;
 }
+
 
 /* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #365899;
@@ -1095,6 +1114,7 @@ header #logo {
   color : #365899;
 }
 
+
 .profile_photo {
   height: 168px;
   top: 60px;
@@ -1679,6 +1699,14 @@ font-weight: 400;
     padding-left:30px;
 
 }
+
+
+/*.block_high {
+   background-color:rgb(255,255,153);
+   box-shadow:3px 3px #999900;
+   display:inline-block;
+   border-radius: 5px;
+}*/
 
 .block_content {
 

@@ -30,7 +30,7 @@ class Header extends React.Component {
       <header>
         <Link to={{
             pathname:'/',
-            state:{fromHeader:true}}}><h1 id="logo">fakebook</h1>
+            state:{fromHeader:true}}}><h1 id="logo">FriendBook</h1>
         </Link>
         
         <div id='user'>

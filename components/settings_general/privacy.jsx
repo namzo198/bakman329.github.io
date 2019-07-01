@@ -5,6 +5,8 @@ import CheckBox from './Functions/CheckBox.jsx'
 import AudienceMenu from '../AudienceMenu.jsx'
 import SuggestionBoilerplate from '../../adaptations/Suggestion/SuggestionBoilerplate.jsx'
 import AutomationBoilerplate from '../../adaptations/Automation/AutomationBoilerplate.jsx'
+import {highLight,highLightExtended,No_highLight} from '../../adaptations/Highlight.js';
+
 import {getParsed,addToLocalStorageObject} from '../../utilities.js'
 
 
@@ -39,6 +41,7 @@ class body extends Component {
               label_Auto:"The grayed out and underlined option's audience was automatically changed."
         }
         this.changeAudience = this.changeAudience.bind(this);
+        this. changeStyle= this. changeStyle.bind(this);
         this.onClickDestroySuggestion = this.onClickDestroySuggestion.bind(this);
         this.onClickOK_Suggestion = this.onClickOK_Suggestion.bind(this);
         this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
@@ -70,6 +73,14 @@ class body extends Component {
         
   
     }
+    /*Method for the Highlight Adaptation*/
+    changeStyle(){
+         if(!this.state.adaptationVisited["Privacy_futureRequests"]['highlight']){
+            this.setState({
+             highlight:null,
+            })
+          }
+    }
     
     /*Methods for the Suggestion Adaptation*/
     onClickDestroySuggestion() {
@@ -98,7 +109,7 @@ class body extends Component {
         })
     }
     
-    displayEdit(section,description,edit_description,audienceSelectionMethod,closeEditDialog, adapt_Highlight){
+    displayEdit(section,description,edit_description,audienceSelectionMethod,closeEditDialog, adapt_Highlight,context){
         
         switch(section){
                 
@@ -115,14 +126,16 @@ class body extends Component {
                             {edit_description}
                          </div>
                         
-                        
                         <AudienceMenu onChange={audienceSelectionMethod}
                           className="audience_selection"
                           options={["public","friends","friends_except","more"]}
                           more={["specific_friends","only_me","see_all"]}
                           see_all={["custom"]}
                           title="Who should see this?"
+                          //highlight={adapt_Highlight != null?highLight:null}
+                          //removeHighlightOnClick={changeStyle}
                           adapt={adapt_Highlight}
+                          context={context}
                           />
                            
                            
@@ -266,7 +279,7 @@ class body extends Component {
         <div id="right_bottom">
           <span className="rightbottom_label"> How people can find and contact you </span>
           
-           <Edit description="Who can send you friend requests?" audienceType="friend_request" audience={this.state.friend_request} changeAudience={this.changeAudience} renderEditForm={this.displayEdit} />
+           <Edit description="Who can send you friend requests?" audienceType="friend_request" audience={this.state.friend_request} changeAudience={this.changeAudience} renderEditForm={this.displayEdit}/>
            <hb/>
            
            <Edit description="Who can see your friend lists?" edit_description="Remember that your friends control who can see their friendships on their own timelines. If people can see your friendship on another timeline, they'll be able to see it in News Feed, search and other places on Fakebook. If you set this to Only me, only you will be able to see your full friends list on your timeline. Other people will only see mutual friends." audienceType="friend_list" audience={this.state.friend_list} changeAudience={this.changeAudience} renderEditForm={this.displayEdit} />

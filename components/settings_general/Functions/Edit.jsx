@@ -74,7 +74,7 @@ class Edit extends React.Component{
     renderEditForm(){
         return(
             <div>
-                {this.props.renderEditForm(this.props.audienceType,this.props.description,this.props.edit_description,this.onAudienceChange,this.onClose,this.props.adapt)}
+                {this.props.renderEditForm(this.props.audienceType,this.props.description,this.props.edit_description,this.onAudienceChange,this.onClose,this.props.adapt,"Privacy_futureRequests")}
            </div>
         )
     }

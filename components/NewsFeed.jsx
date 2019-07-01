@@ -31,7 +31,7 @@ class NewsFeed extends React.Component {
               <a href='javascript:void(0)' onClick={() => { resetAll() }}>Reset Posts(DEBUG)</a>
             </li>
             <li>
-                {/*<h3>session_id: {localStorage.session_id}</h3>*/}
+                {<h3>session_id: {localStorage.session_id}</h3>}
             </li>
           </ul>
           <PostArea />

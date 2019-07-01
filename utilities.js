@@ -288,6 +288,16 @@ export function resetAdaptationDisplay(){
             suggestion:false,
             highlight:false,
             automation:false
+        },
+        Status_Audience:{
+            suggestion:false,
+            highlight:false,
+            automation:false
+        },
+       Unsubscribe_Friend:{
+            suggestion:false,
+            highlight:false,
+            automation:false,
         }
     }))
 }

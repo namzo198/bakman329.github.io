@@ -32,7 +32,7 @@ class Header extends React.Component {
     }
     
     settingsdropDown() {
-        console.log("I am in here");
+        
         this.setState( (prevState, props) => ({
             
             renderSettings:!prevState.renderSettings,

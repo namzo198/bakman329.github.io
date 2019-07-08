@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
 import {getParsed} from '../utilities.js';
+import Button from './Button.jsx'
+import Settingsdropdown from './settings_general/Settingsdropdown.jsx'
 
 class Header extends React.Component {
     constructor(props) {
@@ -12,11 +14,15 @@ class Header extends React.Component {
         this.state = {
             adaptation:adaptation,
             adaptationVisited:adaptationVisited,
+            renderSettings:false,
             highlight: !adaptationVisited["Privacy_futureRequests"]["highlight"]&&(adaptation["privacy_futureRequests"] == "high") || !adaptationVisited ["Timeline_seePost"]["highlight"]&& (adaptation["timeline_seePost"] === "high") || !adaptationVisited["Block_User"]["highlight"] && (adaptation["block_User"] == "high")||!adaptationVisited["Block_Event"]["highlight"] && (adaptation["block_Event"] == "high")||!adaptationVisited["Block_App"]["highlight"] && (adaptation["block_App"] == "high")||!adaptationVisited["Block_AppInvite"]["highlight"] && (adaptation["block_AppInvite"] == "high")? true: false,
+            
+            
             
         }
         
         this.changeIcon = this.changeIcon.bind(this);
+        this.settingsdropDown = this.settingsdropDown.bind(this);
     }
     
     changeIcon(){
@@ -25,12 +31,21 @@ class Header extends React.Component {
         })
     }
     
+    settingsdropDown() {
+        
+        this.setState( (prevState, props) => ({
+            
+            renderSettings:!prevState.renderSettings,
+        }));
+         
+    }
+    
   render() {
     return (
       <header>
         <Link to={{
             pathname:'/',
-            state:{fromHeader:true}}}><h1 id="logo">fakebook</h1>
+            state:{fromHeader:true}}}><h1 id="logo">FriendBook</h1>
         </Link>
         
         <div id='user'>
@@ -66,8 +81,20 @@ class Header extends React.Component {
             </p>
             
             <p>
-              <Link to={{
-               pathname:'/settings_general/GeneralSettings',
+             
+             <Button onClick={this.settingsdropDown}>
+              { this.state.highlight?
+               <img id='profile-pic' src='/assets/settings4.png'/>:
+               
+                <img id='profile-pic' src='/assets/settings.png'/>
+                
+               }
+               </Button>
+               
+              
+                {/*<Link to={{
+               //pathname:'/settings_general/GeneralSettings'
+              pathname:'/settings_general/Settingsdropdown',
                state:{fromHeader:true}}} onClick={this.changeIcon}>
                
                { this.state.highlight?
@@ -78,8 +105,12 @@ class Header extends React.Component {
                }
                 
                
-               </Link>
+                </Link> */}
+               
               </p>
+              
+               {this.state.renderSettings?<Settingsdropdown SettingsdropDown={this.settingsdropDown} changeIcon={this.changeIcon}/>:null}
+             
             
           </div>
         </div>

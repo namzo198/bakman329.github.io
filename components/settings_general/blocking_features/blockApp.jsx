@@ -94,6 +94,7 @@ class BlockApp extends React.Component {
              
         };
         
+     
        
         //When adaptation is highligh and enter is pressed
         if(this.state.highlight){
@@ -192,6 +193,7 @@ class BlockApp extends React.Component {
        onEnter={this.onEnter}
        
        />
+           
            
        return (
             <div id="right_bottom">

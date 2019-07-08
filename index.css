@@ -326,6 +326,10 @@ background-position: -250px -330px;
   font-weight: bold;
 }
 
+#comment-name, #left-navagation-profile_name {
+    color:#365899;
+}
+
 #comment-content {
     display: inline-block;
 }
@@ -367,6 +371,74 @@ background-position: -250px -330px;
   padding-right: 15px;
 }
 
+.dropbtn_1_highlight{
+  color: #4b4f56;
+  background-color:rgb(255,255,153) ;
+  line-height: 26px;
+  cursor: pointer;
+  font-weight: bold;
+  border:1px solid #ced0d4;
+  border-radius: 2px;
+  text-align: center;
+  font-size: 12px;
+  padding-left:15px;
+  padding-right: 15px;
+}
+
+.high1 {
+     background-color:rgb(255,255,153) ;
+}
+
+/*The settings css dropdown*/
+#dropdown_header {
+    background-color: white;
+    background-clip: padding-box;
+    border:1px solid rgba(0,0,0, .15);
+    box-shadow:0 3px 8px rgba(0,0,0, .3);
+    
+}
+
+#dropdown_header:after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;  /* At the top of the tooltip */
+  left: 100%;
+  margin-left: 298px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}
+
+#dropdown_header ul{
+    padding-left: 25px;
+}
+
+.settings_options_a {
+    display: block;
+    text-align:left;
+    color:#1d2129;
+    list-style: none;
+    border-bottom: 1px solid rgba(0,0,0, .15);
+}
+
+
+.settings_options_b {
+    display: block;
+    text-align:left;
+    color:#1d2129;
+    list-style: none;
+}
+
+#dropdown_header li a{
+    display: block;
+    color:#1d2129;
+}
+#dropdown_header li a:hover{
+    background-color: #385898;
+    color:#ffffff;
+}
+
+/*End of settings dropdown css*/
 .btn{
   color: #4b4f56;
   background-color: #f5f6f7;
@@ -409,6 +481,7 @@ background-position: -250px -330px;
   display: block;
   font-size: 12px;
 }
+
 
 /* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #365899;
@@ -1095,6 +1168,7 @@ header #logo {
   color : #365899;
 }
 
+
 .profile_photo {
   height: 168px;
   top: 60px;
@@ -1679,6 +1753,14 @@ font-weight: 400;
     padding-left:30px;
 
 }
+
+
+/*.block_high {
+   background-color:rgb(255,255,153);
+   box-shadow:3px 3px #999900;
+   display:inline-block;
+   border-radius: 5px;
+}*/
 
 .block_content {
 

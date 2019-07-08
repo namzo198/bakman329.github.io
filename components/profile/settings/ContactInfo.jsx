@@ -144,8 +144,7 @@ class ContactInfo extends Component {
         [add]: prevState.add,
         edit:false
       }));
-    }
-    else {
+    } else {
       /*when user saves with new input*/
       event = {
         action: infoAdded,

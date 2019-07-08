@@ -8,6 +8,7 @@ import Header from './components/Header.jsx'
 import Profile from './components/profile/Profile.jsx'
 import Chat from './components/Chat.jsx'
 import GeneralSettings from './components/settings_general/GeneralSettings.jsx'
+import {RegisterSession} from './controller/databaseFunctions.js';
 
 import {verifyLocalStorage} from './utilities.js'
 
@@ -25,9 +26,9 @@ http://localhost:8080/?session=6c2cc0c1aefce7c1f00eb70cd2df88d8&deletetimeline=h
 */
 
 class App extends React.Component {
+    
   constructor(props) {
     super(props);
-
     verifyLocalStorage();
     this.getChildContext = this.getChildContext.bind(this);
   }
@@ -35,11 +36,13 @@ class App extends React.Component {
   componentDidMount() {
     // TODO: Replace this with router handling using props.location.search
     let userparams = this.getChildContext();
-
+      
+  
     let option_dict = {
-      "session_id": userparams. session_id
+      "session_id": userparams.session_id
     };
-
+      
+  
     let adaptations_dict = {
       "deletetimeline": userparams.deletetimeline,
       "liketimeline": userparams.liketimeline,
@@ -51,6 +54,10 @@ class App extends React.Component {
         "block_Event":userparams.block_Event,
         "block_App":userparams.block_App,
         "block_AppInvite":userparams.block_AppInvite,
+        "status_Audience":userparams.status_Audience,
+        "unsubscribe_Friend":userparams.unsubscribe_Friend,
+        "hide_Post":userparams.hide_Post,
+        "untag_Post":userparams.untag_Post,
     };
     
     // If any change is made to localstorage, refreshes after update
@@ -71,18 +78,25 @@ class App extends React.Component {
     });
       
     localStorage.setItem("adaptations", JSON.stringify(adaptations));
-  
-      if (update) {
+      
+    
+     
+    if (update) {
       window.location.href = "/";
     }
+      
   }
 
   // Turn the querystring into a JSON object
   urlqueryStringToJSON() {
+    
     var search = window.location.search.split('#')[0]; // Discard fragment identifier
+     
+     // console.log(window.location)
     if (!search) {
       return [];
     }
+      
     let pairs = search.slice(1).split('&');
     let result = {};
 
@@ -90,22 +104,29 @@ class App extends React.Component {
       pair = pair.split('=');
       result[pair[0]] = decodeURIComponent(pair[1] || '');
     });
-
+    
+   
+      var session_data = {
+          session:result['session'],
+          url:JSON.stringify(result),
+      }
+    RegisterSession(session_data);
     return JSON.parse(JSON.stringify(result));
   }
 
   // Defines global variables
   getChildContext() {
-    // Get the url parameters from JSON String
-    const {session,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite} = this.urlqueryStringToJSON();
-
+      // Get the url parameters from JSON String
+    const {session_id,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post} = this.urlqueryStringToJSON();
+      
     // const {change}="Hello"
     // Assign url parameters to local variables
-    const current_session = {session,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite};
+    const current_session = {session_id,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post};
+      
 
     // Assigns the local variables to the global variables 
     return {
-      session_id: current_session.session,
+      session_id: current_session.session_id,
       deletetimeline: current_session.deletetimeline,
       liketimeline: current_session.liketimeline,
       chatoffline: current_session.chatoffline,
@@ -115,7 +136,11 @@ class App extends React.Component {
       block_User:current_session.block_User,  
       block_Event:current_session.block_Event,
       block_App:current_session.block_App,
-      block_AppInvite:current_session.block_AppInvite,
+      block_AppInvite:current_session.block_AppInvite, 
+      status_Audience:current_session.status_Audience,
+      unsubscribe_Friend:current_session.unsubscribe_Friend,
+      hide_Post:current_session.hide_Post,
+      untag_Post:current_session.untag_Post,
       NewsFeed: true,
       Timeline: false
     };     
@@ -160,6 +185,11 @@ App.childContextTypes = {
   block_Event:PropTypes.string,
   block_App:PropTypes.string,    
   block_AppInvite: PropTypes.string,
+  status_Audience:PropTypes.string,
+  unsubscribe_Friend:PropTypes.string,
+  hide_Post:PropTypes.string,
+  untag_Post:PropTypes.string,
+
  
 };
 

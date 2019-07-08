@@ -26,7 +26,7 @@ class AutomationBoilerplate extends Component {
 
         this.props.onClickOK_Auto();
         this.visited(this.props.context, "automation")
-        //return event;
+        return event;
     }
 
     onClickUndo_Auto(){

@@ -326,6 +326,10 @@ background-position: -250px -330px;
   font-weight: bold;
 }
 
+#comment-name, #left-navagation-profile_name {
+    color:#365899;
+}
+
 #comment-content {
     display: inline-block;
 }
@@ -385,6 +389,56 @@ background-position: -250px -330px;
      background-color:rgb(255,255,153) ;
 }
 
+/*The settings css dropdown*/
+#dropdown_header {
+    background-color: white;
+    background-clip: padding-box;
+    border:1px solid rgba(0,0,0, .15);
+    box-shadow:0 3px 8px rgba(0,0,0, .3);
+    
+}
+
+#dropdown_header:after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;  /* At the top of the tooltip */
+  left: 100%;
+  margin-left: 298px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}
+
+#dropdown_header ul{
+    padding-left: 25px;
+}
+
+.settings_options_a {
+    display: block;
+    text-align:left;
+    color:#1d2129;
+    list-style: none;
+    border-bottom: 1px solid rgba(0,0,0, .15);
+}
+
+
+.settings_options_b {
+    display: block;
+    text-align:left;
+    color:#1d2129;
+    list-style: none;
+}
+
+#dropdown_header li a{
+    display: block;
+    color:#1d2129;
+}
+#dropdown_header li a:hover{
+    background-color: #385898;
+    color:#ffffff;
+}
+
+/*End of settings dropdown css*/
 .btn{
   color: #4b4f56;
   background-color: #f5f6f7;

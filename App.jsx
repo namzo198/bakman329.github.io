@@ -56,6 +56,8 @@ class App extends React.Component {
         "block_AppInvite":userparams.block_AppInvite,
         "status_Audience":userparams.status_Audience,
         "unsubscribe_Friend":userparams.unsubscribe_Friend,
+        "hide_Post":userparams.hide_Post,
+        "untag_Post":userparams.untag_Post,
     };
     
     // If any change is made to localstorage, refreshes after update
@@ -115,11 +117,11 @@ class App extends React.Component {
   // Defines global variables
   getChildContext() {
       // Get the url parameters from JSON String
-    const {session_id,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend} = this.urlqueryStringToJSON();
+    const {session_id,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post} = this.urlqueryStringToJSON();
       
     // const {change}="Hello"
     // Assign url parameters to local variables
-    const current_session = {session_id,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend};
+    const current_session = {session_id,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post};
       
 
     // Assigns the local variables to the global variables 
@@ -137,6 +139,8 @@ class App extends React.Component {
       block_AppInvite:current_session.block_AppInvite, 
       status_Audience:current_session.status_Audience,
       unsubscribe_Friend:current_session.unsubscribe_Friend,
+      hide_Post:current_session.hide_Post,
+      untag_Post:current_session.untag_Post,
       NewsFeed: true,
       Timeline: false
     };     
@@ -183,6 +187,8 @@ App.childContextTypes = {
   block_AppInvite: PropTypes.string,
   status_Audience:PropTypes.string,
   unsubscribe_Friend:PropTypes.string,
+  hide_Post:PropTypes.string,
+  untag_Post:PropTypes.string,
 
  
 };

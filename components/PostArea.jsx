@@ -29,7 +29,7 @@ class PostArea extends React.Component {
           let render = true;
           if (this.props.name) {
             render = (post.name === this.props.name);
-            console.log(render)
+           // console.log(render)
           }
          out[index] = React.createElement(Post,
           {name: post.name,
@@ -41,7 +41,7 @@ class PostArea extends React.Component {
            displayContactInfoSuggestion: this.props.displayContactInfoSuggestion,
            render: render,
            audience: post.audience,
-           tagRemoved: post.tagRemoved || false}, post.content);
+           tagRemoved: post.tagRemoved || false,update:this.update},post.content);
       });
  
       //console.log("Post Area "+this.props.toAdapt)
@@ -50,6 +50,7 @@ class PostArea extends React.Component {
      
 
    update() {
+       
       this.forceUpdate();
    }
 

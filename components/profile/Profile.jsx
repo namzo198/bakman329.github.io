@@ -6,6 +6,7 @@ import AutomationBoilerplate from '../../adaptations/Automation/AutomationBoiler
 import Timeline from "./Timeline.jsx"
 import About from "./settings/About.jsx"
 import FriendSubscription from "./FriendSubscription.jsx"
+import Friends from "./Friends.jsx"
 
 class Profile extends React.Component {
   constructor(props) {
@@ -104,11 +105,13 @@ class Profile extends React.Component {
 
 render() {
 
-{console.log("The display box: "+  this.state.unsubscribe_displayAutomationPopup)}
+{/*console.log("The display box: "+  this.state.unsubscribe_displayAutomationPopup)*/}
 
-{console.log("The automation state:"+  this.state.unsubscribe_automation)}
+{/*console.log("The automation state:"+  this.state.unsubscribe_automation)
+*/}
     
-{console.log("Test "+this.state.test)} 
+{/*console.log("Test "+this.state.test)*/} 
+    
     return (
         
 
@@ -129,19 +132,7 @@ render() {
           </div>
            :<div>
            
-           <div className="dropdown">
-                <div>
-                    <button className="dropbtn">Friends ▼ </button>
-                    <div className="dropdown-content">
-                         <a href="#">Get Notifications </a> <ha/>
-                         <a href="#">Close friends</a>
-                         <a href="#">Acquaintances</a>
-                         <a href="#">Add to another list </a> <ha/>
-                         <a href="#">Unfriend</a>
-                     </div>
-                </div>
-           </div>
-            
+            <Friends/> 
             <FriendSubscription auto={this.state.unsubscribe_automation}/>
              
           

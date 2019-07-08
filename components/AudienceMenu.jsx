@@ -188,7 +188,7 @@ class AudienceMenu extends React.Component {
 
   render() {
     let title = (this.props.title) ? <p>{this.props.title}</p> : "";
-    let subtitle = (this.props.subtitle) ? <p id="audience-header-subtitle">{this.props.subtitle}</p> : "";
+    let subtitle = (this.props.subtitle) ? <p id="audience-header-subtitle">{this.props.subtitle}</p> : null;
 
     let friends_except_popup = (
       <FriendSelector except okay={(empty) => {this.setAudience(empty ? "friends" : "friends_except")}} destroy={this.unrenderPopups} />

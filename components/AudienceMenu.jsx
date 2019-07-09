@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {audienceText,saveVisitedAdaptation} from '../utilities.js'
-
+import {CreateEvent} from '../controller/databaseFunctions.js';
 import Button from './Button.jsx'
 import Menu from './Menu.jsx'
 import FriendSelector from './FriendSelector.jsx'
@@ -29,7 +29,17 @@ class AudienceMenu extends React.Component {
    
       // For adaptation: if one of the friends audience option is highlighted and selected 
     if(this.props.adapt == "high" && audience == "friends"){
-      saveVisitedAdaptation("Privacy_futureRequests","highlight");
+    
+    
+      var event = { action:`User concurs with the Audience Highlight for ${this.props.context}`,
+                    details:this.props.context,
+                    object:'Alex Doe',
+                    session:localStorage.session_id}
+      
+      saveVisitedAdaptation(this.props.context,"highlight");
+        
+       CreateEvent(event);
+    
     }
      
     var settings = JSON.parse(localStorage.getItem('settings'));
@@ -159,7 +169,7 @@ class AudienceMenu extends React.Component {
 
         default:
           buttons.push(
-            <Button onClick={() => {this.setAudience(option)}} key={i} adapt={text[0]=="Friends"&&this.props.adapt}>
+            <Button onClick={() => {this.setAudience(option)}} key={i} adapt={text[0]=="Friends" && this.props.adapt}>
               {text[0]}
               {subtext}
             </Button>
@@ -178,7 +188,7 @@ class AudienceMenu extends React.Component {
 
   render() {
     let title = (this.props.title) ? <p>{this.props.title}</p> : "";
-    let subtitle = (this.props.subtitle) ? <p id="audience-header-subtitle">{this.props.subtitle}</p> : "";
+    let subtitle = (this.props.subtitle) ? <p id="audience-header-subtitle">{this.props.subtitle}</p> : null;
 
     let friends_except_popup = (
       <FriendSelector except okay={(empty) => {this.setAudience(empty ? "friends" : "friends_except")}} destroy={this.unrenderPopups} />
@@ -192,12 +202,13 @@ class AudienceMenu extends React.Component {
       <CustomSelector okay={(new_audience) => {this.setAudience(new_audience)}} destroy={this.unrenderPopups} />
     );
 
+      
     return (
       <span className="audience-menu">
       {(this.state.render_friends_except) ? friends_except_popup : null}
       {(this.state.render_specific_friends) ? specific_friends_popup : null}
       {(this.state.render_custom) ? custom_popup : null}
-      <Menu icon="current" current={() => {return audienceText(this.state.audience) + " ▼"}} onClose={() => {this.setState({more: false, see_all: false})}} expandButtons={[this.more_button, this.see_all_button]}>
+      <Menu icon="current" current={() => {return audienceText(this.state.audience) + " ▼"}} onClose={() => {this.setState({more: false, see_all: false})}} expandButtons={[this.more_button, this.see_all_button]} style={this.props.highlight} changeStyle={this.props.removeHighlightOnClick}>
         {title}
         {subtitle}
         {this.generateButtons()}

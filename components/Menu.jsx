@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import Button from './Button.jsx'
-
+import {highLight,highLightExtended,No_highLight } from '../adaptations/Highlight.js'
 // Largely from https://blog.campvanilla.com/reactjs-dropdown-menus-b6e06ae3a8fe
 class Menu extends React.Component {
   constructor() {
@@ -12,12 +12,18 @@ class Menu extends React.Component {
       overflow: false};
     this.showMenu = this.showMenu.bind(this);
     this.onClick = this.onClick.bind(this);
+    
   }
 
   showMenu(event) {
     this.setState({showMenu: true}, () => {
       document.addEventListener('click', this.onClick);
     });
+    
+      /*This style is for defining the highlight ..see example from NewPostArea*/
+      if(this.props.style != undefined){
+         this.props.changeStyle();
+      }
   }
 
   onClick(e) {
@@ -30,7 +36,7 @@ class Menu extends React.Component {
     let exit = false;
     if (this.props.expandButtons) {
       this.props.expandButtons.forEach((button) => {
-        if (button != undefined && button.contains(e.target)) {
+        if (button != null && button.contains(e.target)) {
           exit = true;
         }
       });
@@ -48,7 +54,7 @@ class Menu extends React.Component {
     let button = null;
     if (this.props.icon == "current") {
       // this.props.current is a callback function which tells the menu what the currently selection option is
-      button = <Button type="cancel" onClick={this.showMenu} id="current-button">{this.props.current()}</Button>
+      button = <Button type="cancel" onClick={this.showMenu} id="current-button" style={this.props.style}>{this.props.current()}</Button>
     }
     else {
       button = (

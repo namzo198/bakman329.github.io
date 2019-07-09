@@ -12,7 +12,15 @@ export function indexPosts() {
 // TODO: Maybe consolidate these defaults to a .JSON file
 export function resetPosts() {
  localStorage.setItem('posts', JSON.stringify(
-    [{"name":"Alex Doe",
+    [
+    {
+      "name":"Kyle Parker",
+      "img": "./assets/kyle_profile_img.jpg",
+      "content": "I am hanging out tonight with Alex Doe",
+       "key":21,
+       "comments":[],
+        "audience":"public"}, 
+    {"name":"Alex Doe",
        "img":"./assets/alex_profile_img.jpg",
        "content":"\nMy job interview last week sucked, the interviewer was a jackass who seemed not to know what it is exactly they were looking for. Complete waste of my time! 😡",
        "key":20,
@@ -202,6 +210,11 @@ export function resetUsers() {
       friend: false}]));
 }
 
+export function friendList() {
+    localStorage.setItem('list', JSON.stringify(["Family","Work"]));
+}
+
+
 export function resetAdaptations() {
   localStorage.setItem('adaptations', JSON.stringify({}));
 }
@@ -288,6 +301,26 @@ export function resetAdaptationDisplay(){
             suggestion:false,
             highlight:false,
             automation:false
+        },
+        Status_Audience:{
+            suggestion:false,
+            highlight:false,
+            automation:false
+        },
+       Unsubscribe_Friend:{
+            suggestion:false,
+            highlight:false,
+            automation:false,
+        },
+        Hide_Post: {
+            sugggestion:false,
+            highlight:false,
+            automation:false
+        }, 
+        Untag_Post: {
+            suggestion:false,
+            highlight:false,
+            automation:false,
         }
     }))
 }
@@ -410,6 +443,11 @@ export function verifyLocalStorage() {
         resetBlockedEventInvites();
         location.reload();
     }
+    
+    if(!localStorage.list){
+         friendList();
+        location.reload();
+    }
 
 }
 
@@ -487,13 +525,19 @@ export function audienceText(audience) {
     case "custom":
       text = "Custom"
       break;
-
+    
+    case "family":
+       text = "Family"
+       break;
+          
     default:
       text = "";
   }
 
   return text;
 }
+
+
 
 export function namesToLinks(str, omitUser=false) {
   // Builds a regular expression matching the name of any user case insensitively
@@ -516,6 +560,7 @@ export function namesToLinks(str, omitUser=false) {
   let end_index = 0;
   // Null-terminate to fill in end of string
   matches.push(null);
+
   return (
     <span>
     {matches.map((match, index) => {
@@ -528,3 +573,39 @@ export function namesToLinks(str, omitUser=false) {
     })}
     </span>);
 }
+
+/**export function namesTagged(str){
+    
+ // Builds a regular expression matching the name of any user case insensitively
+  let regex_str = '(';
+  let users = JSON.parse(localStorage.users);
+  users.forEach((user, index) => {
+    regex_str += user.name;
+    if (index != users.length - 1) regex_str += '|';
+  });
+  regex_str += ')';
+
+  // Find indices and lengths of matches, and produce a JSX object replacing names with links
+  let match;
+  let matches = [];
+  let regex = new RegExp(regex_str, 'gi');
+  while ((match = regex.exec(str)) != null) {
+    if (match[0] == "Alex Doe") continue;
+    matches.push(match);
+  }
+  let end_index = 0;
+  // Null-terminate to fill in end of string
+  matches.push(null);
+
+  return (
+    <span>
+    {matches.map((match, index) => {
+      if (match == null) {
+        return <span key={index}></span>;
+      }
+      let out = <span key={index}><ProfileLink name={match[0]}/></span>;
+      end_index = match.index + match[0].length;
+      return out;
+    })}
+    </span>);
+}*/

@@ -44,11 +44,11 @@ class Button extends React.Component {
 
     var event = { action : state.action,
                   details : state.context,
-                  object : state.object,    //'Alex Doe', //state.name,
-                  session_id: localStorage.session_id
+                  object: 'Alex Doe',
+                  session: localStorage.session_id
                 };
     
-    //console.log("The Button session is", this.context.session_id);
+     //console.log("The Button session is",localStorage.session_id );
     // console.log("The Button newsfeed is", this.context.NewsFeed);
     // console.log("The Button timeline is", this.context.Timeline);
      
@@ -65,9 +65,7 @@ class Button extends React.Component {
     }
     // Type prop is one of {default, cancel, confirm}
     return (
-        
-     
-        <a
+     <a
       id={this.props.id} href={this.props.href ? this.props.href : "javascript:void(0)"}
       style={this.props.style}
       onClick={this.onClick}

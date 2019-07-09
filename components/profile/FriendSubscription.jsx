@@ -19,7 +19,7 @@ class FriendSubscription extends React.Component {
             subscribe:this.props.auto?false: true,  //true
             adaptationVisited:adaptationVisited,
             highlight1: !adaptationVisited["Unsubscribe_Friend"]["highlight"] && (adaptation["unsubscribe_Friend"] == "high")? true:false,
-            highlight: !adaptationVisited["Unsubscribe_Friend"]["highlight"] && (adaptation["unsubscribe_Friend"] == "high")? "high":null,
+            //highlight: !adaptationVisited["Unsubscribe_Friend"]["highlight"] && (adaptation["unsubscribe_Friend"] == "high")? "high":null,
             context:"Unsubscribe_Friend",
             
         }
@@ -69,7 +69,7 @@ class FriendSubscription extends React.Component {
         if(!this.state.adaptationVisited["Unsubscribe_Friend"]['highlight']) {
             
             this.setState({
-                highlight: null,
+                //highlight: null,
                 highlight1: false,
             })
             
@@ -96,7 +96,8 @@ class FriendSubscription extends React.Component {
                 <div className="dropdown_content_1">
                     <a href="#">See First </a> 
                     <a href="#">Default</a>
-                    <Button onClick={this.handleClick} style={this.state.highlight?highLight:null}>Unfollow</Button>
+                    <hr></hr>
+                    <Button onClick={this.handleClick} style={this.state.highlight1?highLight:null}>Unfollow</Button>
                 </div>
                 <button className="btn"> Message </button>
                 <button className="btn">...</button>

@@ -101,7 +101,11 @@ class BlockEventInvites extends React.Component {
         
         this.state.blockedFriendsList.push(friendname)
         this.setLocalStorage();
-        
+
+        let used = JSON.parse(localStorage.featuresUsed);
+        used.notifications.event = true;
+        localStorage.setItem("featuresUsed", JSON.stringify(used));
+ 
        event = {
              action: `Block event invites`,
              object: `Pressed the Enter key`,

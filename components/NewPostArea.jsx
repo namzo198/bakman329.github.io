@@ -43,7 +43,8 @@ class NewPostArea extends React.Component {
                  photo: this.state.photo,
                  key: posts.length,
                  comments: [],
-                 audience: this.state.audience};
+                 audience: this.state.audience,
+                 new: true};
        
      localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
      indexPosts();

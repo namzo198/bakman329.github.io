@@ -31,6 +31,9 @@ class PostArea extends React.Component {
             render = (post.name === this.props.name);
             console.log(render)
           }
+          else {
+            render = (post.new || post.name != "Alex Doe");
+          }
          out[index] = React.createElement(Post,
           {name: post.name,
            key: count -  index - 1,

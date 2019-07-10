@@ -115,21 +115,27 @@ class NewPostArea extends React.Component {
                  return null;
              }
 
-             var posts = JSON.parse(localStorage.getItem('posts'));
+     var posts = JSON.parse(localStorage.getItem('posts'));
+       
+     var post = {name: 'Alex Doe',
+                 img: './assets/users/alex_profile_img.jpg',
+                 content: this.state.value,
+                 photo: this.state.photo,
+                 key: posts.length,
+                 comments: [],
+                 audience: this.state.audience,
+                 new: true};
+       
+     localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
+     indexPosts();
+     this.props.postarea.update();
+     this.setState({value: '', photo: '', renderUploadPopup: false});
 
-             var post = {name: 'Alex Doe',
-                         img: './assets/users/alex_profile_img.jpg',
-                         content: this.state.value,
-                         photo: this.state.photo,
-                         key: posts.length,
-                         comments: [],
-                         audience: this.state.audience};
-
-             localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
-             indexPosts();
-             this.props.postarea.update();
-             this.setState({value: '', photo: '', renderUploadPopup: false});
-             return event;
+     localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
+     indexPosts();
+     this.props.postarea.update();
+     this.setState({value: '', photo: '', renderUploadPopup: false});
+     return event;
    }
     
    onClick() {

@@ -242,6 +242,10 @@ class Post extends React.Component {
         name: this.props.name + '\'s Post'
       };
 
+        let used = JSON.parse(localStorage.featuresUsed);
+        used.posts.delete = true;
+        localStorage.setItem("featuresUsed", JSON.stringify(used));
+
       this.setState(event);
       var posts = JSON.parse(localStorage.getItem('posts'));
       posts.some((post, index, array) => {
@@ -342,6 +346,10 @@ class Post extends React.Component {
         return true;
       }
     });
+
+    let used = JSON.parse(localStorage.featuresUsed);
+    used.posts.hide = true;
+    localStorage.setItem("featuresUsed", JSON.stringify(used));
       
     if(!this.state.adaptationVisited["Hide_Post"]['highlight'] && this.state.hideHighlight1){
         
@@ -351,12 +359,13 @@ class Post extends React.Component {
         
         HighlightBoilerplate(this.state.context);
     }
-      
-      
   }
 
   // TODO: Consider adding undo based on what Facebook does
   onClickRemoveTag() {
+    let used = JSON.parse(localStorage.featuresUsed);
+    used.untag.self = true;
+    localStorage.setItem("featuresUsed", JSON.stringify(used));
     var posts = JSON.parse(localStorage.getItem('posts'));
     posts.some((post, index, array) => {
       if (post.key == this.props.index) {
@@ -512,7 +521,7 @@ class Post extends React.Component {
            <Menu icon={this.state.hideHighlight1 && this.props.index === 19 || this.state.untag_Higlight && this.props.index === 21?'horiz high1':'horiz'}>
               <div className={this.state.hideHighlight1 && this.props.index === 19?"high1":null}><Button onClick={this.onClickHide}>Hide post</Button></div>
               
-              {(!this.state.tagRemoved && this.props.children.includes("Alex Doe"))
+              {(!this.state.tagRemoved && this.props.children.toLocaleLowerCase().includes("alex doe"))
                   ? <div className={this.state.untag_Higlight && this.props.index === 21?"high1":null}><Button onClick={this.onClickRemoveTag}>Remove tag</Button></div> : null}
               {(this.props.name != "Alex Doe") ? <Button>Unfollow {this.props.name}</Button> : null}
               

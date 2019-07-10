@@ -88,6 +88,9 @@ class Chat extends React.Component {
     }
 
     createTurnOffChatPopup() {
+        let visited = JSON.parse(localStorage.featuresVisited);
+        visited.chat.settings = true;
+        localStorage.setItem("featuresVisited", JSON.stringify(visited));
         this.setState({renderChatPopup: true});
     }
 
@@ -168,6 +171,7 @@ class Chat extends React.Component {
           chats.push(<ChatWindow key={index} name={name} destroy={this.removeChat} />);
       });
 
+      var friend_names = [];
       var friends = [];
       JSON.parse(localStorage.getItem('users')).forEach((user, index, array) => {
         if (!user.friend) {
@@ -185,9 +189,11 @@ class Chat extends React.Component {
           return;
         }
 
+        friend_names.push(name);
         friends.push(<ChatUser key={index} chat={this} name={name} />);
       });
-          
+      
+
       var except_text;
       var some_text;
       if (this.state.turnOffChat === "allContactsExcept") {
@@ -196,7 +202,7 @@ class Chat extends React.Component {
             onChange={(value) => this.setState({except_contacts: value})}
             defaultValue={this.state.except_contacts}
             placeholder='Required: Enter names or lists'
-            list={["Jack Roe", "Jim Mend"]} />
+            list={friend_names} />
       }
       else if (this.state.turnOffChat === "someContacts") {
          some_text = <AutocompleteInput
@@ -204,7 +210,7 @@ class Chat extends React.Component {
             onChange={(value) => this.setState({some_contacts: value})}
             defaultValue={this.state.some_contacts}
             placeholder='Optional: Enter names or lists'
-            list={["Jack Roe", "Jim Mend"]} />
+            list={friend_names} />
       }
 
       var except_warning;
@@ -235,11 +241,19 @@ class Chat extends React.Component {
                   this.setState({showExceptWarning: false});
                }
                var settings = JSON.parse(localStorage.getItem('settings'));
+               var old_settings = JSON.parse(JSON.stringify(settings));
                settings["turn_off_chat"][0] = this.state.turnOffChat;
                settings["turn_off_chat"][1] = this.parseText(this.state.except_contacts);
                settings["turn_off_chat"][2] = this.parseText(this.state.some_contacts);
                localStorage.setItem('settings', JSON.stringify(settings));
                this.updateSettings();
+
+               console.log(settings, old_settings)
+               if (JSON.stringify(settings) != JSON.stringify(old_settings)) {
+                  let used = JSON.parse(localStorage.featuresUsed);
+                  used.chat.settings = true;
+                  localStorage.setItem("featuresUsed", JSON.stringify(used));
+               }
             }}
             cancel={() => {this.updateSettings()}}>
             {/* https://www.w3schools.com/howto/howto_js_autocomplete.asp */}

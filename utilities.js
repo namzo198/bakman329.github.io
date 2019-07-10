@@ -349,6 +349,37 @@ export function resetBlockedEventInvites(){
     localStorage.setItem('blockedEventInvites',JSON.stringify(["Richard Midor"]))
 }
 
+export function resetFeaturesVisited() {
+  // As per https://docs.google.com/spreadsheets/d/19BlSfiV7xRTI9TtcAvVFC9B9TlZB1l9CUGx7-jcg_Dk/edit#gid=157833438
+  localStorage.setItem('featuresVisited', JSON.stringify({
+    chat: {settings: false},
+    untag: {self: false}, // TODO: What does visited mean for this
+    friends: {follow: false}, // TODO
+    notifications: {app: false, event: false}, // TODO: What does visited mean for this?
+    posts: {delete: false, hide: false}, // TODO: What does visited mean for this? 
+    withhold_info: {address: false, political: false}, // TODO
+    custom_lists: {create_custom: false, post_custom: false, photo_custom: false}, // TODO
+    block: {app: false, user: false}, // TODO: User
+    audience: {restrict_timeline: false, restrict_albums: false} // TODO
+  }));
+}
+
+export function resetFeaturesUsed() {
+  // As per https://docs.google.com/spreadsheets/d/19BlSfiV7xRTI9TtcAvVFC9B9TlZB1l9CUGx7-jcg_Dk/edit#gid=157833438
+  localStorage.setItem('featuresUsed', JSON.stringify({
+    chat: {settings: false},
+    untag: {self: false},
+    friends: {follow: false}, // TODO
+    notifications: {app: false, event: false},
+    posts: {delete: false, hide: false},
+    withhold_info: {address: false, political: false}, // TODO
+    custom_lists: {create_custom: false, post_custom: false, photo_custom: false}, // TODO
+    block: {app: false, user: false}, // TODO: User
+    audience: {restrict_timeline: false, restrict_albums: false} // TODO
+  }));
+}
+
+
 export function resetAll() {
   resetPosts();
   resetChat();
@@ -362,6 +393,8 @@ export function resetAll() {
   resetBlockedApps();
   resetBlockedAppInvites();
   resetBlockedEventInvites();
+  resetFeaturesVisited();
+  resetFeaturesUsed();
   location.reload();
 }
 

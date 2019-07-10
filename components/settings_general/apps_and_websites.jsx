@@ -48,6 +48,7 @@ onClickEdit(){
 
     
 popup(){
+    // TODO: Error on destroy
     return(
     <Popup title = {"Game and app notifications"} cancel={this.onClickCancel} okay={this.onClickTurnOn} >
       

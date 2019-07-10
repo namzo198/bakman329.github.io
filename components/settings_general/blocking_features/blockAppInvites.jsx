@@ -92,6 +92,10 @@ class BlockAppInvites extends React.Component {
         var event;
         this.state.blockedFriendsList.push(friendname)
         this.setLocalStorage();  
+
+        let used = JSON.parse(localStorage.featuresUsed);
+        used.notifications.app = true;
+        localStorage.setItem("featuresUsed", JSON.stringify(used));
         
         event = {
              action: `Block app invites`,

@@ -101,7 +101,6 @@ class FriendSubscription extends React.Component {
                     <a href="#">See First </a> 
                     <a href="#">Default</a>
                     <hr></hr>
-                    
                     <Button onClick={this.handleClick} style={this.state.highlight1?highLight:null}>Unfollow</Button>
                 </div>
                 <button className="btn"> Message </button>

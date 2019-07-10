@@ -16,7 +16,7 @@ class FriendSubscription extends React.Component {
        let adaptationVisited = getParsed("visited");
         
         this.state = {
-            subscribe:this.props.auto?false: true,  //true
+             subscribe:!this.props.auto,  //true
             adaptationVisited:adaptationVisited,
             highlight1: !adaptationVisited["Unsubscribe_Friend"]["highlight"] && (adaptation["unsubscribe_Friend"] == "high")? true:false,
             //highlight: !adaptationVisited["Unsubscribe_Friend"]["highlight"] && (adaptation["unsubscribe_Friend"] == "high")? "high":null,
@@ -32,9 +32,12 @@ class FriendSubscription extends React.Component {
     }
     
     componentWillReceiveProps(nextProps) {
-        console.log("I am in here in the Friend to subscribe "+nextProps.auto);
-        if (nextProps.auto != this.props.auto) {
+        
+       if (nextProps.auto !== this.props.auto  ) {
             this.setState({subscribe:nextProps.auto})
+        }else {
+            
+            this.setState({subscribe:true})
         }
         
     }
@@ -86,12 +89,13 @@ class FriendSubscription extends React.Component {
              'dropbtn_1':!this.state.highlight1,
              'dropbtn_1_highlight':this.state.highlight1,
          })
+         
         return(
          <div className="dropdown_1">
              {this.state.subscribe?
               <div>
                 
-                <button className={dropbtn_style}>Following ▼</button>
+                <button className={dropbtn_style}> ✓ Following ▼</button>
                 
                 <div className="dropdown_content_1">
                     <a href="#">See First </a> 

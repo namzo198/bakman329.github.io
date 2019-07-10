@@ -211,7 +211,7 @@ export function resetUsers() {
 }
 
 export function friendList() {
-    localStorage.setItem('list', JSON.stringify(["Family","Work"]));
+    localStorage.setItem('list', JSON.stringify([{id:1,name:"Family",addtick:true},{id:2,name:"Work",addtick:false}],));
 }
 
 
@@ -225,11 +225,11 @@ export function resetSession() {
 
 export function resetContactInfo(){
     localStorage.setItem('contactInfo',JSON.stringify({
-        mobile:'3014672967',
+        mobile:'801234567',
         email:'alexdoe@gmail.com',
         dob:'01 January',
-        year:'1990',
-        gender:'Human',
+        year:'1996',
+        gender:'Gender-Neutral',
         /**email:{
             email:'alexdoe@gmail.com',
             AddEmailInfo:false,
@@ -321,7 +321,13 @@ export function resetAdaptationDisplay(){
             suggestion:false,
             highlight:false,
             automation:false,
+        },
+        Categorize_Friend:{
+            suggestion:false,
+            highlight:false,
+            automation:false
         }
+        
     }))
 }
 

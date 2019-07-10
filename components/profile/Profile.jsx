@@ -31,7 +31,6 @@ class Profile extends React.Component {
         unsubscribe_displayAutomationPopup:true,
         unsubscribe_label_Auto: "You were automatically unsubscribed from following Jack Scout",
         unsubscribe_context: "Unsubscribe_Friend",
-        test:true,
       }
 
       this.changeStyle = this.changeStyle.bind(this);
@@ -41,11 +40,18 @@ class Profile extends React.Component {
       this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
   }
 
+
+    
+    
     componentDidUpdate(prevProps,prevState){
-        if(prevState.unsubscribe_automation != this.state.unsubscribe_automation) {
+        console.log("I am in here in Profile");
+        if(prevState.unsubscribe_automation !== this.state.unsubscribe_automation) {
          console.log("I was called in here"+ this.state.unsubscribe_displayAutomationPopup+" and automation "+this.state.unsubscribe_automation+" Test"+this.state.test);
         }
     }
+    
+    
+    
     
     /*Methods for the Automation Adaptation*/
    onClickOk_Auto(){
@@ -55,18 +61,9 @@ class Profile extends React.Component {
         this.setState({
             unsubscribe_displayAutomationPopup:false,
             unsubscribe_automation:false,
-            test:false,
+
         })
        
-       
-       //this.forceUpdate();
-      /* this.setState({
-           test:true,
-       })*/
-
-       
-    
-       //this.post()
     }
     
    onClickUndo_Auto(){
@@ -75,7 +72,7 @@ class Profile extends React.Component {
        
        this.setState({
                unsubscribe_displayAutomationPopup:false,
-            unsubscribe_automation:true,
+               unsubscribe_automation :true,
             })
        
       
@@ -104,13 +101,6 @@ class Profile extends React.Component {
 
 
 render() {
-
-{/*console.log("The display box: "+  this.state.unsubscribe_displayAutomationPopup)*/}
-
-{/*console.log("The automation state:"+  this.state.unsubscribe_automation)
-*/}
-    
-{/*console.log("Test "+this.state.test)*/} 
     
     return (
         
@@ -163,10 +153,10 @@ render() {
             }
             
           </div>
-          <Switch>
-            <Route path='/profile/:user/about/:section' component={About} />
-            <Route path='/profile/:user' render={(props) => <Timeline {...props}  displayContactInfoSuggestion ={this.state.displayContactInfoSuggestion} />}/>
-          </Switch>
+            <Switch>
+                <Route path='/profile/:user/about/:section' component={About} />
+                <Route path='/profile/:user' render={(props) => <Timeline {...props}  displayContactInfoSuggestion ={this.state.displayContactInfoSuggestion} />}/>
+            </Switch>
         </div>
       </div>
     );

@@ -1,7 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Button from '../Button.jsx'
-import {getParsed} from '../../utilities.js'
+import {getParsed,addToLocalStorageObject} from '../../utilities.js'
+import NameFriendList from './NameFriendList.jsx'
+
 
 class Friends extends React.Component {
     
@@ -9,24 +11,30 @@ class Friends extends React.Component {
         super(props);
         
         let list = getParsed('list');
-        console.log(list);
+        
+        const listIdCounter = 2;
         this.state = {
             renderCreateList:false,
             currentLists:list,
             check: false,
+            idCounter:listIdCounter,
+            displayInputText:false,
         }
         
         //set a call back ref
-        this.createFriendList = null;
-        this.setFriendList = element => {
-            this.createFriendList = element
-        }
+        //this.createFriendList = null;
+        //this.setFriendList = element => {
+       //     this.createFriendList = element
+        //}
+        
         this.handleClick = this.handleClick.bind(this);
         this.addCheck = this.addCheck.bind(this);
+        this.addNewList = this.addNewList.bind(this);
+        this.input = this.input.bind(this);
     }
     
     
-    ComponentDidMount() {
+   /* ComponentDidMount() {
        
         
         if(this.createFriendList) {
@@ -34,8 +42,15 @@ class Friends extends React.Component {
         }
         
        
-    }
+    }*/
     
+    componentDidUpdate(prevProps,prevState) {
+        
+        if (prevState.currentLists !== this.state.currentLists){
+            addToLocalStorageObject("list",this.state.currentLists);
+        }
+        
+    }
     
     handleClick() {
         
@@ -44,15 +59,52 @@ class Friends extends React.Component {
             renderCreateList:!prevState.renderCreateList,
             
         }));
-        //render the new list can do that here.
-        //console.log("Your clicking Add to another list");
-         //console.log(this.createFriendList);
+        
     }
     
-    addCheck() {
-        this.setState((prevState,props) =>({
-            check:!prevState.check,
-        }));
+    addCheck(itemId) {
+    
+        
+       this.setState(prevState => ({
+           
+           currentLists: prevState.currentLists.map ((list,index)=>{
+                              
+                          if( list.id == itemId){
+                              
+                              list.addtick = !list.addtick;
+                            }
+                         
+                        return list;
+                       })
+           
+           
+          
+       }));
+
+    }
+    
+    addNewList(NewListname) {
+        
+        const nextId = this.state.idCounter+1;
+        const listName = NewListname;
+        const newList = [...this.state.currentLists, 
+                        {id:nextId,name:listName, addtick:true}
+                        ]
+        
+        //TODO: save list to local storage
+        
+        this.setState({
+            currentLists:newList,
+            idCounter:nextId,
+            displayInputText:false,
+        })
+    }
+    
+    input() {
+        
+        this.setState({
+            displayInputText:true,
+        })
     }
     
     
@@ -63,7 +115,7 @@ class Friends extends React.Component {
            
             <div className="dropdown">
                     <div>
-                        <button className="dropbtn">Friends ▼ </button>
+                        <button className="dropbtn"> ✓ Friends ▼ </button>
                         <div className="dropdown-content">
                            {!this.state.renderCreateList?
                               <div>
@@ -72,21 +124,24 @@ class Friends extends React.Component {
                                  <a href="#">Close friends</a>
                                  <a href="#">Acquaintances</a>
                                   
-                                 <span ><Button onClick={this.handleClick} ref={this.setFriendList }>Add to another list </Button></span> 
+                                 <span ><Button onClick={this.handleClick}>Add to another list </Button></span> 
                                   
                                 <hr></hr>
                                  <a href="#">Unfriend</a>
                                 </div>:
                             
                                  <div>
+                                   
                                     <Button onClick={this.handleClick}>Go Back</Button> 
                                      <hr></hr>
-                                     
-                                      {this.state.currentLists.map((list,index)=>
-                                         <Button onClick={this.addCheck} key={index}> {list}</Button>
+                                     <small className="addtoList">Add to Lists:</small>
+                                      {this.state.currentLists.map((listItem,index)=>
+                                         <Button key= {listItem.id} onClick={() => this.addCheck(listItem.id)} ><span>{listItem.addtick? " ✓ ":null}</span> {listItem.name}</Button>
                                        )
                                      }
-                                     <a href="#"> ➕ New List</a>
+                                     
+                                {this.state.displayInputText?<NameFriendList addNewList={this.addNewList}/>:<Button onClick={this.input}> ➕ New List</Button>}
+                                
                                  </div>
                             
                             }

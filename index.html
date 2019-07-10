@@ -1,20 +1,3 @@
-       
-<?php
-        //get database connection
-        include_once './config/database.php';
-        //instantiate the session object
-        include_once './model/session.php';
-
-
-        $database = new Database();
-        $db = $database::getConnection();
-        $session = new Session($db);
-
-        $session::_write("MOSES_SESSION", "Blah Blah");
-        echo "Am being seen";
-        
-?>
-
 
 <!DOCTYPE html>
 <html lang = "en">

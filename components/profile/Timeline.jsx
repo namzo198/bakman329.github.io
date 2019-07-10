@@ -9,7 +9,7 @@ class Timeline extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    location.reload();
+   // location.reload();
   }
 
   render() {

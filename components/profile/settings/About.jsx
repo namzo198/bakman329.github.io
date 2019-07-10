@@ -59,7 +59,7 @@ class About extends React.Component {
     return (
         <div id="info_wrapper">
           <div className="title">
-            <img src='https://static.xx.fbcdn.net/rsrc.php/v3/ym/r/IKrON1RLHfZ.png'/>
+            <img src='https://static.xx.fbcdn.net/rsrc.php/v3/yZ/r/dp8LigpKyOw.png'/>
             <a href ="#">About</a>
           </div>
           {this.overview()}

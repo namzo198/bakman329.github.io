@@ -389,6 +389,13 @@ background-position: -250px -330px;
      background-color:rgb(255,255,153) ;
 }
 
+
+.addtoList {
+    color:gray;
+    margin-left:14px;
+}
+
+
 /*The settings css dropdown*/
 #dropdown_header {
     background-color: white;
@@ -1488,9 +1495,9 @@ header #logo {
 }
 
 .imgwrap_1 {
-    background-position: -16px -20px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
-    background-size: 34px 308px;
+    background-position: -16px -17px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/y7/r/MSPO701byKM.png);
+    background-size: 33px 542px;
     background-repeat: no-repeat;
     display: inline-block;
     height: 16px;
@@ -1500,9 +1507,9 @@ header #logo {
  }
 
 .imgwrap_2 {
-    background-position: 0 -234px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
-    background-size: 34px 308px;
+    background-position: 0 -475px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/y7/r/MSPO701byKM.png);
+    background-size: 33px 542px;
     background-repeat: no-repeat;
     display: inline-block;
     height: 16px;
@@ -1513,9 +1520,9 @@ header #logo {
 }
 
 .imgwrap_3 {
-    background-position: 0 -290px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
-    background-size: 34px 308px;
+    background-position: 0 -526px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/y7/r/MSPO701byKM.png);
+    background-size: 33px 542px;
     background-repeat: no-repeat;
     display: inline-block;
     height: 16px;
@@ -1527,9 +1534,9 @@ header #logo {
 
 .imgwrap_4 {
     height: 16px;
-    background-position: -18px -60px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
-    background-size: 34px 308px;
+    background-position: -17px -321px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/y7/r/MSPO701byKM.png);
+    background-size: 33px 542px;
     background-repeat: no-repeat;
     display: inline-block;
     padding-left:20px;
@@ -1538,9 +1545,9 @@ header #logo {
 }
 
 .imgwrap_5 {
-    background-position: 0 -176px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
-    background-size: 34px 308px;
+    background-position: 0 -424px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/y7/r/MSPO701byKM.png);
+    background-size: 33px 542px;
     background-repeat: no-repeat;
     display: inline-block;
     height: 16px;
@@ -1727,6 +1734,17 @@ width: 230px;
 font-size: 12px;
 font-weight: 400;
 }
+
+#FriendListtext{
+padding: 2px;
+width: 100px;
+margin-left: 16px;
+margin-bottom: 10px;
+font-size: 12px;
+font-weight: 400;
+}
+
+
 .right {
   padding-top:35px;
 }

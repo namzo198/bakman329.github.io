@@ -120,7 +120,7 @@ class Chat extends React.Component {
     renderChat(){
         if (this.state.adapt==='auto' &!this.state.undo){
             return (
-                <Button href='javascript:void(0)' onClick={this.onClickUndo}><span id ='chat-auto' style={No_highLight}>Chat was automatically turned off for all contacts except Jack Roe</span> Undo</Button>
+                <Button href='javascript:void(0)' onClick={this.onClickUndo}><span id ='chat-auto' style={No_highLight}>Chat was automatically turned off</span> Undo</Button>
             )
         }
         else if (this.state.adapt==='sugst'){
@@ -148,7 +148,7 @@ class Chat extends React.Component {
                   }}>
 
                   <label>
-                      I think you should turn off chat for all contacts except Jack Crow.
+                     Hi Alex- Would you like to turn off your Active Status on Chat. 
                   </label>
               </SuggestionPopup>)
         }
@@ -215,7 +215,7 @@ class Chat extends React.Component {
 
       var except_warning;
       if (this.state.showExceptWarning) {
-         // TODO: Note that despite the fact that Facebook's feature was changed from "turn off chat" to "turn off active status", this notice remains unchanged on facebook!
+         // TODO: Note that despite the fact that FriendBook's feature was changed from "turn off chat" to "turn off active status", this notice remains unchanged on FriendBook!
          except_warning = (
             <p className="popup-note" id="except-warning">
             Note: If "Turn off active status for all contacts except..." is selected but no contacts are entered into the box, you will be offline to all contacts.
@@ -285,7 +285,7 @@ class Chat extends React.Component {
 
             <p className="popup-note">
             Your friends and contacts will see when you're active or recently active.
-            You'll appear active or recently active unless you turn off the setting every place you're using Messenger or Facebook.
+            You'll appear active or recently active unless you turn off the setting every place you're using mezzenger or FriendBook.
             You'll also see when your friends and contacts are active or recently active.
             </p>
 

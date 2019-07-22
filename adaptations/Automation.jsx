@@ -12,8 +12,10 @@ class Automation extends React.Component{
     var divStyle = {paddingLeft: '40px'}
 
     return(
-        <div id = "automation-block"> <img src={'/assets/flag.png'} />
-
+        <div id = "automation-block">
+            <div id="automation-flag">
+             <img src={'/assets/flag.png'} />
+            </div>
             <label style={divStyle}>{this.props.label}</label><Button id='undo' href='javascript:void(0)' onClick={this.props.onUndoClick}>{this.props.undoButton}</Button>
              {okButton_option}
 

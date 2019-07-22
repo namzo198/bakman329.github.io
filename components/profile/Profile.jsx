@@ -1,8 +1,9 @@
 import React from 'react'
 import {BrowserRouter, Link, Switch, Route} from 'react-router-dom'
-import {linkToName,getParsed,addToLocalStorageObject} from '../../utilities.js'
+import {linkToName,getParsed,addToLocalStorageObject,AddfriendList} from '../../utilities.js'
 import {highLight,noHighLight} from '../../adaptations/Highlight.js';
 import AutomationBoilerplate from '../../adaptations/Automation/AutomationBoilerplate.jsx'
+import SuggestionBoilerplate from '../../adaptations/Suggestion/SuggestionBoilerplate.jsx'
 import Timeline from "./Timeline.jsx"
 import About from "./settings/About.jsx"
 import FriendSubscription from "./FriendSubscription.jsx"
@@ -23,7 +24,15 @@ class Profile extends React.Component {
         displayContactInfoSuggestion: !adaptationVisited["ContactInfo"]["suggestion"]&& (adaptation["contactInfo"] === "sugst"),
         
         //Suggestion: Unsubscribe from friend
-        suggestion:!adaptationVisited ["Unsubscribe_Friend"]["suggestion"]&& (adaptation["unsubscribe_Friend"] === "sugst"),
+        unsubscribe_suggestion:!adaptationVisited ["Unsubscribe_Friend"]["suggestion"]&& (adaptation["unsubscribe_Friend"] === "sugst"),
+        unsubcribe_displaySuggestionPopup:true,
+       // unsubscribe_label_Sugst:"We think you should Unfollow Jack Scout ",
+        suggestAgree:true,
+        
+        //Suggestion: Categorize friend
+        categorize_suggestion:!adaptationVisited ["Categorize_Friend"]["suggestion"]&& (adaptation["categorize_Friend"] === "sugst"),
+        categorize_displaySuggestionPopup:true,
+        
         
         //Unsubscribe from friend: AUtomation
         unsubscribe_automation:!adaptationVisited ["Unsubscribe_Friend"]["automation"]&& (adaptation["unsubscribe_Friend"] === "auto"),
@@ -31,32 +40,71 @@ class Profile extends React.Component {
         unsubscribe_displayAutomationPopup:true,
         unsubscribe_label_Auto: "You were automatically unsubscribed from following Jack Scout",
         unsubscribe_context: "Unsubscribe_Friend",
+        
+        //Categorize Friend:Automation
+        
+        categorize_automation:!adaptationVisited ["Categorize_Friend"]["automation"]&& (adaptation["categorize_Friend"] === "auto"),
+        categorize_action:"Unsubscribe_Friend, Check to see if the suggested audience for the post was followed/not followed (for Undo_Automation)",
+        categorize_displayAutomationPopup:true,
+        categorize_label_Auto: " Jack Scout was automatically added to the \"Work\" friends list",
+        categorize_context: "Categorize_Friend",
       }
 
       this.changeStyle = this.changeStyle.bind(this);
       
-         /*Automation Adaptation*/
+        /* Unsubscribe Friend Suggestion Adaptation 
+      
+        this.onClickDestroyUnsubscribeSuggestion = this.onClickDestroyUnsubscribeSuggestion.bind(this);
+        this.onClickOK_UnsubscribeSuggestion = this.onClickOK_UnsubscribeSuggestion.bind(this);*/
+      
+         /*Automation Unsubscribe Adaptation*/
       this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
       this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
+      this.updateSubscribe = this.updateSubscribe.bind(this);
+      
+      
+      /*Automation Categorization Adaptation*/
+      this.onClickOk_CategorizeAuto = this.onClickOk_CategorizeAuto.bind(this);
+      this.onClickUndo_CategorizeAuto = this.onClickUndo_CategorizeAuto.bind(this);
   }
 
 
     
     
     componentDidUpdate(prevProps,prevState){
-        console.log("I am in here in Profile");
+        //console.log("I am in here in Profile");
         if(prevState.unsubscribe_automation !== this.state.unsubscribe_automation) {
-         console.log("I was called in here"+ this.state.unsubscribe_displayAutomationPopup+" and automation "+this.state.unsubscribe_automation+" Test"+this.state.test);
+        // console.log("I was called in here"+ this.state.unsubscribe_displayAutomationPopup+" and automation "+this.state.unsubscribe_automation);
         }
     }
     
+   /*Methods for the Categorization Automation Adaptation*/
+   onClickOk_CategorizeAuto(){
+       
+      
+       
+        this.setState({
+              categorize_displayAutomationPopup:false,
+        })
+       
+       AddfriendList(); 
+       
+    }
     
+   onClickUndo_CategorizeAuto(){
+    
+       //console.log("Undo Automation has been clicked"); 
+       
+       this.setState({
+                 categorize_displayAutomationPopup:false,
+            })
+       
+      
+    }    
     
     
     /*Methods for the Automation Adaptation*/
    onClickOk_Auto(){
-       
-       console.log("Automation ok has been clicked");   
        
         this.setState({
             unsubscribe_displayAutomationPopup:false,
@@ -78,6 +126,10 @@ class Profile extends React.Component {
       
     }    
     
+    updateSubscribe(){
+        console.log("Did some say something");
+        this.setState({suggestAgree:false})
+    }
     
    componentWillReceiveProps(nextProps){
        if(this.state.displayContactInfoSuggestion !== (this.state.adaptationVisited["ContactInfo"]["suggestion"]&&this.state.adaptation["contactInfo"] === "sugst")){
@@ -122,8 +174,8 @@ render() {
           </div>
            :<div>
            
-            <Friends/> 
-            <FriendSubscription auto={this.state.unsubscribe_automation}/>
+            <Friends friendName={this.props.match.params.user}/> 
+            <FriendSubscription auto={this.state.unsubscribe_automation} sugst={this.state.suggestAgree}/>
              
           
            </div>
@@ -144,20 +196,27 @@ render() {
               {/*console.log("The suggestion state is "+ this.state.displayContactInfoSuggestion)*/}
 
             <div className = "profile_photo">
-              <img src ={'/assets/users/'+this.props.match.params.user.split("_")[0]+'_profile_img.jpg'}/>
+              <img src ={'/assets/users/'+this.props.match.params.user.split("_")[0].toLowerCase()+'_profile_img.jpg'}/>
             </div>
             <h2>{linkToName(this.props.match.params.user)}</h2>
             
-            {/*The Automation Adaptation Popup*/ 
+            
+            {/*The Unsubscribe Automation Adaptation Popup*/ 
                 this.state.unsubscribe_displayAutomationPopup && this.state.unsubscribe_automation && <AutomationBoilerplate action = {this.state.unsubscribe_action} context = {this.state.unsubscribe_context} label={this.state.unsubscribe_label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this. onClickUndo_Auto}/>
             }
-            
+             
+              {/*The Categorization Automation Adaptation Popup*/ 
+                this.state.categorize_displayAutomationPopup && this.state.categorize_automation && <AutomationBoilerplate action = {this.state.categorize_action} context = {this.state.categorize_context} label={this.state.categorize_label_Auto} onClickOK_Auto={this.onClickOk_CategorizeAuto} onClickUnDo_Auto = {this. onClickUndo_CategorizeAuto}/>
+            }
+             
+           
           </div>
-            <Switch>
+           <Switch>
                 <Route path='/profile/:user/about/:section' component={About} />
-                <Route path='/profile/:user' render={(props) => <Timeline {...props}  displayContactInfoSuggestion ={this.state.displayContactInfoSuggestion} />}/>
+                <Route path='/profile/:user' render={props => <Timeline {...props} displayContactInfoSuggestion ={this.state.displayContactInfoSuggestion} displayUnsubscribeSuggestion = {this.state.unsubscribe_suggestion}  updateSubscribe ={this.updateSubscribe} displayCategorizeSuggestion = {this.state.categorize_suggestion}/>}/>
             </Switch>
         </div>
+        
       </div>
     );
   }

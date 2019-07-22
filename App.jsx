@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { browserHistory } from 'react-router';
+import {hotjar} from 'react-hotjar'
 import {BrowserRouter, Link, Switch, Route} from 'react-router-dom'
 import PropTypes from 'prop-types';
 
@@ -8,6 +9,8 @@ import NewsFeed from './components/NewsFeed.jsx'
 import Header from './components/Header.jsx'
 import Profile from './components/profile/Profile.jsx'
 import Chat from './components/Chat.jsx'
+import Scenario from './components/Scenario/Scenario.jsx'
+import ExitExperiment from './components/Scenario/ExitExperiment.jsx'
 import GeneralSettings from './components/settings_general/GeneralSettings.jsx'
 import {RegisterSession} from './controller/databaseFunctions.js';
 
@@ -36,6 +39,7 @@ class App extends React.Component {
 
   componentDidMount() {
     // TODO: Replace this with router handling using props.location.search
+    hotjar.initialize(1372296, 6);
     let userparams = this.getChildContext();
       
   
@@ -163,6 +167,12 @@ class App extends React.Component {
             <div id='chat-area'>
               <Chat />
             </div>
+            <div id="scenario-area">
+              <Scenario/> 
+             </div>
+             <div id="experiment-done">
+                <ExitExperiment />
+             </div>
           </div>
         </BrowserRouter>
       </div>

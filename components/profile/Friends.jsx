@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import Button from '../Button.jsx'
 import {getParsed,addToLocalStorageObject} from '../../utilities.js'
 import NameFriendList from './NameFriendList.jsx'
+import {HighlightBoilerplate} from '../../adaptations/Highlight/HighlightBoilerplate.jsx';
 
 
 class Friends extends React.Component {
@@ -11,6 +12,8 @@ class Friends extends React.Component {
         super(props);
         
         let list = getParsed('list');
+        let adaptation = getParsed('adaptations');
+        let adaptationVisited = getParsed("visited");
         
         const listIdCounter = 2;
         this.state = {
@@ -19,13 +22,11 @@ class Friends extends React.Component {
             check: false,
             idCounter:listIdCounter,
             displayInputText:false,
+            adaptationVisited:adaptationVisited,
+            highlight1: !adaptationVisited["Categorize_Friend"]["highlight"] && (adaptation["categorize_Friend"] == "high")? true:false,
+            context:"Categorize_Friend"
         }
         
-        //set a call back ref
-        //this.createFriendList = null;
-        //this.setFriendList = element => {
-       //     this.createFriendList = element
-        //}
         
         this.handleClick = this.handleClick.bind(this);
         this.addCheck = this.addCheck.bind(this);
@@ -60,6 +61,7 @@ class Friends extends React.Component {
             
         }));
         
+        
     }
     
     addCheck(itemId) {
@@ -69,12 +71,25 @@ class Friends extends React.Component {
            
            currentLists: prevState.currentLists.map ((list,index)=>{
                               
-                          if( list.id == itemId){
+                          if(list.id == itemId && !list.members.includes(this.props.friendName)){
                               
-                              list.addtick = !list.addtick;
-                            }
+                          
+                              //list.addtick = !list.addtick;
+                               list.members = list.members.concat(this.props.friendName)
+                              
+                            }else {
+                                
+                                
+                                if(list.id == itemId) {
+                                    list.members = list.members.filter((name,index,array)=> {
+                                        return name != this.props.friendName;
+                                    })
+                                }
+                            } 
+                           
+                          
                          
-                        return list;
+                           return list;
                        })
            
            
@@ -88,7 +103,7 @@ class Friends extends React.Component {
         const nextId = this.state.idCounter+1;
         const listName = NewListname;
         const newList = [...this.state.currentLists, 
-                        {id:nextId,name:listName, addtick:true}
+                        {id:nextId,name:listName, members:[this.props.friendName]}
                         ]
         
         //TODO: save list to local storage
@@ -98,6 +113,15 @@ class Friends extends React.Component {
             idCounter:nextId,
             displayInputText:false,
         })
+        
+         if(!this.state.adaptationVisited["Categorize_Friend"]['highlight']) {
+            
+            this.setState({
+                highlight1: false,
+            })
+            
+          HighlightBoilerplate(this.state.context);
+        }
     }
     
     input() {
@@ -112,10 +136,9 @@ class Friends extends React.Component {
         
         return (
             
-           
             <div className="dropdown">
                     <div>
-                        <button className="dropbtn"> ✓ Friends ▼ </button>
+                        <button className = {this.state.highlight1?"dropbtn_highlight":"dropbtn" }> ✓ Friends ▼ </button>
                         <div className="dropdown-content">
                            {!this.state.renderCreateList?
                               <div>
@@ -124,7 +147,7 @@ class Friends extends React.Component {
                                  <a href="#">Close friends</a>
                                  <a href="#">Acquaintances</a>
                                   
-                                 <span ><Button onClick={this.handleClick}>Add to another list </Button></span> 
+                                 <span className={this.state.highlight1?"high1":null} ><Button onClick={this.handleClick}>Add to another list </Button></span> 
                                   
                                 <hr></hr>
                                  <a href="#">Unfriend</a>
@@ -136,11 +159,11 @@ class Friends extends React.Component {
                                      <hr></hr>
                                      <small className="addtoList">Add to Lists:</small>
                                       {this.state.currentLists.map((listItem,index)=>
-                                         <Button key= {listItem.id} onClick={() => this.addCheck(listItem.id)} ><span>{listItem.addtick? " ✓ ":null}</span> {listItem.name}</Button>
+                                         <Button key= {listItem.id} onClick={() => this.addCheck(listItem.id)} ><span>{ listItem.members.includes(this.props.friendName)? " ✓ ":null}</span> {listItem.name}</Button>
                                        )
                                      }
                                      
-                                {this.state.displayInputText?<NameFriendList addNewList={this.addNewList}/>:<Button onClick={this.input}> ➕ New List</Button>}
+                                {this.state.displayInputText?<NameFriendList addNewList={this.addNewList}/>:<span className={this.state.highlight1?"high1":null} ><Button onClick={this.input}> ➕ New List</Button></span>}
                                 
                                  </div>
                             

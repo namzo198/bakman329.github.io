@@ -305,10 +305,6 @@ class ContactInfo extends Component {
       
     return (
         <div className="contact_section">
-        
-        {shouldDisplayAutomation && <div id='except-warning'>
-            <Automation undoButton="Undo" okButton="Ok" onOkClick={this.onClickOk_Auto} label="Your political views were automatically set" onUndoClick={this.onClickUndo_Auto}/></div>}
-            
          
           <div className="heading">Contact Information</div>
           {this.display("Mobile", "+ Add a mobile phone","enter mobile number")}
@@ -330,7 +326,10 @@ class ContactInfo extends Component {
           {this.display("Interest", "+ Add who you're interested in", "")}
           {this.display("Religious", "+ Add your religious view", "")}
           {this.display("Political", "+ Add your political views", "")}
-          
+         
+            {shouldDisplayAutomation && <div id='except-warning'>
+            <Automation undoButton="Undo" okButton="Ok" onOkClick={this.onClickOk_Auto} label="Your political views were automatically set" onUndoClick={this.onClickUndo_Auto}/></div>}
+            
           
         
         </div>

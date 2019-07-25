@@ -228,7 +228,7 @@ render(){
 
 
             <Edit description="Review tags that people add to your posts before the tags appear on Fakebook?" audienceType="review_tags" audience={this.state.review_tags} changeAudience={this.changeAudience} renderEditForm={this.displayEdit}  />
-                  {/*this.display("Review tags that people add to your posts before the tags appear on Facebook?","rtag",false,true)*/}
+                  {/*this.display("Review tags that people add to your posts before the tags appear on FriendBook?","rtag",false,true)*/}
         </div>
          <hr/>
 

@@ -58,13 +58,13 @@ popup(){
       <br/>
       
       <div>
-        Turning off game and app notifications will hide those notifications on Facebook and Gameroom. It will not affect your ability to use apps or play games.
+        Turning off game and app notifications will hide those notifications on FriendBook and Gameroom. It will not affect your ability to use apps or play games.
        </div></div>:
       
         <div><div><b>Game and app notifications are turned off</b></div>
          <br/>
         <div>
-        Turning on game and app notifications will re-enable those notifications on Facebook and Gameroom based on your previous settings
+        Turning on game and app notifications will re-enable those notifications on FriendBook and Gameroom based on your previous settings
         </div></div>
      }
     </Popup>
@@ -81,7 +81,7 @@ render() {
 
          <div className="block1_icon"> <div className ="block_header">  Game and app notifications </div> </div>
         <div className ="block_content"> This setting controls game requests from friends and game status updates,
-           and app notifications from app developers on Facebook and Gameroom.
+           and app notifications from app developers on FriendBook and Gameroom.
             Changing this setting will not affect your ability to use apps or play games.
           </div>
           <div>

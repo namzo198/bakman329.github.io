@@ -203,6 +203,7 @@ background-position: -250px -330px;
 
 #post-content {
     padding: 12px 12px 0;
+    line-height: 1.6;
 }
 
 #post-info {
@@ -219,6 +220,8 @@ background-position: -250px -330px;
 #post-text {
     display: inline-block;
     vertical-align: top;
+    color:#616770;
+    line-height: 1.6;
 }
 
 #post-name {
@@ -341,11 +344,40 @@ background-position: -250px -330px;
     margin-right: 9px;
     border-radius: 50%;
 }
+
+/*CSS for the Automation button */
+#automation-block {
+    display: inline-block;
+    position: relative;
+}
+#automation-flag{
+    display: inline-block;
+    position: absolute;
+    transform: scale(.6);
+    float: left;
+    top: -25px;
+    left: -130px;
+}
+
 /* CSS FOR PROFILE_TIMELINE OPTIONS*/
 
 .dropbtn {
   color: #4b4f56;
   background-color: #f5f6f7;
+  line-height: 26px;
+  cursor: pointer;
+  font-weight: bold;
+  border:1px solid #ced0d4;
+  border-radius: 2px;
+  text-align: center;
+  font-size: 12px;
+  padding-left:15px;
+  padding-right: 15px;
+}
+
+.dropbtn_highlight {
+  color: #4b4f56;
+  background-color: rgb(255,255,153);
   line-height: 26px;
   cursor: pointer;
   font-weight: bold;
@@ -387,7 +419,15 @@ background-position: -250px -330px;
 
 .high1 {
      background-color:rgb(255,255,153) ;
+    display: block;
 }
+
+
+.addtoList {
+    color:gray;
+    margin-left:14px;
+}
+
 
 /*The settings css dropdown*/
 #dropdown_header {
@@ -904,6 +944,9 @@ color: #ffffff;}
     display: inline-block;
     vertical-align: middle;
     margin-left: 50px ;
+    border:3px solid #dddddd;
+    border-radius:4px;
+    padding: 5px;
 }
 
 basicInfo-body {
@@ -1091,11 +1134,11 @@ Edit_Icon_pos{
   position: absolute;
   top:42px;
   width: 100%;
-  height: 100%;
+  /*height: 100%;*/
 }
 
 #profile-content {
-  margin-left: 18.75%;
+  margin-left: 21%;
 }
 
 #profile-content h2 {
@@ -1469,28 +1512,31 @@ header #logo {
 /*CSS for settings_general*/
 
 .wrapper_left {
-  width:180px;
+  /*width:180px;*/
+  width:20%;
   height: 100%;
   float: left;
 }
 
 .divider {
   border-left: 1px solid #ccc;
-  height: 1200px;
-  margin-left: 180px;
+  height: 100%;
+ /*margin-left: 180px;*/
+  margin-left:20%;
   position: absolute;
 }
 
 
 .options_left{
-  margin-left: 20px;
+  /*margin-left: 20px;*/
+  margin-left: 30%;    
   margin-top:70px;
 }
 
 .imgwrap_1 {
-    background-position: -16px -20px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
-    background-size: 34px 308px;
+    background-position: -16px -17px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/y7/r/MSPO701byKM.png);
+    background-size: 33px 542px;
     background-repeat: no-repeat;
     display: inline-block;
     height: 16px;
@@ -1500,9 +1546,9 @@ header #logo {
  }
 
 .imgwrap_2 {
-    background-position: 0 -234px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
-    background-size: 34px 308px;
+    background-position: 0 -475px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/y7/r/MSPO701byKM.png);
+    background-size: 33px 542px;
     background-repeat: no-repeat;
     display: inline-block;
     height: 16px;
@@ -1513,9 +1559,9 @@ header #logo {
 }
 
 .imgwrap_3 {
-    background-position: 0 -290px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
-    background-size: 34px 308px;
+    background-position: 0 -526px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/y7/r/MSPO701byKM.png);
+    background-size: 33px 542px;
     background-repeat: no-repeat;
     display: inline-block;
     height: 16px;
@@ -1527,9 +1573,9 @@ header #logo {
 
 .imgwrap_4 {
     height: 16px;
-    background-position: -18px -60px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
-    background-size: 34px 308px;
+    background-position: -17px -321px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/y7/r/MSPO701byKM.png);
+    background-size: 33px 542px;
     background-repeat: no-repeat;
     display: inline-block;
     padding-left:20px;
@@ -1538,9 +1584,9 @@ header #logo {
 }
 
 .imgwrap_5 {
-    background-position: 0 -176px;
-    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/xqwP2-Ez8O0.png);
-    background-size: 34px 308px;
+    background-position: 0 -424px;
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/y7/r/MSPO701byKM.png);
+    background-size: 33px 542px;
     background-repeat: no-repeat;
     display: inline-block;
     height: 16px;
@@ -1727,6 +1773,17 @@ width: 230px;
 font-size: 12px;
 font-weight: 400;
 }
+
+#FriendListtext{
+padding: 2px;
+width: 100px;
+margin-left: 16px;
+margin-bottom: 10px;
+font-size: 12px;
+font-weight: 400;
+}
+
+
 .right {
   padding-top:35px;
 }
@@ -1916,4 +1973,167 @@ text-align: center;
 
 .friend-selector-enabled.friend-selector-except::before {
   background-image: url("/assets/solid_red_minus.png") !important;
+}
+
+
+/* CSS for the floating button with scenario */
+ #scenario-area {
+    position:fixed;
+    width: 19%;
+    height: 45%;
+    bottom: 90px;
+    left: 15px;
+    background-color:#efeff4;
+    border-radius: 10px;
+    box-shadow:0 2px 4px rgba(0,0,0,.2);
+}
+
+
+
+.scenario_text {
+    line-height: 1.9;
+    color: #57575d;
+    padding: 5px;
+    text-align: left;
+    overflow-wrap: break-word;
+    
+}
+
+.floatbutton_pressed{
+    opacity: 0.05;
+}
+  
+
+
+.scenario-menu {
+    position:absolute;
+    right:8px;
+    bottom:5px;
+    height: inherit;
+    text-align: right;
+}
+
+.scenario-menu.open {
+	height: inherit;
+	overflow: scroll;
+}
+
+.scenario-menu.open .scenario-menu-item {
+	margin-top: 8px;
+}
+
+.scenario-menu-item label{
+	display: inline-block;
+	margin-right: 8px;
+	padding: 4px 10px;
+	border-radius: 12px;
+	background: rgb(255,255,255);
+    box-shadow:  0 2px 4px rgba(0,0,0,.4);
+	transition: opacity 250ms ease-in-out;
+    text-align: left;
+    font-size: 15px;
+    white-space: nowrap;
+    
+}
+
+.scenario-menu.open .scenario-menu-item label {
+	opacity: 1.0;
+}
+
+.scenario-menu-icon-number{
+    position: static;
+	display: inline-block;
+	width: 42px;
+	height: 42px;
+	line-height: 42px;
+	vertical-align: middle;
+	/*background: #e53935;*/
+    background: #FF9900;
+	border-radius: 50%;
+	border: none;
+	box-shadow: 0 2px 4px rgba(0,0,0,.2);
+	text-align: center;
+    transform:translate3d(0,0px,0) scale(0.8) !important;
+    color:#fff;
+    vertical-align: middle;
+}
+
+.scenario-menu-icon{
+	display: inline-block;
+	width: 125px;
+	height: 50px;
+	line-height: 50px;
+	vertical-align: middle;
+	/*background: #e53935;*/
+    background: #3399FF;
+	border-radius: 25px;
+	border: none;
+	box-shadow: 0 2px 4px rgba(0,0,0,.4);
+	text-align: center;
+    
+}
+
+
+
+.scenario-menu-icon .number-icon{
+    font-size:12px;
+   
+}
+
+.scenario-menu-icon .material-icons {
+	font-size: 32px;
+	color: #fff;
+	vertical-align: middle;
+}
+
+.scenario-menu-icon .list-text{
+    padding:0 2px;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform:uppercase;
+    color: white;
+}
+
+.scenario-done-button{
+    position: relative;
+    left:0px;
+    bottom: 55px;
+	display: inline-block;
+	width: 110px;
+	height: 50px;
+	line-height: 50px;
+	vertical-align: middle;
+	/*background: #e53935;*/
+    background: green;
+	border-radius: 25px;
+	border: none;
+	box-shadow: 0 2px 4px rgba(0,0,0,.4);
+	text-align: center;
+    
+}
+
+#experiment-done {
+    position:fixed;
+    bottom:30px;
+    left:80px;
+    margin-top: 10px;
+}
+
+.finish-button {
+    width: 150px;
+    height: 45px;
+    background-color: #4cd964;
+    border-radius: 25px;
+    vertical-align: middle;
+    box-shadow: 0 2px 4px rgba(0,0,0,.4);
+    text-align: center;
+    
+}
+
+.finish-button label {
+    padding:0 2px;
+    font-size: 26px;
+    font-weight: 400;
+    text-transform:uppercase;
+    color: white;
 }

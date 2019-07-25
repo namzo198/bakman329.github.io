@@ -50,10 +50,10 @@ class AudienceMenu extends React.Component {
   getText(option) {
     switch (option) {
       case "public":
-        return ["Public", "Anyone on or off Facebook"];
+        return ["Public", "Anyone on or off FriendBook"];
 
       case "friends":
-        return ["Friends", "Your friends on Facebook"];
+        return ["Friends", "Your friends on FriendBook"];
 
       case "friends_except":
         return ["Friends except...", "Friends; Except (list of friends)"];

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { browserHistory } from 'react-router';
+import {hotjar} from 'react-hotjar'
 import {BrowserRouter, Link, Switch, Route} from 'react-router-dom'
 import PropTypes from 'prop-types';
 
@@ -8,6 +9,8 @@ import NewsFeed from './components/NewsFeed.jsx'
 import Header from './components/Header.jsx'
 import Profile from './components/profile/Profile.jsx'
 import Chat from './components/Chat.jsx'
+import Scenario from './components/Scenario/Scenario.jsx'
+import ExitExperiment from './components/Scenario/ExitExperiment.jsx'
 import GeneralSettings from './components/settings_general/GeneralSettings.jsx'
 import {RegisterSession} from './controller/databaseFunctions.js';
 
@@ -36,6 +39,7 @@ class App extends React.Component {
 
   componentDidMount() {
     // TODO: Replace this with router handling using props.location.search
+    hotjar.initialize(1372296, 6);
     let userparams = this.getChildContext();
       
   
@@ -59,6 +63,7 @@ class App extends React.Component {
         "unsubscribe_Friend":userparams.unsubscribe_Friend,
         "hide_Post":userparams.hide_Post,
         "untag_Post":userparams.untag_Post,
+        "categorize_Friend":userparams.categorize_Friend,
     };
     
     // If any change is made to localstorage, refreshes after update
@@ -118,11 +123,11 @@ class App extends React.Component {
   // Defines global variables
   getChildContext() {
       // Get the url parameters from JSON String
-    const {session_id,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post} = this.urlqueryStringToJSON();
+    const {session_id,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post,categorize_Friend} = this.urlqueryStringToJSON();
       
     // const {change}="Hello"
     // Assign url parameters to local variables
-    const current_session = {session_id,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post};
+    const current_session = {session_id,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post,categorize_Friend};
       
 
     // Assigns the local variables to the global variables 
@@ -142,6 +147,7 @@ class App extends React.Component {
       unsubscribe_Friend:current_session.unsubscribe_Friend,
       hide_Post:current_session.hide_Post,
       untag_Post:current_session.untag_Post,
+      categorize_Friend:current_session.categorize_Friend,    
       NewsFeed: true,
       Timeline: false
     };     
@@ -161,6 +167,12 @@ class App extends React.Component {
             <div id='chat-area'>
               <Chat />
             </div>
+            <div id="scenario-area">
+              <Scenario/> 
+             </div>
+             <div id="experiment-done">
+                <ExitExperiment />
+             </div>
           </div>
         </BrowserRouter>
       </div>
@@ -189,6 +201,7 @@ App.childContextTypes = {
   unsubscribe_Friend:PropTypes.string,
   hide_Post:PropTypes.string,
   untag_Post:PropTypes.string,
+  categorize_Friend:PropTypes.string,    
 
  
 };

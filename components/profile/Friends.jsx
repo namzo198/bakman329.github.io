@@ -45,6 +45,12 @@ class Friends extends React.Component {
        
     }*/
     
+   /* componentWillReceiveProps(nextProps) {
+        if(this.props.auto === true) {
+            this.addCheck(1);
+        }
+    }*/
+    
     componentDidUpdate(prevProps,prevState) {
         
         if (prevState.currentLists !== this.state.currentLists){
@@ -95,6 +101,15 @@ class Friends extends React.Component {
            
           
        }));
+        
+         if(!this.state.adaptationVisited["Categorize_Friend"]['highlight'] && (this.props.friendName === "sasha_riley")) {
+            
+            this.setState({
+                highlight1: false,
+            })
+            
+          HighlightBoilerplate(this.state.context);
+        }
 
     }
     
@@ -114,7 +129,7 @@ class Friends extends React.Component {
             displayInputText:false,
         })
         
-         if(!this.state.adaptationVisited["Categorize_Friend"]['highlight']) {
+         if(!this.state.adaptationVisited["Categorize_Friend"]['highlight'] && (this.props.friendName === "sasha_riley")) {
             
             this.setState({
                 highlight1: false,
@@ -133,12 +148,12 @@ class Friends extends React.Component {
     
     
     render() {
-        
+    
         return (
             
             <div className="dropdown">
                     <div>
-                        <button className = {this.state.highlight1?"dropbtn_highlight":"dropbtn" }> ✓ Friends ▼ </button>
+                        <button className = {this.state.highlight1 && (this.props.friendName === "sasha_riley")?"dropbtn_highlight":"dropbtn" }> ✓ Friends ▼ </button>
                         <div className="dropdown-content">
                            {!this.state.renderCreateList?
                               <div>
@@ -147,7 +162,7 @@ class Friends extends React.Component {
                                  <a href="#">Close friends</a>
                                  <a href="#">Acquaintances</a>
                                   
-                                 <span className={this.state.highlight1?"high1":null} ><Button onClick={this.handleClick}>Add to another list </Button></span> 
+                                 <span className={this.state.highlight1 && (this.props.friendName === "sasha_riley")?"high1":null} ><Button onClick={this.handleClick}>Add to another list </Button></span> 
                                   
                                 <hr></hr>
                                  <a href="#">Unfriend</a>
@@ -163,7 +178,7 @@ class Friends extends React.Component {
                                        )
                                      }
                                      
-                                {this.state.displayInputText?<NameFriendList addNewList={this.addNewList}/>:<span className={this.state.highlight1?"high1":null} ><Button onClick={this.input}> ➕ New List</Button></span>}
+                                {this.state.displayInputText?<NameFriendList addNewList={this.addNewList}/>:<span className={this.state.highlight1 && (this.props.friendName === "sasha_riley")?"high1":null} ><Button onClick={this.input}> ➕ New List</Button></span>}
                                 
                                  </div>
                             

@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {getProfilePic} from '../utilities.js'
+import classNames from 'classnames'
 
 import Button from './Button.jsx'
 
@@ -20,8 +21,14 @@ class ChatUser extends React.Component {
     }
 
     render() {
+        
+    var chatUser = classNames({
+      'chat-user': !this.props.allContacts,
+      'off-active-status': this.props.allContacts,
+    });
+
        return (
-          <div id='chat-user'>
+          <div id={chatUser}>
              <img id='profile-pic' src={getProfilePic(this.props.name)} />
              <Button onClick={this.onClickName}>{this.props.name}</Button>
           </div>

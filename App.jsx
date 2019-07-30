@@ -22,11 +22,11 @@ import {verifyLocalStorage} from './utilities.js'
 */
 
 /**
-http://fakebook.usabart.nl/?session=6c2cc0c1aefce7c1f00eb70cd2df88d8&hidestory=high&changesub=high&unsubfriend=high&unsubstatus=high&deletetimeline=high&reportspam=high&hidetimeline=high&untagphoto=high&requestphoto=high&tagvisiblity=high&timelinevisibility=high&blockuser=high&restrictuser=high&blockevent=high&blockapp=high&chatoffline=high&chatvisibility=high&customstatus=high&customphoto=high&catnewfriend=high&catoldfriend=high&withholdcellphone=high&withholdotherphone=high&withholdim=high&withholdstreet=high&withholdinterest=high&withholdreligion=high&withholdpolitical=high
+http://fakebook.usabart.nl/?session=6c2cc0c1aefce7c1f00eb70cd2df88d8&hidestory=high&changesub=high&unsubfriend=high&unsubstatus=high&delete_Post=high&reportspam=high&hidetimeline=high&untagphoto=high&requestphoto=high&tagvisiblity=high&timelinevisibility=high&blockuser=high&restrictuser=high&blockevent=high&blockapp=high&chatoffline=high&chatvisibility=high&customstatus=high&customphoto=high&catnewfriend=high&catoldfriend=high&withholdcellphone=high&withholdotherphone=high&withholdim=high&withholdstreet=high&withholdinterest=high&withholdreligion=high&withholdpolitical=high
 */
 
 /**
-http://localhost:8080/?session=6c2cc0c1aefce7c1f00eb70cd2df88d8&deletetimeline=high&liketimeline=high&chatoffline=high&withholdcellphone=high
+http://localhost:8080/?session=6c2cc0c1aefce7c1f00eb70cd2df88d8&delete_Post=high&liketimeline=high&chatoffline=high&withholdcellphone=high
 */
 
 class App extends React.Component {
@@ -49,10 +49,9 @@ class App extends React.Component {
       
   
     let adaptations_dict = {
-      "deletetimeline": userparams.deletetimeline,
-      "liketimeline": userparams.liketimeline,
-      "chatoffline": userparams.chatoffline,
-      "contactInfo": userparams.contactInfo,
+        "delete_Post": userparams.delete_Post,
+        "chat_Offline": userparams.chat_Offline,
+        "contact_Info": userparams.contact_Info,
         "privacy_futureRequests":userparams.privacy_futureRequests,
         "timeline_seePost":userparams.timeline_seePost,
         "block_User":userparams.block_User,
@@ -91,7 +90,17 @@ class App extends React.Component {
       window.location.href = "/";
     }
       
+      
+      console.log("TODO: Begin time counter to understand how long user stays within the platform");
+      
   }
+    
+    componentWillUnmount() {
+        
+        console.log("TODO: Stop timer and send time taken to DB");
+      //  window.addEventListener("beforeunload",alert("TODO: Stop timer and send time taken to DB"));
+       
+    }
 
   // Turn the querystring into a JSON object
   urlqueryStringToJSON() {
@@ -123,20 +132,19 @@ class App extends React.Component {
   // Defines global variables
   getChildContext() {
       // Get the url parameters from JSON String
-    const {session_id,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post,categorize_Friend} = this.urlqueryStringToJSON();
+    const {session_id,delete_Post,chat_Offline,contact_Info,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post,categorize_Friend} = this.urlqueryStringToJSON();
       
     // const {change}="Hello"
     // Assign url parameters to local variables
-    const current_session = {session_id,deletetimeline,liketimeline,chatoffline,contactInfo,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post,categorize_Friend};
+    const current_session = {session_id,delete_Post,chat_Offline,contact_Info,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post,categorize_Friend};
       
 
     // Assigns the local variables to the global variables 
     return {
       session_id: current_session.session_id,
-      deletetimeline: current_session.deletetimeline,
-      liketimeline: current_session.liketimeline,
-      chatoffline: current_session.chatoffline,
-      contactInfo: current_session.contactInfo,
+      delete_Post: current_session.delete_Post,
+      chat_Offline: current_session.chat_Offline,
+      contact_Info: current_session.contact_Info,
       privacy_futureRequests:current_session.privacy_futureRequests,
       timeline_seePost:current_session.timeline_seePost, 
       block_User:current_session.block_User,  
@@ -167,10 +175,8 @@ class App extends React.Component {
             <div id='chat-area'>
               <Chat />
             </div>
-            <div id="scenario-area">
-              <Scenario/> 
-             </div>
-             <div id="experiment-done">
+            <Scenario/> 
+            <div id="experiment-done">
                 <ExitExperiment />
              </div>
           </div>
@@ -186,11 +192,11 @@ App.childContextTypes = {
   session_id: PropTypes.string,
   NewsFeed: PropTypes.bool,
   Timeline: PropTypes.bool,
-  deletetimeline:PropTypes.string,
-  chatoffline: PropTypes.string,
-  liketimeline:PropTypes.string,
-  contactInfo: PropTypes.string,
-  BasicInfo:PropTypes.string,
+  delete_Post:PropTypes.string,
+  chat_Offline: PropTypes.string,
+  /*liketimeline:PropTypes.string,*/
+  contact_Info: PropTypes.string,
+  Basic_Info:PropTypes.string,
   privacy_futureRequests:PropTypes.string,  
   timeline_seePost:PropTypes.string,
   block_User: PropTypes.string,

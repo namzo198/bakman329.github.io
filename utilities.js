@@ -9,27 +9,7 @@ export function indexPosts() {
    localStorage.setItem('posts', JSON.stringify(posts));
 }
 
-// TODO: Maybe consolidate these defaults to a .JSON file
 
-//Boring Posts
-/*
-1. I remembered to wake up this morning.
-
-2. I switched deaodrant today. I can't quite tell if its working
-
-3. I don't like losing the hour, but resetting the clocks is always much easier in the spring than in the fall.
-
-4. I just found my rock collection from when I was a kid, they are all accounted for.
-
-5. Sitting in a meeting... Don't think I will contribute anything.
-
-6. Here is a shovel.
-
-7. There's a house for sale near me if anyone is interested. Looks like it comes with a driveway and grass. Seller also willing to include For Sale sign in purchase.
-
-8. Almost out I toothpaste. Think I can make it a few more days...
-
-*/
 export function resetPosts() {
  localStorage.setItem('posts', JSON.stringify(
     [  {"name":"Jack Scout",
@@ -95,7 +75,7 @@ export function resetPosts() {
     {"name":"Alex Doe",
          "img":"/assets/alex_profile_img.jpg",
          "photo":"/assets/users/alex_profile_img.jpg",
-         "content":" ",
+         "content":"#New Pic who dis 👍",
          "key":28,
          "comments":[],
          "audience":"public",
@@ -458,19 +438,19 @@ export function resetContactInfo(){
 
 export function resetAdaptationDisplay(){
     localStorage.setItem('visited',JSON.stringify({
-        DeletePost:{
+        Delete_Post:{
             suggestion:false,
             highlight:false,
             automation:false
         },
         
-        LikePost:{
+        Chat_Offline:{
             suggestion:false,
             highlight: false,
             automation:false
         },
         
-        ContactInfo:{
+        Contact_Info:{
             suggestion:false,
             highlight:false, 
             automation:false

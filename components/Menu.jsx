@@ -58,8 +58,8 @@ class Menu extends React.Component {
     }
     else {
       button = (
-          <Button onClick={this.showMenu}>
-            <span className={"menu-icon"  + ' ' + (this.props.icon ? this.props.icon : "vert")}></span>
+          <Button onClick={this.showMenu} >
+           <span className={"menu-icon"  + ' ' + (this.props.icon ? this.props.icon : "vert")}></span>
           </Button>
         );
     }

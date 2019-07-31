@@ -20,8 +20,8 @@ class Profile extends React.Component {
         
         adaptation:adaptation,
         adaptationVisited:adaptationVisited,
-        highlight: !adaptationVisited["ContactInfo"]["highlight"]&& (adaptation["contactInfo"] === "high")?highLight:noHighLight,
-        displayContactInfoSuggestion: !adaptationVisited["ContactInfo"]["suggestion"]&& (adaptation["contactInfo"] === "sugst"),
+        highlight: !adaptationVisited["Contact_Info"]["highlight"]&& (adaptation["contact_Info"] === "high")?highLight:noHighLight,
+        displayContactInfoSuggestion: !adaptationVisited["Contact_Info"]["suggestion"]&& (adaptation["contactInfo"] === "sugst"),
         
         //Suggestion: Unsubscribe from friend
         unsubscribe_suggestion:!adaptationVisited ["Unsubscribe_Friend"]["suggestion"]&& (adaptation["unsubscribe_Friend"] === "sugst"),
@@ -46,7 +46,8 @@ class Profile extends React.Component {
         categorize_automation:!adaptationVisited ["Categorize_Friend"]["automation"]&& (adaptation["categorize_Friend"] === "auto"),
         categorize_action:"Unsubscribe_Friend, Check to see if the suggested audience for the post was followed/not followed (for Undo_Automation)",
         categorize_displayAutomationPopup:true,
-        categorize_label_Auto: " Jack Scout was automatically added to the \"Work\" friends list",
+        auto_CategorizeAccept: false,
+        categorize_label_Auto: " Sasha Riley was automatically added to the \"Family\" friends list",
         categorize_context: "Categorize_Friend",
       }
 
@@ -109,6 +110,7 @@ class Profile extends React.Component {
         this.setState({
             unsubscribe_displayAutomationPopup:false,
             unsubscribe_automation:false,
+            auto_CategorizeAccept:true,
 
         })
        
@@ -174,8 +176,8 @@ render() {
           </div>
            :<div>
            
-            <Friends friendName={this.props.match.params.user}/> 
-            <FriendSubscription auto={this.state.unsubscribe_automation} sugst={this.state.suggestAgree}/>
+            <Friends friendName={this.props.match.params.user} auto = {this.state.auto_CategorizeAccept}/> 
+            <FriendSubscription friendName = {this.props.match.params.user} auto ={this.state.unsubscribe_automation} sugst={this.state.suggestAgree}/>
              
           
            </div>
@@ -202,11 +204,11 @@ render() {
             
             
             {/*The Unsubscribe Automation Adaptation Popup*/ 
-                this.state.unsubscribe_displayAutomationPopup && this.state.unsubscribe_automation && <AutomationBoilerplate action = {this.state.unsubscribe_action} context = {this.state.unsubscribe_context} label={this.state.unsubscribe_label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this. onClickUndo_Auto}/>
+                (this.props.match.params.user === "jack_scout")&&this.state.unsubscribe_displayAutomationPopup && this.state.unsubscribe_automation && <AutomationBoilerplate action = {this.state.unsubscribe_action} context = {this.state.unsubscribe_context} label={this.state.unsubscribe_label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this. onClickUndo_Auto}/>
             }
              
               {/*The Categorization Automation Adaptation Popup*/ 
-                this.state.categorize_displayAutomationPopup && this.state.categorize_automation && <AutomationBoilerplate action = {this.state.categorize_action} context = {this.state.categorize_context} label={this.state.categorize_label_Auto} onClickOK_Auto={this.onClickOk_CategorizeAuto} onClickUnDo_Auto = {this. onClickUndo_CategorizeAuto}/>
+                (this.props.match.params.user === "sasha_riley") && this.state.categorize_displayAutomationPopup && this.state.categorize_automation && <AutomationBoilerplate action = {this.state.categorize_action} context = {this.state.categorize_context} label={this.state.categorize_label_Auto} onClickOK_Auto={this.onClickOk_CategorizeAuto} onClickUnDo_Auto = {this. onClickUndo_CategorizeAuto}/>
             }
              
            

@@ -9,27 +9,60 @@ import ChatWindow from './ChatWindow.jsx'
 import Popup from './Popup.jsx'
 import {highLight,No_highLight} from '../adaptations/Highlight.js'
 import SuggestionPopup from '../adaptations/Suggestion.jsx'
-import {containsIgnoreCase} from '../utilities.js'
+import {containsIgnoreCase, getParsed} from '../utilities.js'
+import {HighlightBoilerplate} from '../adaptations/Highlight/HighlightBoilerplate.jsx';
+import AutomationBoilerplate from '../adaptations/Automation/AutomationBoilerplate.jsx';
+import SuggestionBoilerplate from '../adaptations/Suggestion/SuggestionBoilerplate.jsx';
 
 class Chat extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {chats: [], renderChatPopup: false, turnOffChat: "someContacts", adapt:'', undo:false, context:'From Chat',renderSuggestion:false};
-        this.state = {chats: [], renderChatPopup: false,
+        
+        let adaptations = getParsed('adaptations');
+        let adaptationVisited = getParsed('visited');
+   
+        this.state = {
+             
+         chats: [], 
+         renderChatPopup: false,
           turnOffChat: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0],
           except_contacts: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][1].join(", "),
           some_contacts: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][2].join(", "),
           showExceptWarning: false,
-          undo:false, renderSuggestion:false,
-          context:'From Chat'};
+          renderSuggestion:false,
+          reduceOpacity:false,    
+        
+        //Chat Highlight Adaptation
+        chatHighlight:!adaptationVisited["Chat_Offline"]["highlight"] && (adaptations["chat_Offline"] == "high")? true:false, 
+         context:"Chat_Offline",
+        
+        //Chat Auto Adaptation
+            //Hide Automation Adaptation
+        chatAutomation:!adaptationVisited ["Chat_Offline"]["automation"]&& (adaptations["chat_Offline"] === "auto"),    
+        displayChatAutomationPopup:true,
+        displayStatusLabel:false,    
+        label_Auto: "Your Active Status on Chat was automatically turned off. Your friends and contacts will no longer see when you’re online on FriendBook.",  
+        action:"Chat_Offline, Check to see if the suggested audience for the post was followed/not followed (for Undo_Automation)"  ,  
+            
+        //Chat Suggest Adaptation
+        chatSuggestion: !adaptationVisited ["Chat_Offline"]["suggestion"]&& (adaptations["chat_Offline"] === "sugst"),
+        label_Sugst:"Hi Alex- Would you like to turn off Active Status on Chat. Your friends and contacts will no longer see when you're online on FriendBook.",
+            
+        };
+       
         this.turnOffChatPopup = null;
+        
 
         this.addChat = this.addChat.bind(this);
         this.removeChat = this.removeChat.bind(this);
+        this.cancelAllContacts = this.cancelAllContacts.bind(this);
         this.toggleMenu = this.toggleMenu.bind(this);
         this.handleTurnOffChatOptionChange = this.handleTurnOffChatOptionChange.bind(this);
         this.createTurnOffChatPopup = this.createTurnOffChatPopup.bind(this);
-        this.onClickUndo = this.onClickUndo.bind(this);
+        this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
+        this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
+        this.onClickOK_Suggestion = this.onClickOK_Suggestion.bind(this);
+        this.onClickDestroySuggestion = this.onClickDestroySuggestion.bind(this);
         this.show =this.show.bind(this);
     }
 
@@ -40,12 +73,26 @@ class Chat extends React.Component {
     }
    
 
-    //Show the Suggestion
+    //Show the Suggestion Adaptation Methods
     show(){
          this.setState({
              renderSuggestion:true
          })
      }
+    
+    //Suggestion Adaptation
+     onClickOK_Suggestion() {
+        this.setState({
+            renderSuggestion:false,
+            displayStatusLabel:true,
+            turnOffChat: "allContacts"
+        })
+       
+     }
+    
+    onClickDestroySuggestion() {
+         this.setState({renderSuggestion:false})
+    }
 
     addChat(name) {
         if (this.state.chats.includes(name)) {
@@ -58,13 +105,24 @@ class Chat extends React.Component {
         return true;
     }
 
-    /*TODO, create event and send to DB*/
-    onClickUndo(){
+    /*Automation Adaptation */
+    onClickUndo_Auto(){
         this.setState({
-            undo:true,
+            displayChatAutomationPopup:false,
+            turnOffChat: "turnOnActiveStatus",
+            chatAutomation:false,
         });
+        
     }
 
+    onClickOk_Auto(){
+         this.setState({
+            displayChatAutomationPopup:false,
+            turnOffChat:"allContacts", 
+            displayStatusLabel:true,
+        });
+    } 
+    
     removeChat(name) {
         var chats = this.state.chats;
         var index = chats.indexOf(name);
@@ -80,6 +138,7 @@ class Chat extends React.Component {
     }
 
     handleTurnOffChatOptionChange(e) {
+       
         this.setState({turnOffChat: e.target.value});
 
         if (e.target.value != "allContactsExcept") {
@@ -116,20 +175,29 @@ class Chat extends React.Component {
           some_contacts: JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][2].join(", ")});
     }
 
+   
     //To automate or normally display the chat setting
     renderChat(){
-        if (this.state.adapt==='auto' &!this.state.undo){
+        if (this.state.chatAutomation && this.state.displayChatAutomationPopup){
             return (
-                <Button href='javascript:void(0)' onClick={this.onClickUndo}><span id ='chat-auto' style={No_highLight}>Chat was automatically turned off</span> Undo</Button>
+                <div>
+                 <AutomationBoilerplate action = {this.state.action} context = {this.state.context} label={this.state.label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this.onClickUndo_Auto}/>
+                 
+                 {/*<Button href='javascript:void(0)' onClick={this.onClickUndo}><span id ='chat-auto' style={No_highLight}>Chat was automatically turned off</span> Undo</Button>*/}
+               </div> 
+                
+                
             )
         }
-        else if (this.state.adapt==='sugst'){
+        /**else if (this.state.chatSuggestion){
+            
+            
             var Suggestion_Popup=(
               <SuggestionPopup title="Suggestion" okay={()=>{
                       var event={
                           action:'Accept to turn off chat',
                           context:this.state.context,
-                          name:'This is the Chat suggestion to turn off chat for all except Jack Crow',
+                          name:'This is the Chat suggestion to turn off chat for all contacts',
                           renderSuggestion:false
                       };
                       this.setState(event);
@@ -140,7 +208,7 @@ class Chat extends React.Component {
                       var event={
                           action:'Would rather not turn off chat',
                           context:this.state.context,
-                          name:'This is the Chat suggestion to turn off chat for all except Jack Crow',
+                          name:'This is the Chat suggestion to turn off chat for all contacts',
                           renderSuggestion:false
                       };
                       this.setState(event);
@@ -148,21 +216,28 @@ class Chat extends React.Component {
                   }}>
 
                   <label>
-                     Hi Alex- Would you like to turn off your Active Status on Chat. 
+                     Hi Alex- Would you like to turn off Active Status on Chat. Your friends and contacts will no longer see when you're online on FriendBook.  
                   </label>
               </SuggestionPopup>)
-        }
+        }*/
 
-        let adaptation = JSON.parse(localStorage.adaptations)["chatoffline"];
+        //let adaptation = JSON.parse(localStorage.adaptations)["chatoffline"];adapt={adaptation}
         return(
             <div>
-                <Menu ref={(_menu) => {this.menu = _menu}} upwards icon='gear' adapt={adaptation}>
-                  <Button onClick={this.createTurnOffChatPopup} adapt={adaptation}>Turn Off Active Status</Button>
+                <span className={this.state.chatHighlight?"high":null}><Menu ref={(_menu) => {this.menu = _menu}} upwards icon='gear'>
+                    
+                    <Button onClick={this.createTurnOffChatPopup} adapt={this.state.chatHighlight?"high":null}>Turn Off Active Status</Button>
+                  
                 </Menu>
+                </span>
 
-                {this.state.renderSuggestion?Suggestion_Popup:null}
+                {this.state.chatSuggestion && this.state.renderSuggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label_Sugst} agree ={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>}
             </div>
         )
+    }
+    
+    cancelAllContacts(){
+        this.setState({turnOffChat: "turnOnActiveStatus"});
     }
 
     render() {
@@ -179,18 +254,20 @@ class Chat extends React.Component {
         }
         
         var name = user.name;
-        var setting = JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0];
+        var setting = this.state.turnOffChat;
         var except_contacts_includes = containsIgnoreCase(JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][1], name);
         var some_contacts_includes = containsIgnoreCase(JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][2], name);
 
-        if (setting == "allContacts"
-          || (setting == "allContactsExcept" && !except_contacts_includes)
+        ////setting == "allContacts"
+          //#chat-user a .allContacts
+       // console.log('settings: '+setting )
+        if ((setting == "allContactsExcept" && !except_contacts_includes)
           || (setting == "someContacts" && some_contacts_includes)) {
           return;
         }
-
+        
         friend_names.push(name);
-        friends.push(<ChatUser key={index} chat={this} name={name} />);
+        friends.push(<ChatUser key={index} chat={this} name={name} allContacts={setting === "allContacts" && setting != "turnOnActiveStatus" || this.state. chatAutomation? true:false}/>);
       });
       
 
@@ -236,8 +313,9 @@ class Chat extends React.Component {
                if (this.state.turnOffChat == "allContactsExcept" && this.state.except_contacts == "") {
                   this.setState({showExceptWarning: true});
                   return;
-               }
-               else {
+               }else if(this.state.turnOffChat =="allContacts"){
+                    this.setState({displayStatusLabel:true});
+                } else {
                   this.setState({showExceptWarning: false});
                }
                var settings = JSON.parse(localStorage.getItem('settings'));
@@ -248,17 +326,23 @@ class Chat extends React.Component {
                localStorage.setItem('settings', JSON.stringify(settings));
                this.updateSettings();
 
-               console.log(settings, old_settings)
+               //console.log(settings, old_settings)
                if (JSON.stringify(settings) != JSON.stringify(old_settings)) {
                   let used = JSON.parse(localStorage.featuresUsed);
                   used.chat.settings = true;
                   localStorage.setItem("featuresUsed", JSON.stringify(used));
                }
+                  
+               
+                if(this.state.chatHighlight) {
+                     this.setState({ chatHighlight:false,})
+                    HighlightBoilerplate(this.state.context);
+                }
             }}
             cancel={() => {this.updateSettings()}}>
             {/* https://www.w3schools.com/howto/howto_js_autocomplete.asp */}
-            <label>
-               <input type="radio" id="turn-off-chat-all-contacts"
+            <label className={this.state.chatHighlight?"high1":null}>
+              <input type="radio" id="turn-off-chat-all-contacts"
                   name="turn-off-chat" value="allContacts"
                   onChange={this.handleTurnOffChatOptionChange}
                   checked={this.state.turnOffChat === "allContacts"} />
@@ -289,13 +373,14 @@ class Chat extends React.Component {
             You'll also see when your friends and contacts are active or recently active.
             </p>
 
-            {except_warning}
+            {except_warning}   turnOffChat:"allContacts", displayStatusLabel:true,
         </Popup>);
           
         // TODO: Consider if there's a better solution than this warning
         var turned_off_warning;
-        if (JSON.parse(localStorage.getItem('settings'))["turn_off_chat"][0] == "allContacts") {
-           turned_off_warning = <p>Note: Chat is turned off for all contacts</p>;
+        if (this.state.turnOffChat == "allContacts" && this.state.displayStatusLabel) {
+            
+           turned_off_warning = <p><a href="javaScript:void(0)" onClick={this.cancelAllContacts}>Turn on Active Status</a> to see who's available</p>;
         }
 
         return (
@@ -305,10 +390,10 @@ class Chat extends React.Component {
                 </div>
                 <div id='chat'>
                     {this.state.renderChatPopup ? turnOffChatPopup : null}
-                    {turned_off_warning}
                     {friends}
                     <div id='chat-footer'>
                         <div id='settings'>
+                          {turned_off_warning}
                           {this.renderChat()}
                         </div>
                     </div>

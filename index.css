@@ -1,7 +1,7 @@
 body {
     margin: 0px;
     font-family: Helvetica, Arial, sans-serif;
-    font-size: 15px;
+    font-size: 19px;
 }
 
 header {
@@ -180,12 +180,12 @@ background-position: -250px -330px;
 }
 
 #page-content #post-area {
-  margin-left: 529.5px;
+  margin-left: 800px;
 }
 
 #post {
     display: block;
-    width: 500px;
+    width: 550px;
     background-color: #fff;
     border: 1px solid;
     border-color: #e5e6e9 #dfe0e4 #d0d1d5;
@@ -273,6 +273,12 @@ background-position: -250px -330px;
   padding: 0 5px 0 5px;
   display: inline-block;
 }
+ 
+#new-post-area .button.cancel {
+  padding: 0 5px 0 5px;
+  display: inline-block;
+  margin-left: 10px;
+}
 
 #post #actions a {
     padding-right: 30px;
@@ -288,7 +294,7 @@ background-position: -250px -330px;
 
 #new-post-area {
     display: block;
-    width: 500px;
+    width: 550px;
     background-color: #fff;
     border: 1px solid;
     border-color: #e5e6e9 #dfe0e4 #d0d1d5;
@@ -302,7 +308,7 @@ background-position: -250px -330px;
 
 #new-post-area textarea {
     resize: none;
-    width: 470px;
+    width: 520px;
 }
 
 #actions .menu {
@@ -345,6 +351,28 @@ background-position: -250px -330px;
     border-radius: 50%;
 }
 
+
+/*icon styling for like,comment,share*/
+.icon_actions img{
+    width: 20px;
+    height: 20px;
+    padding: 5px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 15px;
+}
+
+.like_icon {
+    float: left;
+}
+.comment_icon {
+    display: inline-block;
+    float: left;
+}
+.remove_icon {
+    display: inline-block;
+}
+
 /*CSS for the Automation button */
 #automation-block {
     display: inline-block;
@@ -353,10 +381,11 @@ background-position: -250px -330px;
 #automation-flag{
     display: inline-block;
     position: absolute;
-    transform: scale(.6);
+   /* transform: scale(.6);*/
+    transform: scale(.9);
     float: left;
-    top: -25px;
-    left: -130px;
+    top: -38px;
+    left: -220px;
 }
 
 /* CSS FOR PROFILE_TIMELINE OPTIONS*/
@@ -418,7 +447,7 @@ background-position: -250px -330px;
 }
 
 .high1 {
-     background-color:rgb(255,255,153) ;
+    background-color:rgb(255,255,153) ;
     display: block;
 }
 
@@ -605,8 +634,13 @@ color: #ffffff;}
     float: right;
 }
 
-#chat-user a {
-    padding-left: 8px;
+#chat-user {
+  margin-bottom: 10px;  
+}
+
+#off-active-status {
+  margin-bottom: 10px; 
+  opacity: 0.4;    
 }
 
 #chat-window-container {
@@ -722,7 +756,7 @@ color: #ffffff;}
   margin: 0.15em;
   width: 0.75em;
   height: 0.75em;
-  background: #e9ebee;
+  background: #e9ebee ;
   border-radius: 50%;
   border: 0.21429em solid gray;
   box-sizing: border-box;
@@ -871,27 +905,53 @@ color: #ffffff;}
 	display: block;
 }
 
-.suggestPopup::before{
+
+#suggestPopup::before{
     content: url(./assets/Dinosaur.png);
     position: absolute;
     transform: scale(.5);
     top:10%;
     left:-30px;
     margin-left: -15px;
+    
+    
 }
 
-.suggestPopup {
-	position: fixed;
-	top: 50%;
+/*.active {
+ visibility: visible;
+}*/
+
+/*.hidden {
+ visibility: hidden;
+ transition: all 200ms ease-out;
+ transform: translate(0,-100%);
+}*/
+
+@keyframes example {
+  0%   {opacity:0; transform: scale3d(0,0,1);}
+  100% {opacity:1; transform: scale3d(1,1,1);}
+}
+
+#suggestPopup {
+  position: fixed;
+  top: 50%;
   left: 60%;
   margin-left: -250px;
   width: 30%;
     /*height: 13%;*/
-  border:1px #b2b2b2 solid;
+  border:4px #b2b2b2 solid;
+  z-index: 1;    
   vertical-align: middle;
   border-radius: 3px;
+  animation-name: example;
+  animation-duration: 0.3s;
+  animation-direction: forwards;
+  animation-timing-function: ease-in;
+  
 
 }
+
+
 
 .suggestPopupCloseButton{
     cursor: pointer;
@@ -904,7 +964,7 @@ color: #ffffff;}
     color: red;
 }
 
-.suggestPopup .suggestPopupCloseButton:hover{
+#suggestPopup .suggestPopupCloseButton:hover{
     color:red;
 }
 
@@ -943,7 +1003,7 @@ color: #ffffff;}
 #undo{
     display: inline-block;
     vertical-align: middle;
-    margin-left: 50px ;
+    margin-left: 35px ;
     border:3px solid #dddddd;
     border-radius:4px;
     padding: 5px;
@@ -1128,9 +1188,9 @@ Edit_Icon_pos{
 
 #page-container {
   font-family:"Helvetica", Futura, sans-serif;
-  padding: inherit;
+  /*padding: inherit;*/
   background-color: #e9ebee;
-  float: center;
+  /*float: center;*/
   position: absolute;
   top:42px;
   width: 100%;
@@ -1979,25 +2039,45 @@ text-align: center;
 /* CSS for the floating button with scenario */
  #scenario-area {
     position:fixed;
-    width: 19%;
-    height: 45%;
-    bottom: 90px;
+    width: 410px;
+    height: 970px;
+    top: 200px;
     left: 15px;
     background-color:#efeff4;
     border-radius: 10px;
-    box-shadow:0 2px 4px rgba(0,0,0,.2);
+    box-shadow:0 2px 4px rgba(0,0,0,.4);
+     
+   
+}
+.scenario_head {
+    font-size:  20px;
+    text-align: center;
+    margin: 10px;
 }
 
-
-
 .scenario_text {
+    font-size:  18px;
     line-height: 1.9;
     color: #57575d;
     padding: 5px;
+    margin: 0px 12px;
     text-align: left;
     overflow-wrap: break-word;
-    
+    white-space: normal;
 }
+
+.scenario_task {
+    font-size:  18px;
+    line-height: 1.9;
+    color: red;
+    padding-left: 5px;
+    margin: 0 12px;
+    text-align: left;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+
 
 .floatbutton_pressed{
     opacity: 0.05;
@@ -2022,23 +2102,60 @@ text-align: center;
 	margin-top: 8px;
 }
 
+
+#list li {
+   list-style-type: none;
+    
+}
+
 .scenario-menu-item label{
 	display: inline-block;
-	margin-right: 8px;
-	padding: 4px 10px;
-	border-radius: 12px;
+	/*margin-right: 8px;*/
+	padding: 2px 6px;
+	/*border-radius: 12px;*/
 	background: rgb(255,255,255);
-    box-shadow:  0 2px 4px rgba(0,0,0,.4);
-	transition: opacity 250ms ease-in-out;
+    /*box-shadow:  0 2px 4px rgba(0,0,0,.4);*/
+	/*transition: opacity 250ms ease-in-out;*/
     text-align: left;
-    font-size: 15px;
+    font-size: 18px;
     white-space: nowrap;
-    
+    margin-bottom: 7px;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  content: " ";    
+  width: 100%; 
+  background-color: black;
+  color: #fff;
+  font-size:18px;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+ /* Position the tooltip */
+  position: absolute;
+  z-index: 1; 
+}
+.scenario-menu-item:hover .tooltiptext{
+    visibility: visible;
+}
+
+.tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 100%; /* To the left of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
 }
 
 .scenario-menu.open .scenario-menu-item label {
 	opacity: 1.0;
 }
+
 
 .scenario-menu-icon-number{
     position: static;
@@ -2114,7 +2231,7 @@ text-align: center;
 
 #experiment-done {
     position:fixed;
-    bottom:30px;
+    bottom:19px;
     left:80px;
     margin-top: 10px;
 }
@@ -2137,3 +2254,5 @@ text-align: center;
     text-transform:uppercase;
     color: white;
 }
+
+

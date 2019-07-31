@@ -22,9 +22,6 @@ class Scenario extends React.Component {
         ));
     }
     
-    submitExperiment() {
-        alert('My Master has not told me what to do yet. But I guess this is the point where I move onto the post-experiment summary')
-    }
     
     render() {
         
@@ -63,7 +60,7 @@ class Scenario extends React.Component {
             
             buttons.push(<ScenarioFeature label="Endless  app invites" icon="4" action={null} key="i4" id="feature4"/>);
 
-            buttons.push(<ScenarioFeature label=" Embarrassing personal posts." icon="3" action={null} key="i3" id="feature3"/>);
+            buttons.push(<ScenarioFeature label="Embarrassing personal posts." icon="3" action={null} key="i3" id="feature3"/>);
             
             buttons.push(<ScenarioFeature label="Annoying friends." icon="2" action={null} key="i2" id="feature2"/>);
             
@@ -73,12 +70,86 @@ class Scenario extends React.Component {
          buttons.push(<ScenarioFeature label="" icon={icon} action ={this.toggleMenu} key="m" id="mainDescription" />);
             
         return(
-                <div>
-                <div className={className}>
+                <div id="scenario-area">
+                {/*<div className={className}>
                     {buttons}
-                </div>
+                </div>*/}
                 
-                <p className={scenarioTextClass}>You are <strong><ProfileLink name= "Alex Doe"/></strong> from Fresno, California and regularly use FriendBook for professional and leisure activities. You are currently looking for a job and have been advised by your mentor that employers monitor and scrutinize applicants’ FriendBook profile before making decisions on whether to hire them or not. They have provided you with a <strong> list of items</strong> to consider about your profile as you go through the application process. </p>
+                <h3 className="scenario_head">What is my Task ?</h3>
+                
+                <p className="scenario_text">You are <strong><ProfileLink name= "Alex Doe"/></strong> from Fresno, California and regularly use FriendBook for professional and leisure activities. You are currently looking for a job and have been advised by your mentor that employers monitor and scrutinize applicants’ FriendBook profile before making decisions on whether to hire them or not. They have provided you with a <strong> list of items</strong> to consider about your profile as you go through the application process. </p>
+                
+                <p className="scenario_task">In a week, you have an upcoming interview, do what you want to your profile for representation that you are okay with recruiters seeing.</p>
+                
+                    <ol  id="list">
+                      <li className="scenario-menu-item">
+                          <label>1. Embarassing friend posts</label>
+                          <span className="tooltiptext">Some of your friends may have posts with embarrassing content about you.</span>
+                      </li> 
+                      
+                      <li className="scenario-menu-item">
+                          <label>2. Annoying friends</label>
+                          <span className="tooltiptext">Some of your friends might have constantly posted about things that you personally find to be annoying.</span>
+                      </li>
+                      
+                      <li className="scenario-menu-item">
+                          <label>3. Embarrassing personal posts</label>
+                          <span className="tooltiptext">There are certain stories, photos or updates that you previously posted that might be embarrassing for others to see.</span>
+                          
+                      </li>
+                      
+                      <li className="scenario-menu-item">
+                          <label>4. Endless app invites</label>
+                          <span className="tooltiptext">Some of your friends have always endlessly invited you  to try out new apps.</span>
+                      </li>
+                      
+                      <li className="scenario-menu-item">
+                          <label>5. Endless event invites</label>
+                          <span className="tooltiptext">Some of your friends have always endlessly invited you to events.</span>
+                      </li>
+                      
+                      <li className="scenario-menu-item">
+                          <label>6. Trolls</label>
+                          <span className="tooltiptext">Some people bother or harass you.</span>
+                      </li>
+                      
+                      <li className="scenario-menu-item">
+                          <label>7. Undesirable personal posts </label>
+                           <span className="tooltiptext">There are certain stories, photos or updates that you previously posted that might not be reflective of who you now are as a person.</span>
+                      </li>
+                      
+                      <li className="scenario-menu-item">
+                          <label>8. Who can post on  your timeline </label>
+                           <span className="tooltiptext">Remember to control people posting on your timeline.
+                           </span>
+                      </li>
+                      
+                      <li className="scenario-menu-item">
+                          <label>9. Review contact information</label>
+                          <span className="tooltiptext">Review some of the contact information on your profile.
+                          </span>
+                      </li>
+                      
+                      <li className="scenario-menu-item">
+                          <label>10. Review basic information</label>
+                          <span className="tooltiptext"> Review some of the basic information on your profile.</span>
+                      </li>
+                      
+                      <li className="scenario-menu-item">
+                           <label>11. Verify post audience</label>
+                           <span className="tooltiptext"> While posting, verify who can see what you share. </span>
+                       </li>
+                       
+                      <li className="scenario-menu-item">
+                          <label>12. Who can see that your online</label>
+                          <span className="tooltiptext"> Examine chat to control who can see that your available online. </span>
+                        </li>
+                        
+                      <li className="scenario-menu-item">
+                          <label>13. Categorize friends</label>
+                          <span className="tooltiptext"> Sort your friends according to who they are to you in order to control  what you want to share with them </span>
+                       </li>
+                    </ol>
                 </div>
             
         )

@@ -31,7 +31,7 @@ class Settingsdropdown extends React.Component {
                       <li><Link className="settings_options_b" to={{
                               pathname:'/settings_general/GeneralSettings',
                               state:{fromHeader:true}}} onClick={this.handleClick}>Settings</Link></li>
-                     <li><a className="settings_options_b" href="#Log Out">Log Out</a></li>
+                     <li><a className="settings_options_b" href="https://clemson.ca1.qualtrics.com/jfe/form/SV_4OYW85t2VedzdCR">Log Out</a></li>
                </ul>  
             </div>
         )

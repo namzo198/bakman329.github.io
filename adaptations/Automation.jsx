@@ -9,7 +9,7 @@ class Automation extends React.Component{
       okButton_option = <Button id='undo' href='javascript:void(0)' onClick={this.props.onOkClick}>{this.props.okButton}</Button>;
     }
 
-    var divStyle = {paddingLeft: '40px'}
+    var divStyle = {paddingLeft: '40px',fontSize:'14px',}
 
     return(
         <div id = "automation-block">

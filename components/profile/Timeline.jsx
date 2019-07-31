@@ -10,8 +10,8 @@ class Timeline extends React.Component {
 
   componentWillReceiveProps(newProps) {
       
-      console.log("Old "+this.props.match.params.user)
-      console.log("New "+newProps.match.params.user)
+     // console.log("Old "+this.props.match.params.user)
+      //console.log("New "+newProps.match.params.user)
       
       if(this.props.match.params.user != newProps.match.params.user) {
           location.reload();

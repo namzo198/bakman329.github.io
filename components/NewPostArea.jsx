@@ -94,7 +94,8 @@ class NewPostArea extends React.Component {
    onClickUndo_Auto(){
     
        this.setState({
-                displayAutomationPopup:false
+                displayAutomationPopup:false,
+                automation:false,
             })
     }    
     
@@ -127,11 +128,6 @@ class NewPostArea extends React.Component {
                  time: "Just now",
                  new: true};
        
-     localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
-     indexPosts();
-     this.props.postarea.update();
-     this.setState({value: '', photo: '', renderUploadPopup: false});
-
      localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
      indexPosts();
      this.props.postarea.update();

@@ -54,7 +54,10 @@ class BlockEventInvites extends React.Component {
     /*Automation functions*/
     this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
     this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
-      
+
+    let visited = JSON.parse(localStorage.featuresVisited);
+    visited.notifications.event = true;
+    localStorage.setItem("featuresVisited", JSON.stringify(visited));      
   }
     
     /*componentDidMount(){

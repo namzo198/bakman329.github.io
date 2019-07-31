@@ -25,7 +25,8 @@ class FriendSubscription extends React.Component {
         }
         
         this.handleClick = this.handleClick.bind(this);
-        
+        this.onFollowHover = this.onFollowHover.bind(this);
+      
         /*Highlight Adaptation */
         // this.changeStyle = this.changeStyle.bind(this);
         
@@ -58,6 +59,14 @@ class FriendSubscription extends React.Component {
     }*/
     
     handleClick() {
+      if (this.state.subscribe) {
+        /* let visited = JSON.parse(localStorage.featuresVisited);
+        visited.friends.unfollow = true;
+        localStorage.setItem("featuresVisited", JSON.stringify(visited)); */
+        let used = JSON.parse(localStorage.featuresUsed);
+        used.friends.unfollow = true;
+        localStorage.setItem("featuresUsed", JSON.stringify(used));
+      }
          
         this.setState(state => ({
             subscribe: !state.subscribe,
@@ -77,8 +86,14 @@ class FriendSubscription extends React.Component {
         }
         
     }
-    
-   
+
+    onFollowHover() {
+      if (this.state.subscribe) {
+        let visited = JSON.parse(localStorage.featuresVisited);
+        visited.friends.unfollow = true;
+        localStorage.setItem("featuresVisited", JSON.stringify(visited));
+      }
+    }
     
     render() {
         
@@ -91,7 +106,7 @@ class FriendSubscription extends React.Component {
              {this.state.subscribe?
               <div>
                 
-                <button className={dropbtn_style}>Following ▼</button>
+                <button className={dropbtn_style} onMouseOver={this.onFollowHover}>Following ▼</button>
                 
                 <div className="dropdown_content_1">
                     <a href="#">See First </a> 

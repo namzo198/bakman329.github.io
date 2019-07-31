@@ -95,6 +95,7 @@ class Post extends React.Component {
     this.onClickAutoOk = this.onClickAutoOk.bind(this);
     this.onDisplayContactInfoSuggestion = this.onDisplayContactInfoSuggestion.bind(this);
     this.show = this.show.bind(this);
+    this.onMenuOpen = this.onMenuOpen.bind(this);
       
      /*Suggestion Adaptation*/
         this.onClickDestroySuggestion = this.onClickDestroySuggestion.bind(this);
@@ -386,6 +387,14 @@ class Post extends React.Component {
     }
   }
 
+  onMenuOpen() {
+    if (this.props.children.toLocaleLowerCase().includes("alex doe")) {
+      let visited = JSON.parse(localStorage.featuresVisited);
+      visited.untag.self = true;
+      localStorage.setItem("featuresVisited", JSON.stringify(visited));
+    }
+  }
+
   actions() {
     //let adaptations = getParsed('adaptations');
     //let adaptationVisited = getParsed("visited");
@@ -518,7 +527,8 @@ class Post extends React.Component {
               {" · "}
               <p style={{display: "inline"}}>{audienceText(this.props.audience)}</p>
             </div>
-           <Menu icon={this.state.hideHighlight1 && this.props.index === 19 || this.state.untag_Higlight && this.props.index === 21?'horiz high1':'horiz'}>
+           <Menu icon={this.state.hideHighlight1 && this.props.index === 19 || this.state.untag_Higlight && this.props.index === 21?'horiz high1':'horiz'}
+            onOpen={this.onMenuOpen}>
               <div className={this.state.hideHighlight1 && this.props.index === 19?"high1":null}><Button onClick={this.onClickHide}>Hide post</Button></div>
               
               {(!this.state.tagRemoved && this.props.children.toLocaleLowerCase().includes("alex doe"))
@@ -592,6 +602,12 @@ class Post extends React.Component {
           </div>
         </div>
       );
+    }
+
+    if (this.props.name == 'Alex Doe') {
+      let visited = JSON.parse(localStorage.featuresVisited);
+      visited.posts.delete = true;
+      localStorage.setItem("featuresVisited", JSON.stringify(visited));
     } 
     
     //http://localhost:8080/?session=a09eb84d555bb8d55510ef28a56a6f3d&hide_Post=auto

@@ -19,6 +19,8 @@ class Menu extends React.Component {
     this.setState({showMenu: true}, () => {
       document.addEventListener('click', this.onClick);
     });
+
+    if (this.props.onOpen) this.props.onOpen();
     
       /*This style is for defining the highlight ..see example from NewPostArea*/
       if(this.props.style != undefined){

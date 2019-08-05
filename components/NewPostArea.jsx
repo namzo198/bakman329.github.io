@@ -175,7 +175,7 @@ class NewPostArea extends React.Component {
       return (
          <div id='new-post-area'>
             <div id='new-post-area-content'> 
-              <textarea rows='6' placeholder="What's on your mind, Alex?" value={this.state.value} onChange={this.onChange} />
+              <textarea rows='6' placeholder={this.props.forTimeline && this.props.name != "Alex Doe"? `Write something to ${this.props.name.split(" ")[0]}`: "What's on your mind, Alex?"} value={this.state.value} onChange={this.onChange} />
               {photo}
               <hr />
                <div id='actions'>

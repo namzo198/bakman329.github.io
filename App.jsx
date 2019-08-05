@@ -164,8 +164,13 @@ class App extends React.Component {
   render() {
     return (
       <div>
+       
         <BrowserRouter>
           <div>
+           <Scenario/> 
+            <div id="experiment-done">
+                <ExitExperiment />
+             </div>
             <Header />
             <Switch>
               <Route exact path='/' component={NewsFeed} />
@@ -175,10 +180,7 @@ class App extends React.Component {
             <div id='chat-area'>
               <Chat />
             </div>
-            <Scenario/> 
-            <div id="experiment-done">
-                <ExitExperiment />
-             </div>
+            
           </div>
         </BrowserRouter>
       </div>

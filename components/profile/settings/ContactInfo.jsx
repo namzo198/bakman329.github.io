@@ -308,7 +308,7 @@ class ContactInfo extends Component {
          
           <div className="heading">Contact Information</div>
           {this.display("Mobile", "+ Add a mobile phone","enter mobile number")}
-          {this.display("Address", "+ Add your address","Address,Town/City,Zip,Neighbourhood",!this.state.adaptationVisited["ContactInfo"]["highlight"]?this.state.adapt:null)}
+          {this.display("Address", "+ Add your address","Address,Town/City,Zip,Neighbourhood",!this.state.adaptationVisited["Contact_Info"]["highlight"]?this.state.adapt:null)}
           {this.display("Email", "+ Add an Email address","enter email address")}
           {this.display("Key", "+ Add a public key","Enter a PGP public key")}
           <br/>

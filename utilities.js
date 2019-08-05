@@ -337,35 +337,47 @@ export function resetUsers() {
       friend: false},
      {name: "Jack Scout",
       profile_pic: 'jack_profile_img.jpg',
-      friend: true},
+      friend: true,
+      follow:true},
      {name: "Jim Mend",
       profile_pic: 'jim_profile_img.jpg',
-      friend: true},
+      friend: true,
+      follow:true},
      {name:"Sasha Riley",
      profile_pic:'sasha_profile_img.jpg',
-     friend:true},
+     friend:true,
+     follow:true},
      {name:"Kyle Parker",
      profile_pic:'kyle_profile_img.jpg',
-     friend:true},
+     friend:true,
+     follow:true},
      {name:"Loren Payton",
      profile_pic:'loren_profile_img.jpg',
-     friend:true},
+     friend:true,
+     follow:true},
      {name:"VICE News",
       profile_pic:'vice_profile_img.png',
-      friend:false},
+      friend:false,
+      follow:true},
      {name:"The Coca-Cola Company",
       profile_pic:'coke_profile_img.jpg',
-      friend:false},
+      friend:false,
+      follow:true},
      {name:"Starbucks",
       profile_pic:'starbucks_profile_img.png',
-      friend:false},
+      friend:false,
+      follow:true},
       {name:"Bill Gates",
       profile_pic:'bill_profile_img.jpg',
-      friend:false},
+      friend:false,
+      follow:true},
      {name: "Mike Booth",
       profile_pic: 'mike_profile_img.jpg',
-      friend: false}]));
+      friend: false,
+      follow:true}]));
 }
+
+
 
 export function friendList() {
     localStorage.setItem('list', JSON.stringify([{id:1,name:"Family",members:[]},{id:2,name:"Work",members:[]}],));
@@ -376,14 +388,14 @@ export function AddfriendList() {
     
     friendlists.map((list,index) => {
         if(index === 1) {
-            list.members.push("jack_scout");
+            list.members.push("sasha_riley");
         }
     });
     
     
     localStorage.setItem('list',JSON.stringify(friendlists));
     
-    console.log(getParsed('list'));
+    //console.log(getParsed('list'));
 }
 
 export function getCurrentFriendLists() {
@@ -655,6 +667,68 @@ export function getParsed(name){
     return JSON.parse(localStorage.getItem(name));
 }
 
+export function getFollowStatus(name) {
+  
+    var users  = getParsed('users');
+    
+    var status = users.some((user,index,array) => {  
+            if(user.name == linkToName(name)){ 
+               return user.follow;     
+           } 
+        }); 
+    
+    return status;
+}
+
+export function unFollowUser(name) {
+    
+    var posts = getParsed('posts');
+        posts.forEach((post, index,array)=> {
+
+            if (post.name == linkToName(name)) {
+                posts[index].hidden = true,
+                localStorage.setItem('posts', JSON.stringify(posts));
+                return true;   
+            }
+
+        });
+         
+        var users  = getParsed('users')
+        users.some((user,index,array) => {
+           if(user.name == linkToName(name)){
+               users[index].follow = false,
+              localStorage.setItem('users', JSON.stringify(users));
+              return true;        
+           } 
+        });
+ 
+}
+
+export function followUser(name) {
+    
+    var posts = getParsed('posts');
+        posts.forEach((post, index,array)=> {
+
+            if (post.name == linkToName(name)) {
+                posts[index].hidden = false,
+                localStorage.setItem('posts', JSON.stringify(posts));
+                return true;   
+            }
+
+        });
+         
+        var users  = getParsed('users')
+        users.some((user,index,array) => {
+           if(user.name == linkToName(name)){
+               users[index].follow = true,
+              localStorage.setItem('users', JSON.stringify(users));
+              return true;        
+           } 
+        });
+ 
+}
+
+
 
 export function addToLocalStorageObject (name,value){
     
@@ -774,38 +848,20 @@ export function namesToLinks(str, omitUser=false) {
     </span>);
 }
 
-/**export function namesTagged(str){
+/*export function hideAllPostsfromNewsFeed(name){
+   //var name1="Jack Scout";
     
- // Builds a regular expression matching the name of any user case insensitively
-  let regex_str = '(';
-  let users = JSON.parse(localStorage.users);
-  users.forEach((user, index) => {
-    regex_str += user.name;
-    if (index != users.length - 1) regex_str += '|';
-  });
-  regex_str += ')';
-
-  // Find indices and lengths of matches, and produce a JSX object replacing names with links
-  let match;
-  let matches = [];
-  let regex = new RegExp(regex_str, 'gi');
-  while ((match = regex.exec(str)) != null) {
-    if (match[0] == "Alex Doe") continue;
-    matches.push(match);
-  }
-  let end_index = 0;
-  // Null-terminate to fill in end of string
-  matches.push(null);
-
-  return (
-    <span>
-    {matches.map((match, index) => {
-      if (match == null) {
-        return <span key={index}></span>;
-      }
-      let out = <span key={index}><ProfileLink name={match[0]}/></span>;
-      end_index = match.index + match[0].length;
-      return out;
-    })}
-    </span>);
+    var posts = JSON.parse(localStorage.getItem('posts'));
+    var count = 0;
+    posts.forEach((post, index,array)=> {
+        
+        if (post.name == name) {
+            posts[index].hidden= true,
+            localStorage.setItem('posts', JSON.stringify(posts));
+             
+            return true;   
+        }
+       
+    });
 }*/
+

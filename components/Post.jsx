@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {indexPosts, getProfilePic, audienceText,getParsed,saveVisitedAdaptation, namesToLinks,namesTagged,AddfriendList,nameToLink} from '../utilities.js'
+import {indexPosts, getProfilePic, audienceText,getParsed,saveVisitedAdaptation, namesToLinks,namesTagged,AddfriendList,nameToLink,followUser} from '../utilities.js'
 import {highLight,highLightExtended,No_highLight } from '../adaptations/Highlight.js';
 import Button from './Button.jsx'
 import Comment from './Comment.jsx'
@@ -33,8 +33,8 @@ class Post extends React.Component {
     var hidden = false;
     posts.some((post, index, array) => {
       if (post.key == this.props.index) {
-        if (post.hidden) {
-          hidden = true;
+        if (post.hidden && !this.props.forTimeline) {
+          //hidden = true;
         }
         return true;
       }
@@ -54,6 +54,8 @@ class Post extends React.Component {
       showPostWhenHidden: false,
       renderSuggestion:false,
       hidden: hidden,
+      unfollow:false, 
+      unfollowedName:"",    
       tagRemoved: this.props.tagRemoved,
       displayContactInfoSuggestion:true,
       adaptations: adaptations,
@@ -107,6 +109,7 @@ class Post extends React.Component {
     this.onClickComment = this.onClickComment.bind(this);
     this.onClickHide = this.onClickHide.bind(this);
     this.onClickRemoveTag = this.onClickRemoveTag.bind(this);
+    this.onClickUnfollow = this.onClickUnfollow.bind(this);
     this.onClickUndo = this.onClickUndo.bind(this);
     this.onClickAutoOk = this.onClickAutoOk.bind(this);
     this.onDisplayContactInfoSuggestion = this.onDisplayContactInfoSuggestion.bind(this);
@@ -192,7 +195,7 @@ class Post extends React.Component {
           if (post.key == 19 ) {
             posts[index].hidden = true;
             localStorage.setItem('posts', JSON.stringify(posts));
-            this.setState({render: false});
+            this.setState({hidden: true});
             return true;
           }
         });
@@ -391,7 +394,7 @@ class Post extends React.Component {
                   key: posts.length};
       localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
       indexPosts();
-      this.props.postarea.update();
+      this.props.update();
       //PostArea.update;
 
       return event;
@@ -444,8 +447,19 @@ class Post extends React.Component {
   }
 
 
+
+ onClickUnfollow(name) {
+   
+     this.setState({
+         unfollow:true,
+         unfollowedName: name,
+     }, ()=> this.props.hideAllPosts(name))
+ 
+ }
     
   onClickHide() {
+      
+      //console.log("On hide "+element)
     // TODO: Add confirmation popup and undo button
     var posts = JSON.parse(localStorage.getItem('posts'));
     posts.some((post, index, array) => {
@@ -634,16 +648,21 @@ class Post extends React.Component {
               <p style={{display: "inline"}}>{audienceText(this.props.audience)}</p>
             </div>
             
-           <Menu icon={this.state.hideHighlight1 && this.props.index === 28 || this.state.untag_Highlight && this.props.index === 27||this.state.delete_Highlight && this.props.index === 2 ?'horiz high1':'horiz'}>
-              <div className={this.state.hideHighlight1 && this.props.index === 28?"high1":null}><Button onClick={this.onClickHide}>{this.props.index === 28?"Hide from Timeline": "Hide post"}</Button></div>
-              
-              {(!this.state.tagRemoved && this.props.children.toLocaleLowerCase().includes("alex doe"))
-                  ? <div className={this.state.untag_Highlight && this.props.index === 27?"high1":null}><Button onClick={this.onClickRemoveTag}>Remove tag</Button></div> : null}
-                  
-              {(this.props.name != "Alex Doe") ? <Button>Unfollow {this.props.name}</Button> : null}
-              
-               {(this.props.name === "Alex Doe") ? <div className={this.state.delete_Highlight && this.props.index === 2?"high1":null}> <Button href='javascript:void(0);' onClick={this.onClickDelete}>Delete</Button></div>:null}
-            </Menu>                             
+           {this.props.forTimeline && this.props.name != "Alex Doe" ? null:
+                <Menu icon={this.state.hideHighlight1 && this.props.index === 28 || this.state.untag_Highlight && this.props.index === 27||this.state.delete_Highlight && this.props.index === 2 ?'horiz high1':'horiz'}>
+
+
+                  <div className={this.state.hideHighlight1 && this.props.index === 28?"high1":null}><Button onClick={ this.onClickHide}>{this.props.index === 28?"Hide from Timeline": "Hide post"}</Button></div>
+
+                  {(!this.state.tagRemoved && this.props.children.toLocaleLowerCase().includes("alex doe"))
+                      ? <div className={this.state.untag_Highlight && this.props.index === 27?"high1":null}><Button onClick={this.onClickRemoveTag}>Remove tag</Button></div> : null}
+
+                  {(this.props.name != "Alex Doe") ? <Button onClick={ () => this.onClickUnfollow(this.props.name)}>Unfollow {this.props.name}</Button> : null}
+
+                   {(this.props.name === "Alex Doe") ? <div className={this.state.delete_Highlight && this.props.index === 2?"high1":null}> <Button href='javascript:void(0);' onClick={this.onClickDelete}>Delete</Button></div>:null}
+
+                </Menu> 
+           }                         
           </div>
           
           <VisibilitySensor onChange={(isVisible) => this.onChangeVisible (isVisible,this.props.index)} partialVisibility offset={{top:50,bottom:50}} >
@@ -686,19 +705,28 @@ class Post extends React.Component {
     }
   }
 
+    
   render() {
+      
+    // console.log("The state for hidden is "+this.state.hidden);
+      
     if (!this.state.render) {
-      return null;
-    }
+     return null;
+   }
 
     if (this.state.hidden) {
       // TODO: Make this say newsfeed when it is newsfeed
+        //|| This post is now hidden from your Timeline
       return (
         <div id='post' className='hidden'>
           <div id='post-content'>
-            This post is now hidden from your timeline.
-            {" "}
-            <Button onClick={() => {
+           <i className="hidePosts"></i>
+           
+           {this.props.forTimeline? 
+              " This post is now hidden from your Timeline": 
+              <span className="hide_title_1">Post hidden</span>} 
+            
+           <span className={this.props.forTimeline?"hideUndoButton_timeline":"hideUndoButton"}> <Button className="hideUndoButton" onClick={() => {
               this.setState({hidden: false});
               var posts = JSON.parse(localStorage.getItem('posts'));
               posts.some((post, index, array) => {
@@ -708,15 +736,64 @@ class Post extends React.Component {
                   return true;
                 }
               });
-            }}>Undo</Button>
+                   }}>Undo</Button></span>
             <span id='hide-post-dismiss'>
               <Button onClick={() => this.setState({render: false})}>X</Button>
             </span>
+            
+              {!this.props.forTimeline? <div className="hide_title_2">
+             You won't see this post in your News Feed.
+            </div>: null}
           </div>
         </div>
       );
     } 
+      
+    if(this.state.unfollow) {
+        let hideClass = classNames('hidePosts', 'allPosts')
+        return (
+          <div id='post' className='hidden'>
+          <div id='post-content'>
+           <i className={hideClass}></i>
+            <span className="hide_title_1">All posts hidden</span>
+            
+            <span className="hideUndoButton"><Button  onClick={() => {
+             
+              
+               followUser(this.state.unfollowedName);  
+               this.setState({unfollow: false})
+               this.props.update();  
+                        
+                var users  = JSON.parse(localStorage.getItem('users'))
+                users.some((user,index,array) => {
+                   if(user.name == this.state.unfollowedName){
+                       users[index].follow = true,
+                      localStorage.setItem('users', JSON.stringify(users));
+                      return true;        
+                   } 
+                });
+                
+                //console.log(users);
+             
+            }}>Undo</Button></span>
+            <span id='hide-post-dismiss'>
+              <Button onClick={() => this.setState({render: false})}>X</Button>
+            </span>
+            
+             <div className="hide_title_2">
+            You won't see Posts from {this.state.unfollowedName} in your NewsFeed.</div> 
+        
+          </div>
+          
+          
+        </div>
+      );
+         
+    }  
     
+    if (this.props.hidden && !this.props.forTimeline) {
+         return null;
+    }
     //http://localhost:8080/?session=a09eb84d555bb8d55510ef28a56a6f3d&hide_Post=auto
       
    
@@ -749,7 +826,7 @@ class Post extends React.Component {
       
     /*To indicate tagged Post*/
     if (!this.state.tagRemoved && !this.state.untag_Automation && this.props.children.includes("Alex Doe")  ){
-        post_title.push(' is with ');
+        post_title.push(' is with');
         post_title.push(<ProfileLink name={"Alex Doe"} key={1}/>   );
     }
       
@@ -763,7 +840,7 @@ class Post extends React.Component {
     var posts = JSON.parse(localStorage.getItem('posts'));
     var comments = [];
     posts.some((post, index, array) => {
-      if (post.key == this.props.index) {
+      if (!this.props.hidden && post.key == this.props.index) {
         comments = post.comments;
         return true;
       }

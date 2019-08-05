@@ -1,21 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import Post from './Post.jsx'
 import NewPostArea from './NewPostArea.jsx'
-
-import {resetPosts} from '../utilities.js'
+import {resetPosts,unFollowUser} from '../utilities.js'
 
 class PostArea extends React.Component {
    constructor(props) {
       super(props);
-
+     
+       this.state = {
+           hello:true,
+       }
       // If null, init to 1's
       if (localStorage.getItem('posts') == 'null') {
          resetPosts();
       }
 
       this.update = this.update.bind(this);
+       this. hideAllPostsfromNewsFeed = this. hideAllPostsfromNewsFeed.bind(this);
    }
 
    getPosts() {
@@ -48,24 +50,34 @@ class PostArea extends React.Component {
            render: render,
            audience: post.audience,
            time: post.time,
-           tagRemoved: post.tagRemoved || false,update:this.update},post.content);
+           tagRemoved: post.tagRemoved || false,
+           update:this.update, 
+           hidden: post.hidden || false,
+           forTimeline: this.props.forTimeline,
+           hideAllPosts: this.hideAllPostsfromNewsFeed,},post.content);
       });
- 
-      //console.log("Post Area "+this.props.toAdapt)
       return out;
    }
-     
+   
+     hideAllPostsfromNewsFeed(name) {
+       // var count = 0;
+        unFollowUser(name);
+       //  console.log(users);
+         this.update();
+    
+     }
 
    update() {
-       
+      
       this.forceUpdate();
    }
 
    render() {
+       console.log("Render Post Area")
        //console.log("PostArea: The suggestion is"+ this.props.displayContactInfoSuggestion);
       return (
          <div id='post-area'>
-            <NewPostArea postarea={this}/>
+            <NewPostArea postarea={this} forTimeline={this.props.forTimeline} name={this.props.name}/>
             {this.getPosts()}
          </div>);
    }

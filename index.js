@@ -18851,7 +18851,7 @@ var Post = function (_React$Component) {
               'label',
               null,
               'Hi ',
-              this.props.name.split(" ")[0],
+              (" "this.props.name.split)[0],
               ' - I think you should delete the post that states "',
               _react2.default.createElement(
                 'strong',

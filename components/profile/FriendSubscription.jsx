@@ -5,7 +5,7 @@ import {highLight,highLightExtended,No_highLight} from '../../adaptations/Highli
 import {HighlightBoilerplate} from '../../adaptations/Highlight/HighlightBoilerplate.jsx';
 
 import classNames from 'classnames'
-import {getParsed} from '../../utilities.js'
+import {getParsed,getFollowStatus,unFollowUser,followUser} from '../../utilities.js'
 
 class FriendSubscription extends React.Component {
    
@@ -14,9 +14,11 @@ class FriendSubscription extends React.Component {
         
        let adaptation = getParsed('adaptations');
        let adaptationVisited = getParsed("visited");
+         let getSubscribeStatus = getFollowStatus(this.props.friendName);
+        
         
         this.state = {
-            subscribe:!this.props.auto,  //true
+            subscribe:this.props.auto?!this.props.auto:getSubscribeStatus, 
             adaptationVisited:adaptationVisited,
             highlight1: !adaptationVisited["Unsubscribe_Friend"]["highlight"] && (adaptation["unsubscribe_Friend"] == "high")? true:false,
             //highlight: !adaptationVisited["Unsubscribe_Friend"]["highlight"] && (adaptation["unsubscribe_Friend"] == "high")? "high":null,
@@ -26,6 +28,10 @@ class FriendSubscription extends React.Component {
         
         this.handleClick = this.handleClick.bind(this);
 
+    }
+    
+    componentWillMount(){
+        this.set
     }
     
     componentWillReceiveProps(nextProps) {
@@ -42,13 +48,19 @@ class FriendSubscription extends React.Component {
             this.setState({subscribe:true})
         }
         
-        
-        
     }
     
-    
-    handleClick() {
-         
+  
+  
+    handleClick(element) {
+         if(element == "Unfollow") {
+           unFollowUser(this.props.friendName);
+         }
+        
+        if(element == "Follow") {
+           followUser(this.props.friendName);
+         }
+        
         this.setState(state => ({
             subscribe: !state.subscribe,
             
@@ -87,7 +99,7 @@ class FriendSubscription extends React.Component {
                     <a href="#">See First </a> 
                     <a href="#">Default</a>
                     <hr/>
-                    <span className={(this.props.friendName === "jack_scout") && this.state.highlight1?"high1":null}><Button onClick={this.handleClick}>Unfollow</Button></span>
+                    <span className={(this.props.friendName === "jack_scout") && this.state.highlight1?"high1":null}><Button onClick={() => this.handleClick("Unfollow")}>Unfollow</Button></span>
                 </div>
                 
                 <button className="btn"> Message </button>
@@ -95,7 +107,7 @@ class FriendSubscription extends React.Component {
               </div> 
                 :
                    <div>
-                    <button className="dropbtn_1" onClick={this.handleClick}>Follow</button>
+                    <button className="dropbtn_1" onClick={() => this.handleClick("Follow")}>Follow</button>
                     <button className="btn"> Message </button>
                     <button className="btn">...</button>
                    </div>

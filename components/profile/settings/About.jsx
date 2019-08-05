@@ -16,7 +16,7 @@ class About extends React.Component {
     
     this.state = {
          adaptationVisited:adaptationVisited,
-        highlight: !adaptationVisited["ContactInfo"]["highlight"]&& (adaptation["contactInfo"] === "high")?highLight:noHighLight,
+        highlight: !adaptationVisited["Contact_Info"]["highlight"]&& (adaptation["contact_Info"] === "high")?highLight:noHighLight,
     };
    
     this.overview = this.overview.bind(this);
@@ -25,7 +25,7 @@ class About extends React.Component {
   }
 
     changeStyle(){
-        if(!this.state.adaptationVisited["ContactInfo"]['highlight']){
+        if(!this.state.adaptationVisited["Contact_Info"]['highlight']){
             this.setState({
              highlight:noHighLight
             })    

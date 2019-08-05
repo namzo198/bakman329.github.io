@@ -1,6 +1,6 @@
 import React from 'react'
 import {BrowserRouter, Link, Switch, Route} from 'react-router-dom'
-import {linkToName,getParsed,addToLocalStorageObject,AddfriendList} from '../../utilities.js'
+import {linkToName,getParsed,addToLocalStorageObject,AddfriendList,unFollowUser,followUser} from '../../utilities.js'
 import {highLight,noHighLight} from '../../adaptations/Highlight.js';
 import AutomationBoilerplate from '../../adaptations/Automation/AutomationBoilerplate.jsx'
 import SuggestionBoilerplate from '../../adaptations/Suggestion/SuggestionBoilerplate.jsx'
@@ -107,6 +107,7 @@ class Profile extends React.Component {
     /*Methods for the Automation Adaptation*/
    onClickOk_Auto(){
        
+        unFollowUser(this.props.match.params.user);
         this.setState({
             unsubscribe_displayAutomationPopup:false,
             unsubscribe_automation:false,
@@ -119,7 +120,7 @@ class Profile extends React.Component {
    onClickUndo_Auto(){
     
        //console.log("Undo Automation has been clicked"); 
-       
+       followUser(this.props.match.params.user);
        this.setState({
                unsubscribe_displayAutomationPopup:false,
                unsubscribe_automation :true,
@@ -129,15 +130,14 @@ class Profile extends React.Component {
     }    
     
     updateSubscribe(){
-        console.log("Did some say something");
         this.setState({suggestAgree:false})
     }
     
    componentWillReceiveProps(nextProps){
-       if(this.state.displayContactInfoSuggestion !== (this.state.adaptationVisited["ContactInfo"]["suggestion"]&&this.state.adaptation["contactInfo"] === "sugst")){
+       if(this.state.displayContactInfoSuggestion !== (this.state.adaptationVisited["Contact_Info"]["suggestion"]&&this.state.adaptation["contact_Info"] === "sugst")){
 
            this.setState({
-               displayContactInfoSuggestion: this.state.adaptationVisited["ContactInfo"]["suggestion"]
+               displayContactInfoSuggestion: this.state.adaptationVisited["Contact_Info"]["suggestion"]
            })
 
            //console.log("The visited state of suggestion in components will receive props" + this.state.displayContactInfoSuggestion)
@@ -145,7 +145,7 @@ class Profile extends React.Component {
    }
     
     changeStyle(){
-        if(!this.state.adaptationVisited["ContactInfo"]['highlight']){
+        if(!this.state.adaptationVisited["Contact_Info"]['highlight']){
             this.setState({
              highlight:noHighLight
             })

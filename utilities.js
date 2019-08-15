@@ -12,14 +12,25 @@ export function indexPosts() {
 
 export function resetPosts() {
  localStorage.setItem('posts', JSON.stringify(
-    [  {"name":"Jack Scout",
+    [  
+        
+    {"name":"Ira Slipan",
+         "content":"Beginning of the week and we all dread Mondays. Fight all temptations, be smart and mind yor business.",
+         "comments":[],
+         "hidden":false,
+         "key":37,
+         "audience":"public",
+         "time": "14 hrs"},
+        
+    {"name":"Jack Scout",
          "content":"I remembered to wake up this morning.",
          "comments":[],
          "hidden":false,
          "key":36,
          "audience":"public",
          "time": "13 hrs"},
-         {"name":"Jack Scout",
+     
+    {"name":"Jack Scout",
          "content":"There's a house for sale near me if anyone is interested. Looks like it comes with a driveway and grass. Seller also willing to include For Sale sign in purchase.",
          "comments":[],
          "photo":"/assets/brand/sale.png",
@@ -79,7 +90,8 @@ export function resetPosts() {
          "key":28,
          "comments":[],
          "audience":"public",
-         "time":"5 mins"},
+         "time":"5 mins",
+        "hidden":false},
         
     {"name":"Loren Payton",
      "img":"/assets/loren_profile_img.jpg",
@@ -329,7 +341,23 @@ export function friendsList() {
    return friends;
 }
 
+export function friendNames() {
+    
+    var names = [];
+    
+    JSON.parse(localStorage.getItem('users')).forEach((user, index, array) => {
+      if (user.friend) {
+        names.push(user.name)
+      } 
+     
+    });
+    
+   return names;    
+}
 
+//Images were genereted from google Image search of "people who like both boys + girls for the main profile pic of Alex Doe."
+
+//Names generated from https://www.lingerandlook.com/Names/FictionNames.htm
 export function resetUsers() {
   localStorage.setItem('users', JSON.stringify(
     [{name: "Alex Doe",
@@ -374,13 +402,39 @@ export function resetUsers() {
      {name: "Mike Booth",
       profile_pic: 'mike_profile_img.jpg',
       friend: false,
-      follow:true}]));
+      follow:true},
+     
+     {name:"Ira Slipan",
+      profile_pic: 'ira_profile_img.jpg',
+      friend:true,
+      follow:true},
+     
+     {name:"Tanya Strotman",
+      profile_pic:'tanya_profile_img.jpg',
+      friend:true,
+      follow:true},
+     
+     {name:" Lydia Chopover",
+      profile_pic:'lydia_profile_img.jpg',
+      friend:true,
+      follow:true},
+     
+     {name:"Esther Rorgash",
+      profile_pic:'esther_profile_img.jpg',
+      friend:true,
+      follow:true},
+     
+     {name:"Trevin Noushy",
+      profile_pic:'trevin_profile_img.jpg',
+      friend:true,
+      follow:true},
+    ]));
 }
 
 
 
 export function friendList() {
-    localStorage.setItem('list', JSON.stringify([{id:1,name:"Family",members:[]},{id:2,name:"Work",members:[]}],));
+    localStorage.setItem('list', JSON.stringify([{id:1,name:"Family",members:[]},{id:2,name:"Colleagues",members:[]}, {id:3,name:"Recruiters",members:[]}],{id:4,name:"Work",members:[]}));
 }
 
 export function AddfriendList() {
@@ -406,7 +460,7 @@ export function getCurrentFriendLists() {
     friendlists.map( (list, index) => {
         arr .push(list.name); 
      })
-    
+
     return arr;
 }
 
@@ -421,9 +475,9 @@ export function resetSession() {
 export function resetContactInfo(){
     localStorage.setItem('contactInfo',JSON.stringify({
         mobile:'801234567',
-        email:'alexdoe@gmail.com',
+        email:'ladiesman69@yahoo.com',
         dob:'01 January',
-        year:'1996',
+        year:'1979',
         gender:'Gender-Neutral',
         /**email:{
             email:'alexdoe@gmail.com',
@@ -466,6 +520,11 @@ export function resetAdaptationDisplay(){
             suggestion:false,
             highlight:false, 
             automation:false
+        },
+        Basic_Info:{
+          suggestion:false,
+          highlight:false,
+          automation:false
         },
         Privacy_futureRequests:{
             suggestion:false,
@@ -526,10 +585,41 @@ export function resetAdaptationDisplay(){
     }))
 }
 
+export function blockFriend(name) {
+    
+    //Add to Blocked Users list
+    var BlockedUsers = getParsed('blockedUsers');
+     BlockedUsers.push(linkToName(name));
+    addToLocalStorageObject('blockedUsers',BlockedUsers)
+    
+    
+    //Unfriend them
+     var users  = getParsed('users')
+        users.some((user,index,array) => {
+           if(user.name == linkToName(name)){
+               users[index].friend = false,
+              localStorage.setItem('users', JSON.stringify(users));
+              return true;        
+           } 
+        });
+    
+    //Hide their posts from the NewsFeed
+     var posts = getParsed('posts');
+        posts.forEach((post, index,array)=> {
+
+            if (post.name == linkToName(name)) {
+                posts[index].hidden = true,
+                localStorage.setItem('posts', JSON.stringify(posts));
+                return true;   
+            }
+
+        });
+}
+
 export function resetBlockedUsers(){
     
     
-    localStorage.setItem('blockedUsers',JSON.stringify(["Richard Roe", "Jane Appleeseed"]))
+    localStorage.setItem('blockedUsers',JSON.stringify(Array.from(new Set(["Richard Roe", "Jane Appleeseed"]))))
 }
 
 export function resetBlockedApps(){
@@ -728,6 +818,16 @@ export function followUser(name) {
  
 }
 
+export function namesAndLists(){
+ //TODO: Combine friends names and list names into array to be accessed by Custom Selector.jsx
+    var friends = friendNames();
+    var friendlists = getCurrentFriendLists();
+    var people_n_lists = friends.concat(friendlists);
+    
+
+   return  people_n_lists;
+}
+
 
 
 export function addToLocalStorageObject (name,value){
@@ -847,21 +947,4 @@ export function namesToLinks(str, omitUser=false) {
     })}
     </span>);
 }
-
-/*export function hideAllPostsfromNewsFeed(name){
-   //var name1="Jack Scout";
-    
-    var posts = JSON.parse(localStorage.getItem('posts'));
-    var count = 0;
-    posts.forEach((post, index,array)=> {
-        
-        if (post.name == name) {
-            posts[index].hidden= true,
-            localStorage.setItem('posts', JSON.stringify(posts));
-             
-            return true;   
-        }
-       
-    });
-}*/
 

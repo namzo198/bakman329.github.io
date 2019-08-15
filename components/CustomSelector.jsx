@@ -1,5 +1,5 @@
 import React from 'react'
-import {getProfilePic, containsIgnoreCase} from '../utilities.js'
+import {getProfilePic, containsIgnoreCase, namesAndLists} from '../utilities.js'
 
 import Popup from './Popup.jsx'
 import AutocompleteInput from './AutocompleteInput.jsx'
@@ -7,7 +7,7 @@ import AutocompleteInput from './AutocompleteInput.jsx'
 class CustomSelector extends React.Component {
   constructor(props) {
     super(props);
-
+ 
     let share = "";
     let dont = "";
     JSON.parse(localStorage.getItem('users')).forEach((user, index, array) => {
@@ -26,22 +26,26 @@ class CustomSelector extends React.Component {
 
   parseText(str) {
     if (!str) return;
-    var raw_list = str.split(",").map(function(item) {
+    let raw_list = str.split(",").map(function(item) {
       return item.trim();
     });
 
-    var friends = JSON.parse(localStorage.getItem('users')).filter((user) => {
+    /**var friends = JSON.parse(localStorage.getItem('users')).filter((user) => {
       return user.friend;
     }).map((item) => {
       return item.name;
-    });
+    });*/
+      
+    let  friends_or_lists = namesAndLists(); 
 
     return raw_list.filter((item) => {
-      return containsIgnoreCase(friends, item) || containsIgnoreCase(["Friends", "Friends of friends"], item);
+      return containsIgnoreCase(friends_or_lists, item) ||    containsIgnoreCase(["Friends", "Friends of friends"], item);
     });
   }
 
   newAudience() {
+      
+        console.log("I am in here");
     let share = this.parseText(this.state.share_value) || [];
     let dont = this.parseText(this.state.dont_share_value) || [];
 
@@ -54,21 +58,22 @@ class CustomSelector extends React.Component {
       }
 
       return "friends";
-    }
-    else if (!share.includes("Friends")
+    } else if (!share.includes("Friends")
       && !share.includes("Friends of friends")
       && share.length !== 0
       && dont.length === 0) {
       settings["post_audience_settings"][2] = share;
       localStorage.setItem("settings", JSON.stringify(settings));
       return "specific_friends";
-    }
-    else {
+    } else {
+      
       return "custom";
     }
+      
   }
 
   render() {
+       console.log("I am in Custom Selector");
     return (
       <Popup saveChanges title="Custom Privacy"
         destroy={this.props.destroy}
@@ -95,7 +100,7 @@ class CustomSelector extends React.Component {
                 onChange={(value) => this.setState({share_value: value})}
                 defaultValue={this.state.share_value}
                 placeholder='Required: Enter names or lists'
-                list={["Jack Roe", "Jim Mend", "Friends", "Friends of friends","Family","Work"]} />
+                list={namesAndLists()} />
             </label>
             <label>
               <span>Friends of tagged{' '}</span>
@@ -112,7 +117,7 @@ class CustomSelector extends React.Component {
                 onChange={(value) => this.setState({dont_share_value: value})}
                 defaultValue={this.state.dont_share_value}
                 placeholder='Required: Enter names or lists'
-                list={["Jack Roe", "Jim Mend", "Friends", "Friends of friends","Family","Work"]} />
+                list={namesAndLists()} />
             </label>
           </div>
         </div>

@@ -68,23 +68,24 @@ class Popup extends React.Component {
       if (this.props.closeButton) {
         footer =
           <div className="popup-footer">
-            <Button type="confirm" onClick={() => {this.props.cancel();}}>{this.props.closeButtonName}</Button>
+            <Button type="confirm" onClick={() => {this.props.cancel();}} routeTo = {this.props.routeTo != undefined?this.props.routeTo:null}>{this.props.closeButtonName}</Button>
           </div>;
       } else if (this.props.saveChanges) {
         footer =
           <div className="popup-footer">
             <Button type="confirm"
-              onClick={() => {this.props.okay(); this.props.destroy();}}
+              onClick={() => {this.props.okay(); 
+                              this.props.destroy()}}
               isDisabled={this.props.confirmDisabled}>Save Changes</Button>
             <Button type="cancel" onClick={() => {this.props.cancel(); this.props.destroy(true);}}>Cancel</Button>
           </div>;
         } else {
         footer =
           <div className="popup-footer">
-            <Button type="cancel" onClick={() => {this.props.cancel(); this.props.destroy(true);}}>Cancel</Button>
+            <Button type="cancel" onClick={() => {this.props.cancel();  this.props.destroy(true)}}>Cancel</Button>
             <Button type="confirm"
               onClick={() => {this.props.okay(); this.props.destroy();}}
-              isDisabled={this.props.confirmDisabled}>Okay</Button>
+              isDisabled={this.props.confirmDisabled}>{this.props.okButtonName != undefined? this.props.okButtonName:Okay}</Button>
           </div>;
       }
        
@@ -98,7 +99,9 @@ class Popup extends React.Component {
               {this.props.title}
               {close_button}
             </div>
-            <div className="popup-content" className={contentStyle}><div id={(this.props.noPadding) ? "popup-no-padding" : ""}>{this.props.children}</div></div>
+            <div className="popup-content" className={contentStyle}>
+               <div id={(this.props.noPadding) ? "popup-no-padding" : ""}>{this.props.children}</div>
+            </div>
             {!this.props.noFooter?footer:""}
          </div>
       )

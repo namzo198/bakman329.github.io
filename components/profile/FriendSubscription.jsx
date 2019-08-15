@@ -103,7 +103,20 @@ class FriendSubscription extends React.Component {
                 </div>
                 
                 <button className="btn"> Message </button>
-                {<button className="btn">...</button>}
+                
+                
+                
+                {/*
+                 <button className="btn">...</button>
+                     <div className="dropdown_content_1">
+                         <a href="#">See friendship</a>
+                         <a href="#">Invite Jack to like your pages</a>
+                         <a href="#">Find Support or report profile</a>
+                         <a href="#"> Block </a>
+                     </div>
+                
+                        <button className="btn">...</button>*/}
+             
               </div> 
                 :
                    <div>

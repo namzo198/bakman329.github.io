@@ -24,20 +24,20 @@ class Header extends React.Component {
             
         }
         
-        this.changeIcon = this.changeIcon.bind(this);
+        //this.changeIcon = this.changeIcon.bind(this);
         this.settingsdropDown = this.settingsdropDown.bind(this);
         this.notification = this.notification.bind(this);
     }
     
-    changeIcon(){
+    /*changeIcon(){
         this.setState ({
             highlight:false
         })
-    }
+    }*/
     
     notification() {
+        
          this.setState( (prevState, props) => ({
-            
             renderNotification:!prevState.renderNotification,
              showNotificationIcon:false,
         }));

@@ -4,7 +4,7 @@ import EditInfoDisplay from './contactDisplays/EditInfoDisplay.jsx'
 import ExistingInfoDisplay from './contactDisplays/ExistingInfoDisplay.jsx'
 import AddInfoDisplay from './contactDisplays/AddInfoDisplay.jsx'
 import Automation from '../../../adaptations/Automation.jsx'
-import {getParsed,addToLocalStorageObject,saveVisitedAdapatation} from '../../../utilities.js'
+import {getParsed,addToLocalStorageObject,saveVisitedAdaptation} from '../../../utilities.js'
 
 class ContactInfo extends Component {
   constructor(props){
@@ -12,7 +12,7 @@ class ContactInfo extends Component {
 
     
       
-       let adapatation = getParsed('adaptations')
+       let adaptation = getParsed('adaptations')
        let existingInformation = getParsed('contactInfo')
        let adaptationVisited = getParsed("visited");
      
@@ -20,7 +20,8 @@ class ContactInfo extends Component {
   
     
     this.state = {
-      adapt:adapatation['contact_Info'], 
+      adapt:adaptation['contact_Info'], 
+      adapt_basic:adaptation['basic_Info'],     
       adaptationVisited:adaptationVisited,
       contactInfoStored:existingInformation,   
       mobile:existingInformation['mobile'],
@@ -66,7 +67,8 @@ class ContactInfo extends Component {
       BasicPoliticalAdded:existingInformation['political'] !== undefined? true: false,
 
       edit:false,
-      renderAuto:false,
+      renderContactAuto:false,    
+      renderBasicAuto:false,
       unhide_addedinfo:false,
     };
 
@@ -75,8 +77,15 @@ class ContactInfo extends Component {
     this.onClickCancel = this.onClickCancel.bind(this);
     this.onClickToggle = this.onClickToggle.bind(this);
     this.onClickEdit = this.onClickEdit.bind(this);
-    this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
-    this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
+     
+    //Contact Info
+    this.onClickUndoContact_Auto = this.onClickUndoContact_Auto.bind(this);
+    this.onClickOkContact_Auto = this.onClickOkContact_Auto.bind(this);
+      
+    //Basic Info
+    this.onClickUndoBasic_Auto = this.onClickUndoBasic_Auto.bind(this);
+    this.onClickOkBasic_Auto = this.onClickOkBasic_Auto.bind(this);
+      
     this.visitedAdaptation = this.visitedAdaptation.bind(this);
     this.display = this.display.bind(this);
  
@@ -86,9 +95,19 @@ class ContactInfo extends Component {
 
         if(!this.state.adaptationVisited["Contact_Info"]["automation"]&&this.state.adapt === 'auto'){
             this.setState({
-                political:'Republican',
-                BasicPoliticalAdded:true,
-                renderAuto:true
+                email:'alexdoe@gmail.com',
+                BasicEmailAdded:true,
+                renderContactAuto:true
+            })
+        }
+        
+        //adapt_basic
+        
+         if(!this.state.adaptationVisited["Basic_Info"]["automation"]&&this.state.adapt_basic === 'auto'){
+            this.setState({
+                //email:'alexdoe@gmail.com',
+               // BasicEmailAdded:true,
+                renderBasicAuto:true
             })
         }
     }
@@ -148,7 +167,7 @@ class ContactInfo extends Component {
       /*when user saves with new input*/
       event = {
         action: infoAdded,
-        context: 'Basic ' + inputfieldname + ' Contact Information Added',
+        context: 'Basic ' + inputfieldname + ' Contact Information Added. NB: When adaptation is highlight, then && email, then was just edited/changed.',
         name: 'Alex Doe'
       };
             
@@ -168,9 +187,24 @@ class ContactInfo extends Component {
     }
     
     //For the highlight adaptation 
-    if(!this.state.adaptationVisited["Contact_Info"]["highlight"] && this.state.adapt === "high" && infoAdded === "BasicAddressAdded"){
+    if(!this.state.adaptationVisited["Contact_Info"]["highlight"] && this.state.adapt === "high" && infoAdded === "BasicEmailAdded"){
+      
+        this.setState({
+          adapt: "none",
+      })
+        
        this.visitedAdaptation("highlight")   
-    }
+    } 
+    
+      if(!this.state.adaptationVisited["Basic_Info"]["highlight"] && this.state.adapt_basic === "high" && infoAdded === "BasicPoliticalAdded"){
+      
+       
+      this.setState({
+          adapt_basic: "none",
+      })
+        saveVisitedAdaptation("Basic_Info","highlight");
+      // this.visitedAdaptation("highlight")   
+    }  
       
     this.state.contactInfoStored[inputfieldname_lwrcse] = this.state[inputfieldname_lwrcse] === ""?undefined:this.state[inputfieldname_lwrcse];
             
@@ -225,7 +259,7 @@ class ContactInfo extends Component {
     var inputfieldname = this.regex(buttonname)
     var add = 'Add' + inputfieldname + 'Info';
 
-    console.log('The edit button is ' + buttonname)
+   // console.log('The edit button is ' + buttonname)
     this.setState(prevState => ({
       [buttonname]: false,
       [add]: true,
@@ -234,33 +268,83 @@ class ContactInfo extends Component {
   }
  
 
-  onClickUndo_Auto() {
+  onClickOkContact_Auto() {
     var event = {
-      action: 'Undo_Automatic Political Views set',
-      context: 'In Contact Info, automation was declined with the clicking of Undo',
-      renderAuto: false,
-      BasicPoliticalAdded:false,
+      action: 'Automatic change of email was accepted',
+      context: 'In Contact Info, automation was accepted with the clicking of OK',
     };
     this.visitedAdaptation("automation")
-    this.setState(event);
+   
+      this.setState({
+       renderContactAuto: false,
+        //BasicEmailAdded:false,
+      });
+      
     return event;
   }
 
-  onClickOk_Auto() {
+  onClickOkBasic_Auto() {
     var event = {
-      action: 'Automatically set political views were accepted',
-      context: 'In Contact Info, automation was accepted with the clicking of OK',
-      renderAuto: false
+      action: 'Automatic removal of political views was accepted',
+      context: 'In Basic Info, automation was accepted with the clicking of OK',
+    };
+    //this.visitedAdaptation("automation")
+   
+     saveVisitedAdaptation("Basic_Info","automation")
+      
+      this.setState({
+        renderBasicAuto: false,
+        BasicPoliticalAdded:false,
+      });
+      
+    return event;
+  }
+
+ onClickUndoContact_Auto() {
+    var event = {
+      action: ' Undo_Automatic Email setting',
+      context: 'In Contact Info, automatic setting of email was declined with the clicking of Undo',
+      
     }
     
-    this.onClickSave("BasicPoliticalAdded")
+    this.onClickSave("BasicEmailAdded")
     this.visitedAdaptation("automation")
-    this.setState(event);
+     
+     
+    this.setState({
+        email:'ladiesman69@yahoo.com',
+        BasicEmailAdded:true,
+        renderContactAuto: false
+    });
+     
     return event;
   }
 
+onClickUndoBasic_Auto() {
+    var event = {
+      action: ' Undo_Automatic Political View removal',
+      context: 'In Basic Info, automatic removal of political views was declined with the clicking of Undo',
+      
+    }
+    
+   
+    this. onClickSave("BasicPoliticalAdded")
+    //this.visitedAdaptation("automation")
+       
+    saveVisitedAdaptation("Basic_Info","automation")
+     
+     
+    this.setState({
+        political:'Moderate',
+        BasicPoliticalAdded:true,
+        renderBasicAuto: false
+    });
+     
+    return event;
+  }    
 
   display(Info,add_request,placeholder,adapt) {
+    
     var basic_info = "Basic" + Info + "Added";
     var add_info = "Add" + Info + "Info";
     var info_lwercase = Info.toLowerCase();
@@ -280,20 +364,20 @@ class ContactInfo extends Component {
       }
         
     return (
-        <ExistingInfoDisplay response = {this.state[info_lwercase]} onClick = {(e) => this.onClickEdit(basic_info)} infoName = {Info}/>
+        <ExistingInfoDisplay response = {this.state[info_lwercase]} onClick = {(e) => this.onClickEdit(basic_info)} infoName = {Info} adapt ={adapt}/>
       )
     }else {
         
         if (this.state[add_info]){
         
             return (
-              <EditInfoDisplay placeholder = {placeholder} infoName = {info_lwercase} onChange = {this.handleChange} value = {this.state[info_lwercase]} onClickSave = {(e) => this.onClickSave(basic_info,e)} onClickCancel = {(e)=>this.onClickCancel(add_info,e)}/>
+              <EditInfoDisplay placeholder = {placeholder} infoName = {info_lwercase} onChange = {this.handleChange} value = {this.state[info_lwercase]} onClickSave = {(e) => this.onClickSave(basic_info,e)} onClickCancel = {(e)=>this.onClickCancel(add_info,e)} adapt ={adapt}/>
             )
         
         }else {
-        
+     
             return (         
-                <AddInfoDisplay add_request={add_request} onClickToggle = {()=>this.onClickToggle(add_info)} adapt = {adapt}  add_Info={add_info}/>
+                <AddInfoDisplay add_request={add_request} onClickToggle = {()=>this.onClickToggle(add_info)}  adapt = {adapt} add_Info={add_info}/>
             );
         }
     }
@@ -301,15 +385,18 @@ class ContactInfo extends Component {
 
   render() {
       
-    const shouldDisplayAutomation = this.state.renderAuto;
-      
+   
     return (
         <div className="contact_section">
          
           <div className="heading">Contact Information</div>
           {this.display("Mobile", "+ Add a mobile phone","enter mobile number")}
-          {this.display("Address", "+ Add your address","Address,Town/City,Zip,Neighbourhood",!this.state.adaptationVisited["Contact_Info"]["highlight"]?this.state.adapt:null)}
-          {this.display("Email", "+ Add an Email address","enter email address")}
+          {this.display("Address", "+ Add your address","Address,Town/City,Zip,Neighbourhood")}
+          {this.display("Email", "+ Add an Email address","enter email address",!this.state.adaptationVisited["Contact_Info"]["highlight"] && this.state.adapt === 'high'?this.state.adapt:null)}
+          
+          {this.state.renderContactAuto && <div id='except-warning'>
+            <Automation undoButton="Undo" okButton="Ok" onOkClick={this.onClickOkContact_Auto} label='Your email address was automatically changed from "ladiesman69@yahoo.com" to "alexdoe@gmail.com"' onUndoClick={this.onClickUndoContact_Auto}/></div>}
+            
           {this.display("Key", "+ Add a public key","Enter a PGP public key")}
           <br/>
 
@@ -325,10 +412,11 @@ class ContactInfo extends Component {
           {this.display("Languages", "+ Add a language", "")}
           {this.display("Interest", "+ Add who you're interested in", "")}
           {this.display("Religious", "+ Add your religious view", "")}
-          {this.display("Political", "+ Add your political views", "")}
+          {this.display("Political", "+ Add your political views", "", !this.state.adaptationVisited["Basic_Info"]["highlight"] && this.state.adapt_basic === 'high'?this.state.adapt_basic:null)}
+        
          
-            {shouldDisplayAutomation && <div id='except-warning'>
-            <Automation undoButton="Undo" okButton="Ok" onOkClick={this.onClickOk_Auto} label="Your political views were automatically set" onUndoClick={this.onClickUndo_Auto}/></div>}
+            {this.state.renderBasicAuto && <div id='except-warning'>
+            <Automation undoButton="Undo" okButton="Ok" onOkClick={this.onClickOkBasic_Auto} label="Your political views were automatically removed from your profile page" onUndoClick={this.onClickUndoBasic_Auto}/></div>}
             
           
         

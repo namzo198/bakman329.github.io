@@ -17,7 +17,7 @@ class FriendSelectorUser extends React.Component {
 
     onClick(e) {
       if (this.container.contains(e.target)) {
-        console.log("Clicked on " + this.props.name);
+        //console.log("Clicked on " + this.props.name);
         this.props.onClick(this.props.name);
       }
     }

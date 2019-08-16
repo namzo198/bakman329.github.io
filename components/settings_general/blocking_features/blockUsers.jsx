@@ -19,7 +19,7 @@ class BlockUsers extends React.Component {
     let adaptationVisited = getParsed("visited");
       
     this.state = {username: '', 
-                  high_username:'Jack Scout',
+                  high_username:'Ira Slipan',
                   renderPopup:false, 
                   friendsList:friendsList(),
                   renderUltimateBlock:false,
@@ -131,10 +131,14 @@ cancel(what){
 
     if(what ==='first'){
         this.setState({renderPopup:false})  
-    }else if (what === 'second'){
+    }
+    
+    if (what === 'second'){
         this.setState({renderUltimateBlock:false,
                       friendsList:friendsList(),})
-    }else if(what =='third'){
+    }
+    
+    if(what =='third'){
         this.setState({showUnblockPopup:false})
     }
 }
@@ -172,7 +176,7 @@ allowed(event){
         
         this.setState({
             highlight:false,
-            high_username:'',
+            high_username:" ",
         })
         
         //console.log("I cleared the input")
@@ -275,10 +279,10 @@ BlockPopup(){
                                 
                                 
                                 
-                                return <li key={index}> {element} 
-                                <img src={profile_image}/> 
+                                return <li key={index} > {element} 
+                                <img className="blockImage" src={profile_image}/> 
                                 
-                                <Button  type="cancel" href="javascript:void(0)" onClick={()=>{this.onClickUltimateBlock(element)}}> Block </Button> </li>
+                                <span style={{marginLeft:'20px',}}><Button  type="cancel" href="javascript:void(0)" onClick={()=>{this.onClickUltimateBlock(element)}}> Block </Button></span> </li>
                             })}
 
                         </ul>
@@ -372,8 +376,9 @@ unblockUser(){
                        
                    }else {
                        return (
-                           <li key={index}>{user}
-                              <Button href="javascript:void(0)" onClick={()=>{this.onClickUnblock(user)}}>Unblock</Button>
+                           <li key={index} style={{marginBottom:'3px'}}>{user}
+                              
+                              <span style = {{marginLeft:'10px',}}><Button href="javascript:void(0)" onClick={()=>{this.onClickUnblock(user)}}>Unblock</Button></span>
                             </li>)
                  }
                     
@@ -435,12 +440,12 @@ return (
                      
                      
                      {this.state.highlight?
-                       <input id = "text" className = {block_value_high_style} type="text"   defaultValue ={this.state.high_username} onChange ={this.handleChange_high} /> 
+                       <input id = "text" className = "high1" type="text"   defaultValue ={this.state.high_username} onChange ={this.handleChange_high} /> 
                       :<input id = "text" type="text" placeholder = "Add name or email" onChange = {this.handleChange} />
                     }
                       
                     </label>
-                    <Button href="javascript:void(0)" type="confirm" onClick={this.onClickBlock}>Block </Button>
+                    <span style={{marginLeft:"2px"}}> <Button href="javascript:void(0)" type="confirm" onClick={this.onClickBlock}>Block </Button> </span>
                     <br/>
                     
                     {this.state.renderPopup?this.BlockPopup():null}

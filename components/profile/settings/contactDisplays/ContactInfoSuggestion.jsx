@@ -27,11 +27,11 @@ class ContactInfoSuggestion extends Component {
     
     okay(){
          var event={
-                    action: ' Followed and agreed with Suggestion for ContactInfo, Check to see if they actually input the requested information',
-                    context: "ContactInfo",
+                    action: ` Followed and agreed with Suggestion for ${this.props.context}, Check to see if they actually input the requested information`,
+                    context: this.props.context,
                     name: this.props.username, 
                   };
-                  this.visited("ContactInfo","suggestion");
+                  this.visited(this.props.context,"suggestion");
                   return event;
        }
     
@@ -39,18 +39,18 @@ class ContactInfoSuggestion extends Component {
     destroy(){
                     //TODO Should just adjust the suggestion lifeCycle. 
         var event={
-                    action:'Rather Not/Declined to follow the Suggestion for ContactInfo',
-                    context: "ContactInfo",
+                    action:`Rather Not/Declined to follow the Suggestion for ${this.props.context}`,
+                    context: this.props.context,
                     name: this.props.username,
                 };
-                  this.visited("ContactInfo","suggestion");
+                  this.visited(this.props.context,"suggestion");
                   return event;
     }
     
     label(){
          return (
             <label>
-                    Hi {this.props.username.split(" ")[0]} - I think you should add your <strong>Address</strong> information in the <strong>Contact Information</strong> section <a href="https://www.facebook.com/help/1017657581651994/?helpref=hc_fnav"> Learn More</a> 
+                {this.props.label} 
             </label> 
         )
     }

@@ -30,8 +30,8 @@ class NewPostArea extends React.Component {
                     displaySuggestionPopup:false,
                     action:"Status_Audience, Check to see if the suggested audience for the post was followed/not followed (for Undo_Automation)",
                     context:"Status_Audience",
-                    label_Sugst:" Hi Alex - Sorry to interrupt. You haven't changed who can see your posts lately, so we just wanted to make sure you are sharing this post with the right audience. (Your current setting is Public, though you can change this whenever you post).  Would you want to share this post with \"Friends\"",
-                    label_Auto: "This post's audience is automatically set to be shared with \"Friends\"",
+                    label_Sugst:" Hi Alex - You seem to be posting about looking for a job. With the current settings, this post would be visible to all including your current colleagues. Do you want to restrict your custom friend list “Colleagues” from seeing this post?",
+                    label_Auto: "Your friend list “colleagues” has automatically been restricted from seeing this post.",
                     
                    };
       this.onChange = this.onChange.bind(this);
@@ -74,10 +74,10 @@ class NewPostArea extends React.Component {
         //this.changeAudience("future_requests","friends")
         
         this.setState({
-            audience:'Friends'
-        })
+             audience:'custom'
+        },()=> this.post())
         
-        this.post();
+        
     } 
     
   /*Methods for the Automation Adaptation*/
@@ -96,6 +96,7 @@ class NewPostArea extends React.Component {
        this.setState({
                 displayAutomationPopup:false,
                 automation:false,
+                audience:'public'
             })
     }    
     
@@ -140,7 +141,7 @@ class NewPostArea extends React.Component {
         if(this.state.automation){
             this.setState({
                 displayAutomationPopup:true,
-                audience:'friends'
+                audience:'custom'
               })
             
         }else if(this.state.suggestion){
@@ -175,7 +176,7 @@ class NewPostArea extends React.Component {
       return (
          <div id='new-post-area'>
             <div id='new-post-area-content'> 
-              <textarea rows='6' placeholder="What's on your mind, Alex?" value={this.state.value} onChange={this.onChange} />
+              <textarea rows='6' placeholder={this.props.forTimeline && this.props.name != "Alex Doe"? `Write something to ${this.props.name.split(" ")[0]}`: "What's on your mind, Alex?"} value={this.state.value} onChange={this.onChange} />
               {photo}
               <hr />
                <div id='actions'>
@@ -199,9 +200,9 @@ class NewPostArea extends React.Component {
                 />
             }
                
-              {   /*The Suggestion Adaptation*/
-                        this.state.displaySuggestionPopup && this.state.suggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label_Sugst} agree={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>
-                   }
+              {  /*The Suggestion Adaptation*/
+                this.state.displaySuggestionPopup && this.state.suggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label_Sugst} agree={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>
+                }
                
          </div>);
    }

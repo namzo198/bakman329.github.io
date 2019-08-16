@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import {getParsed} from '../utilities.js';
 import Button from './Button.jsx'
 import Settingsdropdown from './settings_general/Settingsdropdown.jsx'
+import Notificationsdropdown from './notifications/Notificationdropdown.jsx'
 
 class Header extends React.Component {
     constructor(props) {
@@ -15,20 +16,31 @@ class Header extends React.Component {
             adaptation:adaptation,
             adaptationVisited:adaptationVisited,
             renderSettings:false,
+            renderNotification:false,
+            showNotificationIcon:true,
             highlight: !adaptationVisited["Privacy_futureRequests"]["highlight"]&&(adaptation["privacy_futureRequests"] == "high") || !adaptationVisited ["Timeline_seePost"]["highlight"]&& (adaptation["timeline_seePost"] === "high") || !adaptationVisited["Block_User"]["highlight"] && (adaptation["block_User"] == "high")||!adaptationVisited["Block_Event"]["highlight"] && (adaptation["block_Event"] == "high")||!adaptationVisited["Block_App"]["highlight"] && (adaptation["block_App"] == "high")||!adaptationVisited["Block_AppInvite"]["highlight"] && (adaptation["block_AppInvite"] == "high")? true: false,
             
             
             
         }
         
-        this.changeIcon = this.changeIcon.bind(this);
+        //this.changeIcon = this.changeIcon.bind(this);
         this.settingsdropDown = this.settingsdropDown.bind(this);
+        this.notification = this.notification.bind(this);
     }
     
-    changeIcon(){
+    /*changeIcon(){
         this.setState ({
             highlight:false
         })
+    }*/
+    
+    notification() {
+        
+         this.setState( (prevState, props) => ({
+            renderNotification:!prevState.renderNotification,
+             showNotificationIcon:false,
+        }));
     }
     
     settingsdropDown() {
@@ -72,9 +84,11 @@ class Header extends React.Component {
                <img id='profile-pic' src='/assets/messages.png'/> 
             </p>
             
-             <p>
-               <img id='profile-pic' src='/assets/notifications.png'/> 
-            </p>
+            <p>
+               <Button onClick={this.notification}> 
+                <img id='profile-pic' src={this.state.showNotificationIcon? '/assets/notifications3.png':'/assets/notifications.png'}/>
+              </Button>
+             </p>
             
             <p>
                <img id='profile-pic' src='/assets/quick_help.png'/>
@@ -82,35 +96,19 @@ class Header extends React.Component {
             
             <p>
              
-             <Button onClick={this.settingsdropDown}>
-              { this.state.highlight?
-               <img id='profile-pic' src='/assets/settings4.png'/>:
-               
-                <img id='profile-pic' src='/assets/settings.png'/>
-                
-               }
-               </Button>
-               
-              
-                {/*<Link to={{
-               //pathname:'/settings_general/GeneralSettings'
-              pathname:'/settings_general/Settingsdropdown',
-               state:{fromHeader:true}}} onClick={this.changeIcon}>
-               
-               { this.state.highlight?
-               <img id='profile-pic' src='/assets/settings4.png'/>:
-               
-                <img id='profile-pic' src='/assets/settings.png'/>
-                
-               }
-                
-               
-                </Link> */}
-               
+                 <Button onClick={this.settingsdropDown}>
+                  { this.state.highlight?
+                   <img id='profile-pic' src='/assets/settings4.png'/>:
+
+                    <img id='profile-pic' src='/assets/settings.png'/>
+
+                   }
+                   </Button>
               </p>
               
                {this.state.renderSettings?<Settingsdropdown SettingsdropDown={this.settingsdropDown} changeIcon={this.changeIcon}/>:null}
              
+               {this.state.renderNotification?<Notificationsdropdown notification={this.notification}/> :null}
             
           </div>
         </div>

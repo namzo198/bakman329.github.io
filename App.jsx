@@ -52,6 +52,7 @@ class App extends React.Component {
         "delete_Post": userparams.delete_Post,
         "chat_Offline": userparams.chat_Offline,
         "contact_Info": userparams.contact_Info,
+        "basic_Info": userparams.basic_Info,
         "privacy_futureRequests":userparams.privacy_futureRequests,
         "timeline_seePost":userparams.timeline_seePost,
         "block_User":userparams.block_User,
@@ -132,11 +133,11 @@ class App extends React.Component {
   // Defines global variables
   getChildContext() {
       // Get the url parameters from JSON String
-    const {session_id,delete_Post,chat_Offline,contact_Info,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post,categorize_Friend} = this.urlqueryStringToJSON();
+    const {session_id,delete_Post,chat_Offline,contact_Info,basic_Info,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post,categorize_Friend} = this.urlqueryStringToJSON();
       
     // const {change}="Hello"
     // Assign url parameters to local variables
-    const current_session = {session_id,delete_Post,chat_Offline,contact_Info,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post,categorize_Friend};
+    const current_session = {session_id,delete_Post,chat_Offline,contact_Info,basic_Info,privacy_futureRequests,timeline_seePost,block_User,block_Event,block_App,block_AppInvite,status_Audience,unsubscribe_Friend,hide_Post,untag_Post,categorize_Friend};
       
 
     // Assigns the local variables to the global variables 
@@ -145,6 +146,7 @@ class App extends React.Component {
       delete_Post: current_session.delete_Post,
       chat_Offline: current_session.chat_Offline,
       contact_Info: current_session.contact_Info,
+      basic_Info:current_session.basic_Info,    
       privacy_futureRequests:current_session.privacy_futureRequests,
       timeline_seePost:current_session.timeline_seePost, 
       block_User:current_session.block_User,  
@@ -164,8 +166,13 @@ class App extends React.Component {
   render() {
     return (
       <div>
+       
         <BrowserRouter>
           <div>
+           <Scenario/> 
+            <div id="experiment-done">
+                <ExitExperiment />
+             </div>
             <Header />
             <Switch>
               <Route exact path='/' component={NewsFeed} />
@@ -175,10 +182,7 @@ class App extends React.Component {
             <div id='chat-area'>
               <Chat />
             </div>
-            <Scenario/> 
-            <div id="experiment-done">
-                <ExitExperiment />
-             </div>
+            
           </div>
         </BrowserRouter>
       </div>
@@ -196,7 +200,7 @@ App.childContextTypes = {
   chat_Offline: PropTypes.string,
   /*liketimeline:PropTypes.string,*/
   contact_Info: PropTypes.string,
-  Basic_Info:PropTypes.string,
+  basic_Info:PropTypes.string,
   privacy_futureRequests:PropTypes.string,  
   timeline_seePost:PropTypes.string,
   block_User: PropTypes.string,

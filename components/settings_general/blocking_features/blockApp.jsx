@@ -184,7 +184,7 @@ class BlockApp extends React.Component {
    render(){
        
        var autocomplete = <AutocompleteInput
-       className = {this.state.highlight? "block_high":null}
+       className = {this.state.highlight? "high1":null}
        commaSeperated
        onChange={(value) => this.handleChange(value)}
        defaultValue = {this.state.highlight? "Yahoo":""}

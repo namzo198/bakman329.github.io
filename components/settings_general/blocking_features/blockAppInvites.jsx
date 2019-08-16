@@ -174,7 +174,12 @@ class BlockAppInvites extends React.Component {
                             return (<li key={index}><span className="righttop_text_onAutomation">{friend}</span> <Button href="javascript:void(0)" onClick={()=>this.onClickUnBlock(friend)}>Unblock</Button></li>)
                             
                         }else {
-                        return (<li key={index}>{friend}<Button href="javascript:void(0)" onClick={()=>this.onClickUnBlock(friend)}>Unblock</Button></li>)}
+                        return (
+                        <li key={index}>{friend}
+                          <span style = {{marginLeft:'10px',}}>
+                              <Button href="javascript:void(0)" onClick={()=>this.onClickUnBlock(friend)}>Unblock </Button>
+                          </span>
+                        </li> )}
                     })}
                 </ul>
                 
@@ -191,7 +196,7 @@ class BlockAppInvites extends React.Component {
        
        
      var autocomplete = <AutocompleteInput
-       className = {this.state.highlight? "block_high":null}
+       className = {this.state.highlight? "high1":null}
        commaSeperated
        onChange={(value) => this.handleChange(value)}
        defaultValue = {this.state.highlight? "Jim Mend":""}

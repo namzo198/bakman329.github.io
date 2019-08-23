@@ -1,12 +1,13 @@
 import React from 'react'
 import {BrowserRouter, Link, Switch, Route} from 'react-router-dom'
-import {linkToName,getParsed,addToLocalStorageObject,AddfriendList} from '../../utilities.js'
+import {linkToName,getParsed,addToLocalStorageObject,AddfriendList,unFollowUser,followUser} from '../../utilities.js'
 import {highLight,noHighLight} from '../../adaptations/Highlight.js';
 import AutomationBoilerplate from '../../adaptations/Automation/AutomationBoilerplate.jsx'
 import SuggestionBoilerplate from '../../adaptations/Suggestion/SuggestionBoilerplate.jsx'
 import Timeline from "./Timeline.jsx"
 import About from "./settings/About.jsx"
 import FriendSubscription from "./FriendSubscription.jsx"
+import BlockFriend from "./BlockFriend.jsx"
 import Friends from "./Friends.jsx"
 
 class Profile extends React.Component {
@@ -20,8 +21,11 @@ class Profile extends React.Component {
         
         adaptation:adaptation,
         adaptationVisited:adaptationVisited,
-        highlight: !adaptationVisited["Contact_Info"]["highlight"]&& (adaptation["contact_Info"] === "high")?highLight:noHighLight,
-        displayContactInfoSuggestion: !adaptationVisited["Contact_Info"]["suggestion"]&& (adaptation["contactInfo"] === "sugst"),
+        highlight: !adaptationVisited["Contact_Info"]["highlight"]&& (adaptation["contact_Info"] === "high") || !adaptationVisited["Basic_Info"]["highlight"]&& (adaptation["basic_Info"] === "high")?highLight:noHighLight,
+        
+        displayContactInfoSuggestion: !adaptationVisited["Contact_Info"]["suggestion"]&& (adaptation["contact_Info"] === "sugst"),
+        
+        displayBasicInfoSuggestion: !adaptationVisited["Basic_Info"]["suggestion"]&& (adaptation["basic_Info"] === "sugst"),
         
         //Suggestion: Unsubscribe from friend
         unsubscribe_suggestion:!adaptationVisited ["Unsubscribe_Friend"]["suggestion"]&& (adaptation["unsubscribe_Friend"] === "sugst"),
@@ -107,6 +111,7 @@ class Profile extends React.Component {
     /*Methods for the Automation Adaptation*/
    onClickOk_Auto(){
        
+        unFollowUser(this.props.match.params.user);
         this.setState({
             unsubscribe_displayAutomationPopup:false,
             unsubscribe_automation:false,
@@ -119,7 +124,7 @@ class Profile extends React.Component {
    onClickUndo_Auto(){
     
        //console.log("Undo Automation has been clicked"); 
-       
+       followUser(this.props.match.params.user);
        this.setState({
                unsubscribe_displayAutomationPopup:false,
                unsubscribe_automation :true,
@@ -129,15 +134,14 @@ class Profile extends React.Component {
     }    
     
     updateSubscribe(){
-        console.log("Did some say something");
         this.setState({suggestAgree:false})
     }
     
    componentWillReceiveProps(nextProps){
-       if(this.state.displayContactInfoSuggestion !== (this.state.adaptationVisited["ContactInfo"]["suggestion"]&&this.state.adaptation["contactInfo"] === "sugst")){
+       if(this.state.displayContactInfoSuggestion !== (this.state.adaptationVisited["Contact_Info"]["suggestion"]&&this.state.adaptation["contact_Info"] === "sugst")){
 
            this.setState({
-               displayContactInfoSuggestion: this.state.adaptationVisited["ContactInfo"]["suggestion"]
+               displayContactInfoSuggestion: this.state.adaptationVisited["Contact_Info"]["suggestion"]
            })
 
            //console.log("The visited state of suggestion in components will receive props" + this.state.displayContactInfoSuggestion)
@@ -145,7 +149,7 @@ class Profile extends React.Component {
    }
     
     changeStyle(){
-        if(!this.state.adaptationVisited["ContactInfo"]['highlight']){
+        if(!this.state.adaptationVisited["Contact_Info"]['highlight'] || !this.state.adaptationVisited["Basic_Info"]['highlight'] ){
             this.setState({
              highlight:noHighLight
             })
@@ -178,7 +182,9 @@ render() {
            
             <Friends friendName={this.props.match.params.user} auto = {this.state.auto_CategorizeAccept}/> 
             <FriendSubscription friendName = {this.props.match.params.user} auto ={this.state.unsubscribe_automation} sugst={this.state.suggestAgree}/>
-             
+            
+            <BlockFriend friendName = {this.props.match.params.user}  />
+            
           
            </div>
           }
@@ -215,7 +221,7 @@ render() {
           </div>
            <Switch>
                 <Route path='/profile/:user/about/:section' component={About} />
-                <Route path='/profile/:user' render={props => <Timeline {...props} displayContactInfoSuggestion ={this.state.displayContactInfoSuggestion} displayUnsubscribeSuggestion = {this.state.unsubscribe_suggestion}  updateSubscribe ={this.updateSubscribe} displayCategorizeSuggestion = {this.state.categorize_suggestion}/>}/>
+                <Route path='/profile/:user' render={props => <Timeline {...props} displayContactInfoSuggestion ={this.state.displayContactInfoSuggestion} displayBasicInfoSuggestion ={this.state.displayBasicInfoSuggestion} displayUnsubscribeSuggestion = {this.state.unsubscribe_suggestion}  updateSubscribe ={this.updateSubscribe} displayCategorizeSuggestion = {this.state.categorize_suggestion}/>}/>
             </Switch>
         </div>
         

@@ -1,7 +1,7 @@
 body {
     margin: 0px;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 19px;
+    font-family: Segoe UI Historic, Segoe UI, Helvetica, Arial, sans-serif;
+    font-size: 14px;
 }
 
 header {
@@ -12,6 +12,7 @@ header {
     border-bottom: 1px solid #29487d;
     position: fixed;
     z-index: 101;
+    margin-left: 291px;
 }
 
 hb {
@@ -90,12 +91,17 @@ textarea {
 
 #user {
     float: right;
-    padding-right: 205px;
+    /*padding-right: 205px;*/
+    padding-right: 500px;
     display: inline;
 }
 
 #user span{
     color:white;
+}
+
+#container {
+    margin-left: 240px;
 }
 
 
@@ -131,12 +137,13 @@ background-position: -250px -330px;
 #page-content {
     padding: inherit;
     background-color: #e9ebee;
-    position: absolute;
+    position: fixed;
     top: 42px;
     bottom: 0;
     width: 100%;
     overflow: auto;
     z-index: -99;
+    margin-left: 291px;
 }
 
 /* TODO: Fix overlap on low-width screens */
@@ -180,12 +187,12 @@ background-position: -250px -330px;
 }
 
 #page-content #post-area {
-  margin-left: 800px;
+  margin-left: 300px;
 }
 
 #post {
     display: block;
-    width: 550px;
+    width: 500px;
     background-color: #fff;
     border: 1px solid;
     border-color: #e5e6e9 #dfe0e4 #d0d1d5;
@@ -294,7 +301,7 @@ background-position: -250px -330px;
 
 #new-post-area {
     display: block;
-    width: 550px;
+    width: 500px;
     background-color: #fff;
     border: 1px solid;
     border-color: #e5e6e9 #dfe0e4 #d0d1d5;
@@ -308,7 +315,7 @@ background-position: -250px -330px;
 
 #new-post-area textarea {
     resize: none;
-    width: 520px;
+    width: 470px;
 }
 
 #actions .menu {
@@ -381,11 +388,13 @@ background-position: -250px -330px;
 #automation-flag{
     display: inline-block;
     position: absolute;
-   /* transform: scale(.6);*/
-    transform: scale(.9);
+   transform: scale(.6);
+    /*transform: scale(.9);*/
     float: left;
-    top: -38px;
-    left: -220px;
+    /*top: -38px;*/
+    top: -27px;
+    /*left: -220px;*/
+    left:-150px;
 }
 
 /* CSS FOR PROFILE_TIMELINE OPTIONS*/
@@ -448,7 +457,6 @@ background-position: -250px -330px;
 
 .high1 {
     background-color:rgb(255,255,153) ;
-    display: block;
 }
 
 
@@ -479,7 +487,7 @@ background-position: -250px -330px;
 }
 
 #dropdown_header ul{
-    padding-left: 25px;
+    padding-left: 20px;
 }
 
 .settings_options_a {
@@ -572,6 +580,12 @@ color: #ffffff;}
   margin-top: 160px;
 }
 
+.dropdown_2{
+  position: absolute;
+  display: inline-block;
+  margin-left: 800px;
+  margin-top:160px;
+}
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown_content_1 {
@@ -599,8 +613,13 @@ color: #ffffff;}
 /* Show the dropdown menu on hover */
 .dropdown_1:hover .dropdown_content_1 {display: block;}
 
+.dropdown_2:hover .dropdown_content_1 {display: block;}
+
+
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown_1:hover .dropbtn_1 {background-color: #f5f6f7;}
+
+.dropdown_2:hober .dropbtn_1 {background-color: #f5f6f7;}
 
 /** ------ **/
 /* TODO: Fix overlap on low-width screens */
@@ -636,6 +655,7 @@ color: #ffffff;}
 
 #chat-user {
   margin-bottom: 10px;  
+  margin-left: 10px;    
 }
 
 #off-active-status {
@@ -818,18 +838,19 @@ color: #ffffff;}
 }
 
 .popup {
-	position: fixed;
+ position: fixed;
   border-style: solid;
   border-width: 1px;
-  z-index: 200;
+  background-color: white;    
+  z-index: 100;
 }
 
 .popup-header {
-	background-color: #f5f6f7;
+  background-color: #f5f6f7;
   height: 18px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  padding:10px;
+  padding:5px;
   border-bottom: 1px solid #e5e5e5;
 }
 
@@ -897,7 +918,7 @@ color: #ffffff;}
 }
 
 .popup-footer a {
-	margin-right: 10px;
+	margin-right: 20px;
 	float: right;
 }
 
@@ -910,11 +931,9 @@ color: #ffffff;}
     content: url(./assets/Dinosaur.png);
     position: absolute;
     transform: scale(.5);
-    top:10%;
+    /*top:9%;*/
     left:-30px;
-    margin-left: -15px;
-    
-    
+    margin-left: -15px;  
 }
 
 /*.active {
@@ -936,8 +955,8 @@ color: #ffffff;}
   position: fixed;
   top: 50%;
   left: 60%;
-  margin-left: -250px;
-  width: 30%;
+  /*margin-left: -250px;*/
+  width: 22%;
     /*height: 13%;*/
   border:4px #b2b2b2 solid;
   z-index: 1;    
@@ -948,7 +967,6 @@ color: #ffffff;}
   animation-direction: forwards;
   animation-timing-function: ease-in;
   
-
 }
 
 
@@ -959,9 +977,9 @@ color: #ffffff;}
     position: absolute;
     top:3px;
     right:9px;
-    font-size: 20px;
+    font-size: 13px;
     text-align: center;
-    color: red;
+    color: gray;
 }
 
 #suggestPopup .suggestPopupCloseButton:hover{
@@ -971,14 +989,16 @@ color: #ffffff;}
 .suggest_popup-content {
 	background-color: #ffffff;
 	height: 100%;
-	padding: 30px;
-  padding-left:120px;
+	padding: 10px 5px;
+    font-size:13px;
+    line-height: 1.4;
+    padding-left:120px;
 }
 
 .suggest_popup-footer{
   border-top: 1px solid #e5e5e5;
-    padding-top: 15px;
-    padding-bottom: 5px;
+    padding-top: 8px;
+    padding-bottom: 25px;
 }
 
 .leftbutton{
@@ -1003,10 +1023,10 @@ color: #ffffff;}
 #undo{
     display: inline-block;
     vertical-align: middle;
-    margin-left: 35px ;
-    border:3px solid #dddddd;
+    margin-left: 15px ;
+    border:2px solid #dddddd;
     border-radius:4px;
-    padding: 5px;
+    padding: 3px;
 }
 
 basicInfo-body {
@@ -1194,11 +1214,13 @@ Edit_Icon_pos{
   position: absolute;
   top:42px;
   width: 100%;
+margin-left: 291px;
   /*height: 100%;*/
 }
 
 #profile-content {
-  margin-left: 21%;
+ /* margin-left: 21%;*/
+    margin-left:4%;
 }
 
 #profile-content h2 {
@@ -1562,10 +1584,21 @@ header #logo {
 }
 
 
-.BlockPopup ul {
+.BlockPopup li {
     list-style-type: none;
     padding: 0;
     margin: 0;
+}
+
+.blockImage {
+    display: inline-block;
+    float: left;
+    cursor: pointer;
+    padding: 5px 5px;
+    height: 48px;
+    width: 48px;
+    margin: 0px 10px;
+    border-radius: 25px;
 }
 
 
@@ -1582,7 +1615,8 @@ header #logo {
   border-left: 1px solid #ccc;
   height: 100%;
  /*margin-left: 180px;*/
-  margin-left:20%;
+  /*margin-left:20%;*/
+    margin-left: 18%;
   position: absolute;
 }
 
@@ -1659,7 +1693,7 @@ header #logo {
 
 #wrapper_right {
   height: 100%;
-  max-width: 70%;
+  max-width: 60%;
   float: left ;
 }
 
@@ -1712,7 +1746,7 @@ header #logo {
 .righttop_label_content_1{
   color: #90949c;
   font-size: 12px;
-  margin-right:190px;
+ /* margin-right:190px;*/
 
 }
 
@@ -1772,7 +1806,7 @@ text-decoration: underline;
 font-size: 13px;
 color: #365899;
 float: right;
-padding-left: 30px;
+padding-left: 60px;
 text-align: center;
 }
 
@@ -1795,7 +1829,7 @@ text-align: center;
 }
 
 #right_bottom_form{
-  margin: 20px 100px 20px 150px;
+  margin: 20px 70px 20px 150px;
   padding-top: 10px;
   padding-bottom: 10px;
   border-top:1px solid #e9ebee;
@@ -1850,12 +1884,12 @@ font-weight: 400;
 
 .right_header_1 {
   padding-left:200px;
-  padding: 20px 0px 10px 0px;
+  padding: 20px 0px 10px 300px;
   font-size: 16px;
   font-weight: 600;
 }
 .block_1{
-  margin: 20px 100px 100px 200px;
+  margin: 20px 100px 100px 300px;
   width : 40%;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -2002,7 +2036,7 @@ text-align: center;
   height: 26px;
   float: right;
   margin-right: 17px;
-  margin-top: 14px;
+  margin-top: 14px;    
 }
 
 #friend-selector-user:hover #friend-selector-setting {
@@ -2025,6 +2059,7 @@ text-align: center;
 
 #friend-selector-user:hover #friend-selector-setting.friend-selector-except::before {
   background-image: url("/assets/red_minus.png");
+
 }
 
 .friend-selector-enabled::before {
@@ -2035,28 +2070,131 @@ text-align: center;
   background-image: url("/assets/solid_red_minus.png") !important;
 }
 
+/* CSS FOR Notifications dropdown*/
 
+#notification_container {
+    background: #fff;
+    border: 1px solid rgba(100, 100, 100, .4);
+    border-radius: 0 0 2px 2px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .25);
+    color: #1d2129;
+    overflow: visible;
+    position: absolute;
+    right:60px;
+    top: 26px;
+    width: 430px;
+    z-index: -1;
+}
+
+#notification_header {
+    background-clip: padding-box;
+    background-color: #fff;
+    border-bottom: solid 1px #dddfe2;
+    padding: 0px 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.beeper{
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/y7/r/rAgxl56-rFy.png);
+    background-repeat: no-repeat;
+    background-size: 283px 396px;
+    background-position: -166px -251px;
+    height: 11px;
+    position: absolute;
+    left:400px;
+    top: -10px;
+    width: 20px;
+    z-index: 2;
+}
+}
+#notification_container::after {
+  content: " ";
+  position: absolute;
+  bottom: 100%;  /* At the top of the tooltip */
+  left: 100%;
+  margin-left: 298px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+  z-index: auto;
+}
+
+#header_top h3{
+    color: #333;
+    font-size: 12px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    float: left;
+}
+#header_top_right {
+    margin-left: 10px;
+
+}
+#header_top_right {
+    float: right;
+}
+
+#header_top_right a{
+    color: #385898;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.notification-id {
+  background-color: #edf2fa;  
+  
+}
+
+.notification-id ul li {
+    list-style: none;
+    display: inline-block;
+    margin-bottom: 15px;
+    
+}
+
+.notification-id img {
+    display: inline-block;
+    float: left;
+    cursor: pointer;
+    padding: 5px 5px;
+    height: 48px;
+    width: 48px;
+    margin: 0px 10px;
+    border-radius: 25px;
+
+}
+
+.notification-id ul a{
+    margin-left: 15px ;
+    cursor: pointer;
+}
+
+.notification-id:hover{
+    background-color: rgb(144,148,156,0.1);
+}
 /* CSS for the floating button with scenario */
  #scenario-area {
     position:fixed;
-    width: 410px;
-    height: 970px;
-    top: 200px;
-    left: 15px;
-    background-color:#efeff4;
+    width: 275px;
+    height: 98%;
+    top: 10px;
+    left: 8px;
+    background-color:#efeff4; /*e0e0e0*/
     border-radius: 10px;
     box-shadow:0 2px 4px rgba(0,0,0,.4);
      
    
 }
 .scenario_head {
-    font-size:  20px;
+    font-size:  15px;
     text-align: center;
-    margin: 10px;
+    margin: 10px 10px 0px 10px;
+        
 }
 
 .scenario_text {
-    font-size:  18px;
+    font-size:  12px;
     line-height: 1.9;
     color: #57575d;
     padding: 5px;
@@ -2067,7 +2205,7 @@ text-align: center;
 }
 
 .scenario_task {
-    font-size:  18px;
+    font-size:  12px;
     line-height: 1.9;
     color: red;
     padding-left: 5px;
@@ -2103,6 +2241,13 @@ text-align: center;
 }
 
 
+#list {
+    margin-top: 5px;
+    margin-right: 20px;
+}
+
+
+
 #list li {
    list-style-type: none;
     
@@ -2111,15 +2256,16 @@ text-align: center;
 .scenario-menu-item label{
 	display: inline-block;
 	/*margin-right: 8px;*/
-	padding: 2px 6px;
+    
+	padding: 4px 8px;
 	/*border-radius: 12px;*/
-	background: rgb(255,255,255);
+	background:white;
     /*box-shadow:  0 2px 4px rgba(0,0,0,.4);*/
 	/*transition: opacity 250ms ease-in-out;*/
     text-align: left;
-    font-size: 18px;
-    white-space: nowrap;
-    margin-bottom: 7px;
+    font-size: 12px;
+    white-space: pre-line;
+    margin-bottom: 9px;
 }
 
 .tooltiptext {
@@ -2128,7 +2274,7 @@ text-align: center;
   width: 100%; 
   background-color: black;
   color: #fff;
-  font-size:18px;
+  font-size:13px;
   text-align: center;
   border-radius: 6px;
   padding: 5px 0;
@@ -2144,7 +2290,7 @@ text-align: center;
 .tooltiptext::after {
   content: " ";
   position: absolute;
-  top: 50%;
+  /*top: 50%;
   right: 100%; /* To the left of the tooltip */
   margin-top: -5px;
   border-width: 5px;
@@ -2229,16 +2375,57 @@ text-align: center;
     
 }
 
+.hidePosts {
+    background-image: url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/FTeRqiQ7YhW.png);
+    background-size: 21px 42px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 20px;
+    width: 20px;  
+    margin-right:2px;
+}
+
+.allPosts {
+    background-position: 0 -21px;
+}
+
+.hide_title_1{
+    color: #1d2129;
+    font-weight: bold;
+}
+.hide_title_2{
+    color:#90949c;
+    margin-left: 22px;
+}
+
+.hideUndoButton {
+    background-color: #f5f6f7;
+    border: 1px solid #ccd0d5;
+    color:#4b4f56;
+    display: inline-block;
+    padding: 2px 2px;
+    margin-left: 280px; 
+}
+
+.hideUndoButton_timeline {
+     background-color: #f5f6f7;
+    border: 1px solid #ccd0d5;
+    color:#4b4f56;
+    display: inline-block;
+    padding: 2px 2px;
+    margin-left: 100px; 
+}
+
 #experiment-done {
     position:fixed;
-    bottom:19px;
-    left:80px;
+    bottom:15px;
+    left:85px;
     margin-top: 10px;
 }
 
 .finish-button {
-    width: 150px;
-    height: 45px;
+    width: 90px;
+    height: 35px;
     background-color: #4cd964;
     border-radius: 25px;
     vertical-align: middle;
@@ -2249,7 +2436,7 @@ text-align: center;
 
 .finish-button label {
     padding:0 2px;
-    font-size: 26px;
+    font-size: 14px;
     font-weight: 400;
     text-transform:uppercase;
     color: white;

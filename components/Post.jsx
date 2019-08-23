@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {indexPosts, getProfilePic, audienceText,getParsed,saveVisitedAdaptation, namesToLinks,namesTagged,AddfriendList,nameToLink} from '../utilities.js'
+import {indexPosts, getProfilePic, audienceText,getParsed,saveVisitedAdaptation, namesToLinks,namesTagged,AddfriendList,nameToLink,followUser} from '../utilities.js'
 import {highLight,highLightExtended,No_highLight } from '../adaptations/Highlight.js';
 import Button from './Button.jsx'
 import Comment from './Comment.jsx'
@@ -33,8 +33,8 @@ class Post extends React.Component {
     var hidden = false;
     posts.some((post, index, array) => {
       if (post.key == this.props.index) {
-        if (post.hidden) {
-          hidden = true;
+        if (post.hidden && !this.props.forTimeline) {
+          //hidden = true;
         }
         return true;
       }
@@ -54,8 +54,11 @@ class Post extends React.Component {
       showPostWhenHidden: false,
       renderSuggestion:false,
       hidden: hidden,
+      unfollow:false, 
+      unfollowedName:"",    
       tagRemoved: this.props.tagRemoved,
       displayContactInfoSuggestion:true,
+      displayBasicInfoSuggestion:true,    
       adaptations: adaptations,
       adaptationVisited: adaptationVisited,
         
@@ -79,8 +82,8 @@ class Post extends React.Component {
        displayUntagSuggestionPopup:true,
        unsubcribe_displaySuggestionPopup:true,   
        categorize_displaySuggestionPopup:true,
-       untag_label_Sugst:"Hi Alex - You’ve been tagged in this post by Loren Payton. Would you like to untag yourself from this post?",
-       label_Sugst:"Hi Alex - Would you want to hide this Post that shows that you just updated your profile picture from your Timeline. It may still appear in other places on FriendBook.",
+       untag_label_Sugst:"Hi Alex - You’ve been tagged in this post by Loren Payton, which contains alcohol. Do you want to untag yourself from this post?",
+       label_Sugst:"Hi Alex - Trevin Noushy has posted this message to your Timeline, which contains a reference to drug use. Do you want to hide this post from your Timeline? It may still appear in other places on FriendBook.",
     
       //Hide Automation Adaptation
       hideAutomation:!adaptationVisited ["Hide_Post"]["automation"]&& (adaptations["hide_Post"] === "auto"),
@@ -96,7 +99,7 @@ class Post extends React.Component {
       untag_Context:"Untag_Post",
       displayHideAutomationPopup:true,
       displayUnTagAutomationPopup:true,
-      label_Auto: "The post about your “updated profile picture” was automatically hidden from your Timeline.",
+      label_Auto: "This post by Trevin Noushy was automatically hidden from your Timeline.",
       untag_label_Auto:"A tag of you was automatically removed from this post.",
 
     };
@@ -107,9 +110,11 @@ class Post extends React.Component {
     this.onClickComment = this.onClickComment.bind(this);
     this.onClickHide = this.onClickHide.bind(this);
     this.onClickRemoveTag = this.onClickRemoveTag.bind(this);
+    this.onClickUnfollow = this.onClickUnfollow.bind(this);
     this.onClickUndo = this.onClickUndo.bind(this);
     this.onClickAutoOk = this.onClickAutoOk.bind(this);
     this.onDisplayContactInfoSuggestion = this.onDisplayContactInfoSuggestion.bind(this);
+    this.onDisplayBasicInfoSuggestion = this.onDisplayBasicInfoSuggestion.bind(this);
     this.show = this.show.bind(this);
     this.onMenuOpen = this.onMenuOpen.bind(this);
       
@@ -187,18 +192,23 @@ class Post extends React.Component {
 
  /*Methods for the Hide Automation Adapatation*/
     logHide() {
-         //console.log("In hiding");
-        var posts = JSON.parse(localStorage.getItem('posts'));
+         var posts = JSON.parse(localStorage.getItem('posts'));
         posts.some((post, index, array) => {
-          if (post.key == 19 ) {
+          if (post.key == this.props.index) {
             posts[index].hidden = true;
             localStorage.setItem('posts', JSON.stringify(posts));
-            this.setState({render: false});
+            this.setState({hidden:true});
             return true;
           }
         });
+
+        let used = JSON.parse(localStorage.featuresUsed);
+        used.posts.hide = true;
+        localStorage.setItem("featuresUsed", JSON.stringify(used));
+      
     }
     
+     
     
     /*Methods for the Categorizing Suggestion Adaptation*/
     
@@ -244,11 +254,14 @@ class Post extends React.Component {
     
     //For Hiding
     onClickOk_Auto() {
+        
+    
+        
         this.setState({
             displayHideAutomationPopup:false
-        })
+        }, ()=> this.onClickHide())
         
-        this.logHide();
+       
     }
     
     //For Untagging
@@ -307,9 +320,8 @@ class Post extends React.Component {
         //this.changeAudience("future_requests","friends")
         this.setState({
             displayHideSuggestionPopup:false
-        })
-        
-        this.logHide();
+        },()=> this.onClickHide())
+
     }
     
     
@@ -331,11 +343,14 @@ class Post extends React.Component {
     
     //Dismount the Suggestion for Contact Info in timeline
     onDisplayContactInfoSuggestion() {
-       //console.log("The contactInfo suggestion has been closed")
-        
         this.setState({displayContactInfoSuggestion: false});
-         //this.setState({displayContactInfoSuggestion:false,})
     }
+    
+     
+    onDisplayBasicInfoSuggestion() { 
+        this.setState({displayBasicInfoSuggestion: false});
+    }
+    
   // Show the Suggestion
   show() {
     this.setState({
@@ -389,10 +404,11 @@ class Post extends React.Component {
                   photo:this.props.photo,
                   time:"Just now",
                   comments: [],
+                  new: true,
                   key: posts.length};
       localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
       indexPosts();
-      this.props.postarea.update();
+      this.props.update();
       //PostArea.update;
 
       return event;
@@ -445,8 +461,19 @@ class Post extends React.Component {
   }
 
 
+
+ onClickUnfollow(name) {
+   
+     this.setState({
+         unfollow:true,
+         unfollowedName: name,
+     }, ()=> this.props.hideAllPosts(name))
+ 
+ }
     
   onClickHide() {
+      
+      //console.log("On hide "+element)
     // TODO: Add confirmation popup and undo button
     var posts = JSON.parse(localStorage.getItem('posts'));
     posts.some((post, index, array) => {
@@ -534,10 +561,6 @@ class Post extends React.Component {
             <div className= "icon_actions comment_icon"> <img src="/assets/comment-icon.png"/> <Button onClick={this.onClickComment}>Comment</Button> </div>
             
             <div className= "icon_actions remove_icon"> <img src="/assets/share-icon.png"/> <Button onClick={this.onClickShare}>Share</Button> </div>
-    
-               {/* Transfer to behind menu.
-               <Button href='javascript:void(0);' onClick={this.onClickDelete} adapt={!this.state.adaptationVisited["Delete_Post"]["highlight"] && this.props.index === 6?this.state.adaptations['delete_Post']:""}>Delete</Button>*/
-              }
         </div>);
    // }
   /*  else {
@@ -551,41 +574,48 @@ class Post extends React.Component {
   }
 
   onClickUndo(){
-    var event = {
+   /* var event = {
       render: true,
       action: 'Undo Delete Post',
       context: this.state.context,
       name: this.props.name + '\'s Post',
       showPostWhenHidden: true
-    };
-    this.setState(event);
+    };*/
+    this.setState({
+        showPostWhenHidden:true,
+        render:true
+    });
     
-    this.visitedAdaptation("Delete_Post","automation");
-    return event;
+   /// this.visitedAdaptation("Delete_Post","automation");
+   // return event;
    }
     
     onClickAutoOk(){
-        var event = {
+       
+        /**var event = {
       render: false,
       action: 'Ok With Automatic Deletion of Post',
       context: this.state.context,
       name: this.props.name + '\'s Post',
       showPostWhenHidden: true
-    };
-    this.setState(event);
-    this.visitedAdaptation("Delete_Post","automation");
+    };*/
+    
+    this.setState({
+        render:false,
+        showPostWhenHidden:true
+    });
+    //this.visitedAdaptation("Delete_Post","automation");
         
-    return event; 
+   // return event; 
     }
 
   renderPost(comments,post_title) {
 
     if (this.state.delete_Automation && !this.state.showPostWhenHidden && this.props.index === 2) {
       return (
-              
-              <Automation undoButton="Undo" okButton="Ok" onOkClick={this.onClickAutoOk} label="This post about  Mexican's going back to their country was automatically deleted" onUndoClick={this.onClickUndo} />
-             
+          <AutomationBoilerplate action = {"Delete_Post,Check to see if the suggested delete action for the post was followed/not followed (for Undo_Automation)"} context = {"Delete_Post"} label={"This post about 'Mexican's going back to their country..' was automatically deleted"} onClickOK_Auto={this.onClickAutoOk} onClickUnDo_Auto = {this.onClickUndo}/>
       );
+        
     } else {
       // Suggestion adaptation for the delete method
       var Suggestion_Popup;
@@ -626,7 +656,7 @@ class Post extends React.Component {
                 
                 
             <label>
-                {/*this.props.name.split(" ")[0]*/} Hi Alex - Would you like to delete this post that states "<strong>{this.props.children} </strong>" It’s been flagged as a post that amounts to hate speech.<a href="https://www.facebook.com/communitystandards/hate_speech"> Learn More</a> 
+              Hi Alex - You used foul language in this post. Do you want to delete it? 
             </label>
           </SuggestionPopup>);
       }
@@ -641,17 +671,24 @@ class Post extends React.Component {
               <p id='post-time'>{this.props.time}</p>
               {" · "}
               <p style={{display: "inline"}}>{audienceText(this.props.audience)}</p>
-            </div>  
-           <Menu icon={this.state.hideHighlight1 && this.props.index === 28 || this.state.untag_Highlight && this.props.index === 27||this.state.delete_Highlight && this.props.index === 2 ?'horiz high1':'horiz'}
-            onOpen={this.onMenuOpen}>
-              <div className={this.state.hideHighlight1 && this.props.index === 28?"high1":null}><Button onClick={this.onClickHide}>{this.props.index === 28?"Hide from Timeline": "Hide post"}</Button></div>              
-              {(!this.state.tagRemoved && this.props.children.toLocaleLowerCase().includes("alex doe"))
-                  ? <div className={this.state.untag_Highlight && this.props.index === 27?"high1":null}><Button onClick={this.onClickRemoveTag}>Remove tag</Button></div> : null}
-                  
-              {(this.props.name != "Alex Doe") ? <Button>Unfollow {this.props.name}</Button> : null}
-              
-               {(this.props.name === "Alex Doe") ? <div className={this.state.delete_Highlight && this.props.index === 2?"high1":null}> <Button href='javascript:void(0);' onClick={this.onClickDelete}>Delete</Button></div>:null}
-            </Menu>                             
+            </div>
+            
+           {this.props.forTimeline && this.props.name != "Alex Doe" ? null:
+                <Menu icon={this.state.hideHighlight1 && this.props.index === 28 || this.state.untag_Highlight && this.props.index === 27||this.state.delete_Highlight && this.props.index === 2 ?'horiz high1':'horiz'}
+                 onOpen={this.onMenuOpen}>
+
+
+                  <div className={this.state.hideHighlight1 && this.props.index === 28?"high1":null}><Button onClick={ this.onClickHide}>{this.props.index === 28?"Hide from Timeline": "Hide post"}</Button></div>
+
+                  {(!this.state.tagRemoved && this.props.children.toLocaleLowerCase().includes("alex doe"))
+                      ? <div className={this.state.untag_Highlight && this.props.index === 27?"high1":null}><Button onClick={this.onClickRemoveTag}>Remove tag</Button></div> : null}
+
+                  {(this.props.name != "Alex Doe") ? <Button onClick={ () => this.onClickUnfollow(this.props.name)}>Unfollow {this.props.name}</Button> : null}
+
+                   {(this.props.name === "Alex Doe") ? <div className={this.state.delete_Highlight && this.props.index === 2?"high1":null}> <Button href='javascript:void(0);' onClick={this.onClickDelete}>Delete</Button></div>:null}
+
+                </Menu> 
+           }                         
           </div>
           
           <VisibilitySensor onChange={(isVisible) => this.onChangeVisible (isVisible,this.props.index)} partialVisibility offset={{top:50,bottom:50}} >
@@ -694,19 +731,28 @@ class Post extends React.Component {
     }
   }
 
+    
   render() {
+      
+    // console.log("The state for hidden is "+this.state.hidden);
+      
     if (!this.state.render) {
-      return null;
-    }
+     return null;
+   }
 
     if (this.state.hidden) {
       // TODO: Make this say newsfeed when it is newsfeed
+        //|| This post is now hidden from your Timeline
       return (
         <div id='post' className='hidden'>
           <div id='post-content'>
-            This post is now hidden from your timeline.
-            {" "}
-            <Button onClick={() => {
+           <i className="hidePosts"></i>
+           
+           {this.props.forTimeline? 
+              " This post is now hidden from your Timeline": 
+              <span className="hide_title_1">Post hidden</span>} 
+            
+           <span className={this.props.forTimeline?"hideUndoButton_timeline":"hideUndoButton"}> <Button className="hideUndoButton" onClick={() => {
               this.setState({hidden: false});
               var posts = JSON.parse(localStorage.getItem('posts'));
               posts.some((post, index, array) => {
@@ -716,10 +762,14 @@ class Post extends React.Component {
                   return true;
                 }
               });
-            }}>Undo</Button>
+                   }}>Undo</Button></span>
             <span id='hide-post-dismiss'>
               <Button onClick={() => this.setState({render: false})}>X</Button>
             </span>
+            
+              {!this.props.forTimeline? <div className="hide_title_2">
+             You won't see this post in your News Feed.
+            </div>: null}
           </div>
         </div>
       );
@@ -730,7 +780,52 @@ class Post extends React.Component {
       visited.posts.delete = true;
       localStorage.setItem("featuresVisited", JSON.stringify(visited));
     } 
+      
+    if(this.state.unfollow) {
+        let hideClass = classNames('hidePosts', 'allPosts')
+        return (
+          <div id='post' className='hidden'>
+          <div id='post-content'>
+           <i className={hideClass}></i>
+            <span className="hide_title_1">All posts hidden</span>
+            
+            <span className="hideUndoButton"><Button  onClick={() => {
+             
+              
+               followUser(this.state.unfollowedName);  
+               this.setState({unfollow: false})
+               this.props.update();  
+                        
+                var users  = JSON.parse(localStorage.getItem('users'))
+                users.some((user,index,array) => {
+                   if(user.name == this.state.unfollowedName){
+                       users[index].follow = true,
+                      localStorage.setItem('users', JSON.stringify(users));
+                      return true;        
+                   } 
+                });
+                
+                //console.log(users);
+             
+            }}>Undo</Button></span>
+            <span id='hide-post-dismiss'>
+              <Button onClick={() => this.setState({render: false})}>X</Button>
+            </span>
+            
+             <div className="hide_title_2">
+            You won't see Posts from {this.state.unfollowedName} in your NewsFeed.</div> 
+        
+          </div>
+          
+          
+        </div>
+      );
+         
+    }  
     
+    if (this.props.hidden && !this.props.forTimeline) {
+         return null;
+    }
     //http://localhost:8080/?session=a09eb84d555bb8d55510ef28a56a6f3d&hide_Post=auto
       
    
@@ -755,15 +850,19 @@ class Post extends React.Component {
     //To indicate shared Post
     var post_title = [<ProfileLink name={this.props.name} key={0} />];
    
-      if (this.props.original_poster) {
+    if (this.props.original_poster) {
       post_title.push(' shared ');
       post_title.push(<ProfileLink name={this.props.original_poster} key={1} />);
       post_title.push('\'s post');
     }
+    else if (this.props.target_friend) {
+      post_title.push(' ➤ ');
+      post_title.push(<ProfileLink name={this.props.target_friend} key={1} />);
+    }
       
     /*To indicate tagged Post*/
     if (!this.state.tagRemoved && !this.state.untag_Automation && this.props.children.includes("Alex Doe")  ){
-        post_title.push(' is with ');
+        post_title.push(' is with');
         post_title.push(<ProfileLink name={"Alex Doe"} key={1}/>   );
     }
       
@@ -777,7 +876,7 @@ class Post extends React.Component {
     var posts = JSON.parse(localStorage.getItem('posts'));
     var comments = [];
     posts.some((post, index, array) => {
-      if (post.key == this.props.index) {
+      if (!this.props.hidden && post.key == this.props.index) {
         comments = post.comments;
         return true;
       }
@@ -790,7 +889,11 @@ class Post extends React.Component {
         <div id='post-content'> 
           {this.renderPost(comments,post_title)}
           
-          {this.props.displayContactInfoSuggestion && this.state.displayContactInfoSuggestion && this.props.index === 0 && <ContactInfoSuggestion username = {this.props.name} destroy = {this.onDisplayContactInfoSuggestion}/>}
+          {this.props.displayContactInfoSuggestion && this.state.displayContactInfoSuggestion && this.props.index === 0 && <ContactInfoSuggestion  username = {this.props.name}  context={"Contact_Info"} label={'Hi Alex -You seem to have an old email address listed on your profile. Do you want to update your email address to "alexdoe@gmail.com".'} destroy = {this.onDisplayContactInfoSuggestion}/>}
+          
+           {this.props.displayBasicInfoSuggestion && this.state.displayBasicInfoSuggestion && this.props.index === 0 && <ContactInfoSuggestion  username = {this.props.name}  context={"Basic_Info"} label={"Hi Alex - You recently removed some of your posts about politics. Do you want to remove your political views from your profile page?"} destroy = {this.onDisplayBasicInfoSuggestion}/>}
+          
+          
           
           {    /*These happen on the Timeline */
                 

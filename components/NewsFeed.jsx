@@ -22,17 +22,17 @@ class NewsFeed extends React.Component {
                  <ProfileLink name='Alex Doe' fromNewsFeed={true} />
             </li>
             
-            {/* TODO make this link look like facebook's when we are on the newsfeed */}
+            {/* TODO make this link look like FriendBook's when we are on the newsfeed */}
             <li>
               <img id="profile-pic" src='./assets/news_feed.jpg' />
               <Link to='/'> <span id="left-navagation-words">News Feed</span></Link>
              </li>
-              <li>
+              {/*<li>
               <a href='javascript:void(0)' onClick={() => { resetAll() }}>Reset Posts(DEBUG)</a>
             </li>
             <li>
                 {<h3>session_id: {localStorage.session_id}</h3>}
-            </li>
+            </li>*/}
           </ul>
           <PostArea />
         </div>

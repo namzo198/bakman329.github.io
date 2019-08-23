@@ -5,7 +5,7 @@ import Button from './Button.jsx'
 import AudienceMenu from './AudienceMenu.jsx'
 import PostArea from './PostArea.jsx'
 import UploadPopup from './UploadPopup.jsx'
-import{addToLocalStorageObject,getParsed,saveVisitedAdaptation} from '../utilities.js';
+import{addToLocalStorageObject,getParsed,saveVisitedAdaptation,getCurrentFriendLists} from '../utilities.js';
 import AutomationBoilerplate from '../adaptations/Automation/AutomationBoilerplate.jsx'
 import SuggestionBoilerplate from '../adaptations/Suggestion/SuggestionBoilerplate.jsx'
 import {highLight,highLightExtended,No_highLight} from '../adaptations/Highlight.js';
@@ -94,7 +94,8 @@ class NewPostArea extends React.Component {
    onClickUndo_Auto(){
     
        this.setState({
-                displayAutomationPopup:false
+                displayAutomationPopup:false,
+                automation:false,
             })
     }    
     
@@ -124,13 +125,9 @@ class NewPostArea extends React.Component {
                  key: posts.length,
                  comments: [],
                  audience: this.state.audience,
+                 time: "Just now",
                  new: true};
        
-     localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
-     indexPosts();
-     this.props.postarea.update();
-     this.setState({value: '', photo: '', renderUploadPopup: false});
-
      localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
      indexPosts();
      this.props.postarea.update();
@@ -174,6 +171,7 @@ class NewPostArea extends React.Component {
           style={{width: 60, height: 60}} />
         : null;
       
+       var currentFriendList = getCurrentFriendLists();
       return (
          <div id='new-post-area'>
             <div id='new-post-area-content'> 
@@ -186,7 +184,7 @@ class NewPostArea extends React.Component {
                   <AudienceMenu onChange={this.onChangeAudience} className="new-post-menu"
                     options={["public", "friends", "friends_except", "only_me", "more"]}
                     more={["specific_friends", "see_all"]}
-                    see_all={["custom"]}
+                    see_all={currentFriendList}
                     title="Who should see this?" 
                     highlight={this.state.highlight1 && this.state.highlight?highLight:No_highLight}
                     removeHighlightOnClick={this.changeStyle}

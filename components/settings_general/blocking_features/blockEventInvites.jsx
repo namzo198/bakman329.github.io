@@ -39,7 +39,7 @@ class BlockEventInvites extends React.Component {
         object:" blocking of Richard Midor", 
         objectSugst: "block Kyle Parker",    
         label_Sugst:" I think you should block \"Kyle Parker\" from sending you event invites", 
-        label_Auto: "The grayed out and underlined entries were automatically blocked",  
+        label_Auto: "The grayed out and underlined people were automatically blocked",  
     }
         
      this.handleChange = this.handleChange.bind(this);

@@ -16,7 +16,7 @@ class FriendSubscription extends React.Component {
        let adaptationVisited = getParsed("visited");
         
         this.state = {
-            subscribe:this.props.auto?false: true,  //true
+            subscribe:!this.props.auto,  //true
             adaptationVisited:adaptationVisited,
             highlight1: !adaptationVisited["Unsubscribe_Friend"]["highlight"] && (adaptation["unsubscribe_Friend"] == "high")? true:false,
             //highlight: !adaptationVisited["Unsubscribe_Friend"]["highlight"] && (adaptation["unsubscribe_Friend"] == "high")? "high":null,
@@ -29,34 +29,26 @@ class FriendSubscription extends React.Component {
       
         /*Highlight Adaptation */
         // this.changeStyle = this.changeStyle.bind(this);
-        
     }
     
     componentWillReceiveProps(nextProps) {
-        console.log("I am in here in the Friend to subscribe "+nextProps.auto);
-        if (nextProps.auto != this.props.auto) {
+        
+       
+       if (nextProps.auto !== this.props.auto  ) {
             this.setState({subscribe:nextProps.auto})
+           
+        } else if(nextProps.sugst !== this.props.sugst) {
+            this.setState({subscribe:nextProps.sugst})
+            
+        }else {
+            
+            this.setState({subscribe:true})
         }
+        
+        
         
     }
     
-    
-   
-    
-    /*Method for the Highlight Adaptation
-    changeStyle(){
-        
-        
-         if(!this.state.adaptationVisited["Unsubscribe_Friend"]['highlight']){
-             
-             //console.log("I am in here");
-            this.setState({
-             highlight1:false,
-            })
-          }
-        
-        
-    }*/
     
     handleClick() {
       if (this.state.subscribe) {
@@ -75,10 +67,9 @@ class FriendSubscription extends React.Component {
         
         
         
-        if(!this.state.adaptationVisited["Unsubscribe_Friend"]['highlight']) {
+        if(!this.state.adaptationVisited["Unsubscribe_Friend"]['highlight'] && (this.props.friendName === "jack_scout") ) {
             
             this.setState({
-                //highlight: null,
                 highlight1: false,
             })
             
@@ -98,24 +89,27 @@ class FriendSubscription extends React.Component {
     render() {
         
          var dropbtn_style = classNames({
-             'dropbtn_1':!this.state.highlight1,
-             'dropbtn_1_highlight':this.state.highlight1,
+             'dropbtn_1':!this.state.highlight1 || (this.props.friendName !== "jack_scout") && this.state.highlight1,
+             'dropbtn_1_highlight':(this.props.friendName === "jack_scout") && this.state.highlight1,
          })
+         
         return(
          <div className="dropdown_1">
              {this.state.subscribe?
               <div>
                 
-                <button className={dropbtn_style} onMouseOver={this.onFollowHover}>Following ▼</button>
+
+                <button className={dropbtn_style} onMouseOver={this.onFollowHover}> ✓ Following ▼</button>
                 
                 <div className="dropdown_content_1">
                     <a href="#">See First </a> 
                     <a href="#">Default</a>
-                    <hr></hr>
-                    <Button onClick={this.handleClick} style={this.state.highlight1?highLight:null}>Unfollow</Button>
+                    <hr/>
+                    <span className={(this.props.friendName === "jack_scout") && this.state.highlight1?"high1":null}><Button onClick={this.handleClick}>Unfollow</Button></span>
                 </div>
+                
                 <button className="btn"> Message </button>
-                <button className="btn">...</button>
+                {<button className="btn">...</button>}
               </div> 
                 :
                    <div>

@@ -19,7 +19,7 @@ class BlockApp extends React.Component {
       appName: "",
       blockedAppsList:blockedApps,
         
-      highlight: !adaptationVisited["Block_App"]["highlight"] && (adaptation["block_App"] == "high")?true:false,
+       highlight: !adaptationVisited["Block_App"]["highlight"] && (adaptation["block_App"] == "high")?true:false,
         suggestion: !adaptationVisited ["Block_App"]["suggestion"]&& (adaptation["block_App"] === "sugst"),
         automation:!adaptationVisited ["Block_App"]["automation"]&& (adaptation["block_App"] === "auto"),
         displayAutomationPopup:true,

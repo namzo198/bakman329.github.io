@@ -1,26 +1,10 @@
-       
-<?php
-        //get database connection
-        include_once './config/database.php';
-        //instantiate the session object
-        include_once './model/session.php';
-
-
-        $database = new Database();
-        $db = $database::getConnection();
-        $session = new Session($db);
-
-        $session::_write("MOSES_SESSION", "Blah Blah");
-        echo "Am being seen";
-        
-?>
-
 
 <!DOCTYPE html>
 <html lang = "en">
    <head>
       <meta charset = "UTF-8">
       <link rel="stylesheet" type="text/css" href="/index.css">
+     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
       <title>Fakebook</title>
    </head>
    

@@ -20,7 +20,7 @@ class ContactInfo extends Component {
   
     
     this.state = {
-      adapt:adapatation['contactInfo'], 
+      adapt:adapatation['contact_Info'], 
       adaptationVisited:adaptationVisited,
       contactInfoStored:existingInformation,   
       mobile:existingInformation['mobile'],
@@ -84,7 +84,7 @@ class ContactInfo extends Component {
 
     componentWillMount(){
 
-        if(!this.state.adaptationVisited["ContactInfo"]["automation"]&&this.state.adapt === 'auto'){
+        if(!this.state.adaptationVisited["Contact_Info"]["automation"]&&this.state.adapt === 'auto'){
             this.setState({
                 political:'Republican',
                 BasicPoliticalAdded:true,
@@ -112,7 +112,7 @@ class ContactInfo extends Component {
   }
 
    visitedAdaptation(name){ 
-      this.state.adaptationVisited["ContactInfo"][name] = true
+      this.state.adaptationVisited["Contact_Info"][name] = true
       addToLocalStorageObject("visited",this.state.adaptationVisited)
     }
     
@@ -168,7 +168,7 @@ class ContactInfo extends Component {
     }
     
     //For the highlight adaptation 
-    if(!this.state.adaptationVisited["ContactInfo"]["highlight"] && this.state.adapt === "high" && infoAdded === "BasicAddressAdded"){
+    if(!this.state.adaptationVisited["Contact_Info"]["highlight"] && this.state.adapt === "high" && infoAdded === "BasicAddressAdded"){
        this.visitedAdaptation("highlight")   
     }
       
@@ -305,10 +305,6 @@ class ContactInfo extends Component {
       
     return (
         <div className="contact_section">
-        
-        {shouldDisplayAutomation && <div id='except-warning'>
-            <Automation undoButton="Undo" okButton="Ok" onOkClick={this.onClickOk_Auto} label="Your political views were automatically set" onUndoClick={this.onClickUndo_Auto}/></div>}
-            
          
           <div className="heading">Contact Information</div>
           {this.display("Mobile", "+ Add a mobile phone","enter mobile number")}
@@ -330,7 +326,10 @@ class ContactInfo extends Component {
           {this.display("Interest", "+ Add who you're interested in", "")}
           {this.display("Religious", "+ Add your religious view", "")}
           {this.display("Political", "+ Add your political views", "")}
-          
+         
+            {shouldDisplayAutomation && <div id='except-warning'>
+            <Automation undoButton="Undo" okButton="Ok" onOkClick={this.onClickOk_Auto} label="Your political views were automatically set" onUndoClick={this.onClickUndo_Auto}/></div>}
+            
           
         
         </div>

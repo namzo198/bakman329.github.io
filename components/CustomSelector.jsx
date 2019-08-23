@@ -95,7 +95,7 @@ class CustomSelector extends React.Component {
                 onChange={(value) => this.setState({share_value: value})}
                 defaultValue={this.state.share_value}
                 placeholder='Required: Enter names or lists'
-                list={["Jack Roe", "Jim Mend", "Friends", "Friends of friends"]} />
+                list={["Jack Roe", "Jim Mend", "Friends", "Friends of friends","Family","Work"]} />
             </label>
             <label>
               <span>Friends of tagged{' '}</span>
@@ -112,7 +112,7 @@ class CustomSelector extends React.Component {
                 onChange={(value) => this.setState({dont_share_value: value})}
                 defaultValue={this.state.dont_share_value}
                 placeholder='Required: Enter names or lists'
-                list={["Jack Roe", "Jim Mend", "Friends", "Friends of friends"]} />
+                list={["Jack Roe", "Jim Mend", "Friends", "Friends of friends","Family","Work"]} />
             </label>
           </div>
         </div>

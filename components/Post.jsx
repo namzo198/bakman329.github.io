@@ -125,6 +125,7 @@ class Post extends React.Component {
     this.onDisplayContactInfoSuggestion = this.onDisplayContactInfoSuggestion.bind(this);
     this.onDisplayBasicInfoSuggestion = this.onDisplayBasicInfoSuggestion.bind(this);
     this.show = this.show.bind(this);
+    this.onMenuOpen = this.onMenuOpen.bind(this);
       
      
     /*Suggestion Adaptation*/
@@ -478,6 +479,7 @@ class Post extends React.Component {
                   photo:this.props.photo,
                   time:"Just now",
                   comments: [],
+                  new: true,
                   key: posts.length};
       localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
       indexPosts();
@@ -594,6 +596,14 @@ class Post extends React.Component {
         })
         
         HighlightBoilerplate(this.state.context_tag);
+    }
+  }
+
+  onMenuOpen() {
+    if (this.props.children.toLocaleLowerCase().includes("alex doe")) {
+      let visited = JSON.parse(localStorage.featuresVisited);
+      visited.untag.self = true;
+      localStorage.setItem("featuresVisited", JSON.stringify(visited));
     }
   }
 
@@ -739,7 +749,8 @@ class Post extends React.Component {
             </div>
             
            {this.props.forTimeline && this.props.name != "Alex Doe" ? null:
-                <Menu icon={this.state.hideHighlight1 && this.props.index === 28 || this.state.untag_Highlight && this.props.index === 27||this.state.delete_Highlight && this.props.index === 2 ?'horiz high1':'horiz'}>
+                <Menu icon={this.state.hideHighlight1 && this.props.index === 28 || this.state.untag_Highlight && this.props.index === 27||this.state.delete_Highlight && this.props.index === 2 ?'horiz high1':'horiz'}
+                 onOpen={this.onMenuOpen}>
 
 
                   <div className={this.state.hideHighlight1 && this.props.index === 28?"high1":null}><Button onClick={ this.onClickHide}>{this.props.index === 28?"Hide from Timeline": "Hide post"}</Button></div>
@@ -839,6 +850,12 @@ class Post extends React.Component {
           </div>
         </div>
       );
+    }
+
+    if (this.props.name == 'Alex Doe') {
+      let visited = JSON.parse(localStorage.featuresVisited);
+      visited.posts.delete = true;
+      localStorage.setItem("featuresVisited", JSON.stringify(visited));
     } 
       
     if(this.state.unfollow) {
@@ -931,10 +948,14 @@ class Post extends React.Component {
     //To indicate shared Post
     var post_title = [<span key={0} className= {BlockHighlightStyle}><ProfileLink name={this.props.name} key={0} onClick={this.handleBlockHighlight} /></span>];
    
-      if (this.props.original_poster) {
+    if (this.props.original_poster) {
       post_title.push(' shared ');
       post_title.push(<ProfileLink name={this.props.original_poster} key={1} />);
       post_title.push('\'s post');
+    }
+    else if (this.props.target_friend) {
+      post_title.push(' ➤ ');
+      post_title.push(<ProfileLink name={this.props.target_friend} key={1} />);
     }
       
     /*To indicate tagged Post*/

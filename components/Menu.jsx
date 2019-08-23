@@ -14,21 +14,20 @@ class Menu extends React.Component {
     this.onClick = this.onClick.bind(this);
     
   }
-  
-    
     
   showMenu(event) {
     //if(this.myRef) {
-        this.setState({showMenu: true}
-                      , () => {
-          document.addEventListener('click', this.onClick);}
-        );
+    this.setState({showMenu: true}
+              , () => {
+    document.addEventListener('click', this.onClick);}
+    );
 
 
-          /*This style is for defining the highlight ..see example from NewPostArea*/
-          if(this.props.style != undefined){
-             this.props.changeStyle();
-          }
+    /*This style is for defining the highlight ..see example from NewPostArea*/
+    if(this.props.style != undefined){
+     this.props.changeStyle();
+    }
+    if (this.props.onOpen) this.props.onOpen();
     //}
   }
     

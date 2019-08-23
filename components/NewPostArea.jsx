@@ -128,6 +128,8 @@ class NewPostArea extends React.Component {
                  audience: this.state.audience,
                  time: "Just now",
                  new: true};
+
+     if (this.props.forTimeline && this.props.name != "Alex Doe") post.target_friend = this.props.name;
        
      localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
      indexPosts();

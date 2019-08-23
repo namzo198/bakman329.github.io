@@ -34,7 +34,7 @@ class PostArea extends React.Component {
          
           if (this.props.name) {
                
-              render = (post.name === this.props.name);
+              render = (post.name === this.props.name) || (post.target_friend === this.props.name);
               
               } else {
                 render = (post.new || post.name != "Alex Doe");
@@ -47,6 +47,7 @@ class PostArea extends React.Component {
            key: count -  index - 1,
            index: count - index - 1,
            original_poster: post.original_poster,
+           target_friend: post.target_friend,
            adapt:this.props.toAdapt,
            photo: post.photo,
            displayContactInfoSuggestion: this.props.displayContactInfoSuggestion,

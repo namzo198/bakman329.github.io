@@ -690,10 +690,10 @@ export function resetFeaturesVisited() {
   // As per https://docs.google.com/spreadsheets/d/19BlSfiV7xRTI9TtcAvVFC9B9TlZB1l9CUGx7-jcg_Dk/edit#gid=157833438
   localStorage.setItem('featuresVisited', JSON.stringify({
     chat: {settings: false},
-    untag: {self: false}, // TODO: What does visited mean for this
-    friends: {follow: false}, // TODO
-    notifications: {app: false, event: false}, // TODO: What does visited mean for this?
-    posts: {delete: false, hide: false}, // TODO: What does visited mean for this? 
+    untag: {self: false},
+    friends: {unfollow: false},
+    notifications: {app: false, event: false},
+    posts: {delete: false, hide: false},
     withhold_info: {address: false, political: false}, // TODO
     custom_lists: {create_custom: false, post_custom: false, photo_custom: false}, // TODO
     block: {app: false, user: false}, // TODO: User
@@ -706,7 +706,7 @@ export function resetFeaturesUsed() {
   localStorage.setItem('featuresUsed', JSON.stringify({
     chat: {settings: false},
     untag: {self: false},
-    friends: {follow: false}, // TODO
+    friends: {unfollow: false},
     notifications: {app: false, event: false},
     posts: {delete: false, hide: false},
     withhold_info: {address: false, political: false}, // TODO

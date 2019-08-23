@@ -52,7 +52,9 @@ class BlockAppInvites extends React.Component {
     this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
     this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
       
-   
+    let visited = JSON.parse(localStorage.featuresVisited);
+    visited.notifications.app = true;
+    localStorage.setItem("featuresVisited", JSON.stringify(visited));
   }
 
  /* componentDidMount(){

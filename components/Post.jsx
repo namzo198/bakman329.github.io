@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {indexPosts, getProfilePic, audienceText,getParsed,saveVisitedAdaptation, namesToLinks,namesTagged,AddfriendList,nameToLink,followUser} from '../utilities.js'
+import {indexPosts, getProfilePic, audienceText,getParsed,saveVisitedAdaptation, namesToLinks,namesTagged,AddfriendList,nameToLink,followUser,blockFriend} from '../utilities.js'
 import {highLight,highLightExtended,No_highLight } from '../adaptations/Highlight.js';
 import Button from './Button.jsx'
 import Comment from './Comment.jsx'
@@ -63,9 +63,10 @@ class Post extends React.Component {
       adaptationVisited: adaptationVisited,
         
       //Scroll Position and Show
-        onScrollShowTagSuggestion:false,
-        onScrollShowHideSuggestion:false,
+        onscrollShowTagSuggestion:false,
+        onscrollShowHideSuggestion:false,
         onscrollShowDeleteSuggestion:false,
+        onscrollShowBlockSuggestion:false,
         //scrollPos:0,
         
       //Highlight Adaptation
@@ -73,33 +74,41 @@ class Post extends React.Component {
       untag_Highlight:!adaptationVisited["Untag_Post"]["highlight"] && (adaptations["untag_Post"] == "high")? true:false,
       delete_Highlight:!adaptationVisited["Delete_Post"]["highlight"] && (adaptations["delete_Post"] == "high")? true:false,
       //highlight: !adaptationVisited["Hide_Post"]["highlight"] && (adaptations["hide_Post"] == "high")? "high":null,
+      block_Highlight: !adaptationVisited["Block_User"]["highlight"] && !adaptationVisited["Block_User"]["NewsFeed_highlight"] && (adaptations["block_User"] == "high")? true:false,
         
-     //Hide Suggestion Adaptation
+     //Suggestion Adaptation
+        block_Suggestion: !adaptationVisited ["Block_User"]["suggestion"] && (adaptations["block_User"] === "sugst"),
        hidesuggestion: !adaptationVisited ["Hide_Post"]["suggestion"]&& (adaptations["hide_Post"] === "sugst"),
        untag_Suggestion:!adaptationVisited ["Untag_Post"]["suggestion"]&& (adaptations["untag_Post"] === "sugst"),
        delete_Suggestion:!adaptationVisited["Delete_Post"]["suggestion"] && (adaptations['delete_Post'] === "sugst"),
+       displayBlockSuggestionPopup:true,
        displayHideSuggestionPopup:true,
        displayUntagSuggestionPopup:true,
        unsubcribe_displaySuggestionPopup:true,   
        categorize_displaySuggestionPopup:true,
+       block_label_Sugst:"Hi Alex - Posts by Ira Siplan have repeatedly been flagged as abusive. Do you want to block Ira?",
        untag_label_Sugst:"Hi Alex - You’ve been tagged in this post by Loren Payton, which contains alcohol. Do you want to untag yourself from this post?",
        label_Sugst:"Hi Alex - Trevin Noushy has posted this message to your Timeline, which contains a reference to drug use. Do you want to hide this post from your Timeline? It may still appear in other places on FriendBook.",
     
       //Hide Automation Adaptation
+      blockAutomation:!adaptationVisited ["Block_User"]["automation"]&& (adaptations["block_User"] === "auto"),
       hideAutomation:!adaptationVisited ["Hide_Post"]["automation"]&& (adaptations["hide_Post"] === "auto"),
       untag_Automation:!adaptationVisited ["Untag_Post"]["automation"]&& (adaptations["untag_Post"] === "auto"),
       delete_Automation: !adaptationVisited["Delete_Post"]["automation"] && (adaptations["delete_Post"] === "auto"),
-      action:"Hide_Post, Check to see if the suggested audience for the post was followed/not followed (for Undo_Automation) ",
-        
-       action_tag:"Untag_Post,Check to see if the suggested audience for the post was followed/not followed (for Undo_Automation)",
+      action:"Hide_Post, Check to see if the suggested hide action for the post was followed/not followed (for Undo_Automation) ",
+      action_tag:"Untag_Post,Check to see if the suggested tag action for the post was followed/not followed (for Undo_Automation)",
+      action_block:"Block_User,Check to see if the suggested block advice for the post was followed/not followed (for Undo_Automation)",
         
      //Context
       context_tag:"Untag_Post",
+      context_block:"Block_User",    
       context:"Hide_Post",
       untag_Context:"Untag_Post",
       displayHideAutomationPopup:true,
       displayUnTagAutomationPopup:true,
+      displayBlockAutomationPopup:true,
       label_Auto: "This post by Trevin Noushy was automatically hidden from your Timeline.",
+      block_label_Auto: "This post by Ira Slipan is not visible because he has been automatically blocked.",  
       untag_label_Auto:"A tag of you was automatically removed from this post.",
 
     };
@@ -117,56 +126,80 @@ class Post extends React.Component {
     this.onDisplayBasicInfoSuggestion = this.onDisplayBasicInfoSuggestion.bind(this);
     this.show = this.show.bind(this);
       
-     /*Suggestion Adaptation*/
-        this.onClickDestroySuggestion = this.onClickDestroySuggestion.bind(this);
-        this.onClickOK_Suggestion = this.onClickOK_Suggestion.bind(this);
-        this.onClickUntag_DestroySuggestion = this.onClickUntag_DestroySuggestion.bind(this);
-        this.onClickUntag_OKSuggestion = this.onClickUntag_OKSuggestion.bind(this);
-       
-      /* Unsubscribe Friend Suggestion Adaptation */
-      
-        this.onClickDestroyUnsubscribeSuggestion = this.onClickDestroyUnsubscribeSuggestion.bind(this);
-        this.onClickOK_UnsubscribeSuggestion = this.onClickOK_UnsubscribeSuggestion.bind(this);
-      
-      /* Categorize Friend Suggestion Adaptation */
-      
-        this.onClickDestroyCategorizeSuggestion = this.onClickDestroyCategorizeSuggestion.bind(this);
-        this.onClickOK_CategorizeSuggestion = this.onClickOK_CategorizeSuggestion.bind(this);
-      
-      
+     
+    /*Suggestion Adaptation*/
+    this.onClickDestroySuggestion = this.onClickDestroySuggestion.bind(this);
+    this.onClickOK_Suggestion = this.onClickOK_Suggestion.bind(this);
+    this.onClickUntag_DestroySuggestion = this.onClickUntag_DestroySuggestion.bind(this);
+    this.onClickUntag_OKSuggestion = this.onClickUntag_OKSuggestion.bind(this);
+    this.onClickBlock_DestroySuggestion = this.onClickBlock_DestroySuggestion.bind(this);
+    this.onClickBlock_OKSuggestion = this.onClickBlock_OKSuggestion.bind(this);  
+
+    /* Unsubscribe Friend Suggestion Adaptation */
+
+    this.onClickDestroyUnsubscribeSuggestion = this.onClickDestroyUnsubscribeSuggestion.bind(this);
+    this.onClickOK_UnsubscribeSuggestion = this.onClickOK_UnsubscribeSuggestion.bind(this);
+
+    /* Categorize Friend Suggestion Adaptation */
+
+    this.onClickDestroyCategorizeSuggestion = this.onClickDestroyCategorizeSuggestion.bind(this);
+    this.onClickOK_CategorizeSuggestion = this.onClickOK_CategorizeSuggestion.bind(this);
+
+
     /*Automation Adaptation */
-      this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
-      this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
-      this.onClickUntag_Ok_Auto = this.onClickUntag_Ok_Auto.bind(this);
-      this.onClickUntag_Undo_Auto = this.onClickUntag_Undo_Auto.bind(this);
+    this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
+    this.onClickUndo_Auto = this.onClickUndo_Auto.bind(this);
+    this.onClickUntag_Ok_Auto = this.onClickUntag_Ok_Auto.bind(this);
+    this.onClickUntag_Undo_Auto = this.onClickUntag_Undo_Auto.bind(this);
+    this.onClickBlock_Ok_Auto = this.onClickBlock_Ok_Auto.bind(this);
+    this.onClickBlock_Undo_Auto = this.onClickBlock_Undo_Auto.bind(this);
       
+
+    /*Block Adaptation*/
+    this.handleBlockHighlight = this.handleBlockHighlight.bind(this);
+
     /*Handle Scroll*/
-      this.onChangeVisible = this.onChangeVisible.bind(this);
+    this.onChangeVisible = this.onChangeVisible.bind(this);
      
   }
+
 
    onChangeVisible(isVisible, postIndex) {
         
       //console.log('Element is now %s', isVisible ? 'visible' : 'hidden');
        
+       //Tag Suggestion Adaptation
          if(postIndex === 27){
             this.setState({
-                   onScrollShowTagSuggestion:isVisible,
+                   onscrollShowTagSuggestion:isVisible,
                })
          }
        
+       //Hide Suggestion Adaptation
         if(postIndex === 28) {
             this.setState({
-             onScrollShowHideSuggestion:isVisible,
+             onscrollShowHideSuggestion:isVisible,
             })
         }
        
+       //Delete Suggestion Adaptation
         if(postIndex === 2) {
             this.setState({
              onscrollShowDeleteSuggestion:isVisible
             })
         }
+       
+       //Block Suggestion Adaptation
+       let adaptationVisited = getParsed('visited')
+       
+       if( (postIndex === 17 || postIndex === 24 || postIndex === 32 || postIndex === 36|| postIndex === 41) &&  (!adaptationVisited["Block_User"]["suggestion"])) {
+           
+           this.setState({
+               onscrollShowBlockSuggestion:isVisible
+           })
+       }
         
+
     }
     
 
@@ -179,17 +212,63 @@ class Post extends React.Component {
      //console.log("Component mounted");
      //window.addEventListener('scroll', this.handleScroll,true); 
   }
-    
+
+
     
    componentWillUnmount(){
        clearInterval(this.timerID)
-       //console.log("Component removed");
-      // window.removeEventListener("scroll", this.handleScroll,true);
    }
     
  
-
- /*Methods for the Hide Automation Adapatation*/
+ /*Methods for the Block Adaptation*/
+ 
+    handleBlockHighlight() {
+      
+       this.setState({
+          block_Highlight:false, 
+       })
+      saveVisitedAdaptation("Block_User","NewsFeed_highlight");
+   }
+    
+   //Suggestion 
+   onClickBlock_OKSuggestion() {
+       
+       blockFriend("ira_slipan");
+       
+       this.setState({
+           displayBlockSuggestionPopup:false,
+        })
+   }    
+    
+   onClickBlock_DestroySuggestion() {
+       
+       this.setState({
+           displayBlockSuggestionPopup:false,
+        }) 
+       
+    }
+    
+    //Automation
+    onClickBlock_Ok_Auto() {
+       
+       blockFriend("ira_slipan");
+        
+        this.setState({
+             displayBlockAutomationPopup:false
+        })  
+        
+    }
+    
+    onClickBlock_Undo_Auto() {
+        
+        this.setState({
+             displayBlockAutomationPopup:false
+        })  
+    
+      this.props.update(); 
+    }
+    
+ /*Methods for the Hide Automation Adaptation*/
     logHide() {
          var posts = JSON.parse(localStorage.getItem('posts'));
         posts.some((post, index, array) => {
@@ -247,14 +326,10 @@ class Post extends React.Component {
         
         this.props.updateSubscribe();
         
-        
-       
     } 
     
     //For Hiding
     onClickOk_Auto() {
-        
-    
         
         this.setState({
             displayHideAutomationPopup:false
@@ -707,23 +782,25 @@ class Post extends React.Component {
           
            
         { /*The Hide Suggestion Adaptation*/
-            this.state.hidesuggestion && this.state.displayHideSuggestionPopup && this.state.onScrollShowHideSuggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label_Sugst} agree={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>
+            this.state.hidesuggestion && this.state.displayHideSuggestionPopup && this.state.onscrollShowHideSuggestion && <SuggestionBoilerplate action={this.state.action}  context={this.state.context} label={this.state.label_Sugst} agree={this.onClickOK_Suggestion} destroy = {this.onClickDestroySuggestion}/>
         }   
            
         
                
-         {/*The Untag Suggestion Adaptation*/
-          this.state.untag_Suggestion && this.state.displayUntagSuggestionPopup &&  this.state.onScrollShowTagSuggestion && <SuggestionBoilerplate action={this.state.action_tag}  context={this.state.context_tag} label={this.state.untag_label_Sugst} agree={this.onClickUntag_OKSuggestion} destroy = {this.onClickUntag_DestroySuggestion}/>}
+        {/*The Untag Suggestion Adaptation*/
+          this.state.untag_Suggestion && this.state.displayUntagSuggestionPopup &&  this.state.onscrollShowTagSuggestion && <SuggestionBoilerplate action={this.state.action_tag}  context={this.state.context_tag} label={this.state.untag_label_Sugst} agree={this.onClickUntag_OKSuggestion} destroy = {this.onClickUntag_DestroySuggestion}/>}
         
+         {/*The Block Suggestion Adaptation*/
+            this.state.block_Suggestion && this.state.displayBlockSuggestionPopup &&  this.state.onscrollShowBlockSuggestion && <SuggestionBoilerplate action={this.state.action_block}  context={this.state.context_block} label={this.state.block_label_Sugst} agree={this.onClickBlock_OKSuggestion} destroy = {this.onClickBlock_DestroySuggestion} routeTo={"/settings_general/blocking"}/> }
             
+        
         </div>);
     }
   }
 
     
   render() {
-      
-    // console.log("The state for hidden is "+this.state.hidden);
+    
       
     if (!this.state.render) {
      return null;
@@ -813,7 +890,7 @@ class Post extends React.Component {
       
    
     /*Automation of Hiding Post */ 
-    if(this.state.hideAutomation && this.state.displayHideAutomationPopup && this.props.index == 28) {
+    if(this.state.hideAutomation && this.state.displayHideAutomationPopup && this.props.index === 28) {
      
         return (
              <div id='post' className='hidden'>
@@ -826,12 +903,33 @@ class Post extends React.Component {
         </div>
         )
     }
-    
-    
+      
+    /*Automation for Blocking Post*/
 
+       let adaptationVisited = getParsed('visited')
+      if(this.state.blockAutomation && this.state.displayBlockAutomationPopup && (!adaptationVisited["Block_User"]["automation"]) && (this.props.index === 17 || this.props.index === 24 || this.props.index === 32 || this.props.index === 36 || this.props.index === 41 )){
+          
+          return (
+             <div id='post' className='hidden'>
+              <div id='post-content'>
+              {/*The Automation Adaptation Popup*/ 
+                <AutomationBoilerplate action = {this.state.action_block} context = {this.state.context_block} label={this.state.block_label_Auto} onClickOK_Auto={this. onClickBlock_Ok_Auto} onClickUnDo_Auto = {this.onClickBlock_Undo_Auto} routeTo={"/settings_general/blocking"}
+                />
+               }
+            </div>
+        </div>
+        )
+      }
+      
+      
+    
+    //This is the special highlight adaptation case for block on the NewsFeed. 
+    let BlockHighlightStyle = classNames({
+          "high1": this.state.block_Highlight && this.props.name === "Ira Slipan"
+      });
 
     //To indicate shared Post
-    var post_title = [<ProfileLink name={this.props.name} key={0} />];
+    var post_title = [<span key={0} className= {BlockHighlightStyle}><ProfileLink name={this.props.name} key={0} onClick={this.handleBlockHighlight} /></span>];
    
       if (this.props.original_poster) {
       post_title.push(' shared ');
@@ -841,7 +939,7 @@ class Post extends React.Component {
       
     /*To indicate tagged Post*/
     if (!this.state.tagRemoved && !this.state.untag_Automation && this.props.children.includes("Alex Doe")  ){
-        post_title.push(' is with');
+        post_title.push(' is with ');
         post_title.push(<ProfileLink name={"Alex Doe"} key={1}/>   );
     }
       

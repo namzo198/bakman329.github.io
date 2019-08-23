@@ -18,7 +18,7 @@ class BlockFriend extends React.Component {
         this.state = {
              adaptationVisited:adaptationVisited,
             highlight1: !adaptationVisited["Block_User"]["highlight"] && (adaptation["block_User"] == "high")? true:false,
-             context:"Block_User",
+            context:"Block_User",
             renderDropdown:true,
             renderPopup:false,
             renderBlockConfirmation:false,

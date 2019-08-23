@@ -16,6 +16,8 @@ class AutomationBoilerplate extends Component {
         saveVisitedAdaptation(feature, name);
         //this.props.destroy();
     }
+ 
+   
 
     onClickOk_Auto() {
         var event = {
@@ -44,7 +46,7 @@ class AutomationBoilerplate extends Component {
     render(){
         return(
         <div id ='except-warning'>
-                <Automation undoButton="Undo" okButton="Ok" onOkClick={this.onClickOk_Auto} label={this.props.label} onUndoClick={this.onClickUndo_Auto}/></div>
+                <Automation undoButton="Undo" okButton="Ok" onOkClick={this.onClickOk_Auto} label={this.props.label} onUndoClick={this.onClickUndo_Auto} routeTo={this.props.routeTo != undefined? this.props.routeTo:null}/></div>
        )
     }
 

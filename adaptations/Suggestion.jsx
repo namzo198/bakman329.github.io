@@ -38,11 +38,11 @@ destroy() {
         
       <div id="suggestPopup">
         <div className="popup-header">{this.props.title}</div>
-        <a className="suggestPopupCloseButton" href="javascript:void(0)" onClick={this.props.destroy}>X</a>
+        <a className="suggestPopupCloseButton" href="javascript:void(0)" onClick={() => this.props.destroy("Dismissed")}>X</a>
         <div className="suggest_popup-content"><div>{this.props.children}</div>
         <br/>
         <div className="suggest_popup-footer">
-          <span className="popup-footer"><Button type="cancel" href='javascript:void(0)' onClick={this.props.destroy}>Rather Not</Button></span>
+          <span className="popup-footer"><Button type="cancel" href='javascript:void(0)' onClick={()=> this.props.destroy("Rather Not follow")}>Rather Not</Button></span>
           <span className="popup-footer"><Button type="confirm" href='javascript:void(0)' onClick={this.props.okay} routeTo = {this.props.routeTo}>OK</Button></span>
         </div>
         </div>

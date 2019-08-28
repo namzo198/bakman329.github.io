@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Button from '../Button.jsx'
 import {Link} from 'react-router-dom';
+import Menu from '../Menu.jsx'
 
 
 
@@ -19,6 +20,10 @@ class Notificationdropdown extends React.Component {
     
     render(){
        // console.log("I have been called");
+        /*style="
+    display: inline-block;
+    margin-left: 60px;
+"*/
         return (  
             
              <div id= "notification_container">
@@ -37,38 +42,77 @@ class Notificationdropdown extends React.Component {
                     <div id = "dropdown_header">
                          <div className = "notification-id">
                              <img src="/assets/users/kyle_profile_img.jpg"/>
-                             <ul>
-                                 <li> Kyle Parker invited you to Rave Night </li>
-                                     <a> Accept </a>
-                                     <a> Decline </a>
-                             </ul>
+                             
+                                 <p> Kyle Parker invited you to Rave Night </p>  
+                                    <div style={{display:"inline-block", marginLeft:"60px"}}>
+                                        <Menu icon={'horiz'}>
+                                         <Button>
+                                             Block
+                                         </Button>
+                                       </Menu>
+                                  </div>  
                          </div>
                          
                           <div className = "notification-id">
+                             <img src="/assets/users/jack_profile_img.jpg"/>
+                             <ul>
+                                 <li> Jack Scout mentioned you in a comment</li>
+                                  
+                             </ul>
+                         </div>
+                        
+                         <div className = "notification-id">
+                             <img src="/assets/users/jim_profile_img.jpg"/>
+                             
+                                 <p> Jim Mend invited you to play CandyOut </p>
+                                   <div style={{display:"inline-block", marginLeft:"60px"}}>
+                                        <Menu icon={'horiz'}>
+                                         <Button>
+                                             Block
+                                         </Button>
+                                       </Menu>
+                                  </div> 
+                         </div>                  
+                       
+                         
+                         <div className = "notification-id">
+                             <img src="/assets/users/lydia_profile_img.jpg"/>
+                             <ul>
+                               <li>  Lydia Chopover likes your post </li>                    
+                            </ul>
+                         </div>
+            
+                        
+                          <div className = "notification-id">
                              <img src="/assets/users/kyle_profile_img.jpg"/>
-                             <ul>
-                                 <li> Kyle Parker invited you to TwerkOut </li>
-                                     <a> Accept </a>
-                                     <a> Decline </a>
-                             </ul>
+                            <p> Kyle Parker invited you to TwerkOut </p>
+                                <div style={{display:"inline-block", marginLeft:"60px"}}>
+                                        <Menu icon={'horiz'}>
+                                         <Button>
+                                             Block
+                                         </Button>
+                                       </Menu>
+                                  </div>   
                          </div>
+                         
+                        <div className = "notification-id">
+                             <img src="/assets/users/tanya_profile_img.jpg"/>
+                               <ul>
+                                  <li> Tanya Strotman likes your photo </li>
+                               </ul>
+                         </div>
+                         
                          
                          <div className = "notification-id">
                              <img src="/assets/users/jim_profile_img.jpg"/>
-                             <ul>
-                                 <li> Jim Mend invited you to play CandyOut </li>
-                                     <a> Accept </a>
-                                     <a> Decline </a>
-                             </ul>
-                         </div>
-                         
-                         <div className = "notification-id">
-                             <img src="/assets/users/jim_profile_img.jpg"/>
-                             <ul>
-                                 <li> Jim Mend invited you to play SwordIt  </li>
-                                     <a> Accept </a>
-                                     <a> Decline </a>
-                             </ul>
+                              <p> Jim Mend invited you to play SwordIt  </p>
+                                <div style={{display:"inline-block", marginLeft:"60px"}}>
+                                        <Menu icon={'horiz'}>
+                                         <Button>
+                                             Block
+                                         </Button>
+                                       </Menu>
+                                  </div> 
                          </div>
                      </div>
                  </div>

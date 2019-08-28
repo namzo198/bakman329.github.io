@@ -2,7 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import {linkToName,getParsed,addToLocalStorageObject} from '../../../utilities.js'
 import {highLight,noHighLight} from '../../../adaptations/Highlight.js';
-
+import ReactTooltip from 'react-tooltip'
 import ContactInfo from './ContactInfo.jsx';
 import Overview from './Overview.jsx'
 
@@ -34,12 +34,12 @@ class About extends React.Component {
   overview() {
     return(
         <ul id="info_left">
-          <li id="selector"><Link to={'/profile/' + this.props.match.params.user + '/about/overview'}>Overview</Link></li>
-          <li><a href="javascript:void(0)">Work and education</a></li>
-          <li><a href="javascript:void(0)">Places you've lived</a></li>
+          <li id="selector" data-tip="Not Implemented"><Link to={'/profile/' + this.props.match.params.user + '/about/overview'}>Overview</Link></li>
+          <li data-tip="Not Implemented" ><a href="javascript:void(0)">Work and education</a></li>
+          <li data-tip="Not Implemented" ><a href="javascript:void(0)">Places you've lived</a></li>
           <li style={this.state.highlight}><Link to={'/profile/' + this.props.match.params.user + '/about/contact'} onClick = {this.changeStyle}>Contact and basic info</Link></li>
-          <li><a href="javascript:void(0)">Details about you</a></li>
-          <li><a href="javascript:void(0)">Life events </a></li>
+          <li data-tip="Not Implemented" ><a href="javascript:void(0)">Details about you</a></li>
+          <li data-tip="Not Implemented" ><a href="javascript:void(0)">Life events </a></li>
         </ul>
     );
   }

@@ -1,6 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {nameToLink} from '../utilities.js'
+import {nameToLink,registerEvent} from '../utilities.js'
 
 class ProfileLink extends React.Component {
   constructor(props) {
@@ -8,6 +8,8 @@ class ProfileLink extends React.Component {
   }
 
   render() {
+      
+      //registerEvent('Clicked on ProfileLink for '+this.props.name, "Add something",this.props.fromNewsFeed);
     return (
       <Link to={{
         pathname: '/profile/' + nameToLink(this.props.name),

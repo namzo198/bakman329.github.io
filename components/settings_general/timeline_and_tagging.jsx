@@ -9,11 +9,6 @@ import AudienceMenu from '../AudienceMenu.jsx';
 import AutomationBoilerplate from '../../adaptations/Automation/AutomationBoilerplate.jsx'
 
 
-
-
-
-
-
 class TimelineandTagging extends Component {
     constructor(props){
         super(props)
@@ -33,7 +28,7 @@ class TimelineandTagging extends Component {
 
             action: "Timeline_seePost, Check to see if the audience was changed/unchanged to the suggested audience i.e \"Friends\"",
             context:"Timeline_seePost",
-            label_Auto:"The grayed out and underlined option's audience was automatically changed",
+            label_Auto:"The setting “Who can post to your timeline” was automatically changed from “Everyone” to “Friends”.",
         }
 
 
@@ -181,10 +176,6 @@ render(){
             <hr/>
           <br/>
 
-        {/*The Automation Adaptation*/
-          this.state.displayAutomationPopup && this.state.automation && <AutomationBoilerplate action = {this.state.action} context = {this.state.context} label={this.state.label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this.onClickUndo_Auto}/>
-        }
-
         <div id="right_top">
             <span className="righttop_label">Timeline </span>
             {/*this.displayNormal("Who can post on your timeline?","timeline_post")*/}
@@ -192,6 +183,9 @@ render(){
             <hb/>
 
             <Edit description="Who can see what others post on your timeline?" audienceType="timeline_see" audience={this.state.timeline_see} changeAudience={this.changeAudience} renderEditForm={this.displayEdit} renderNormal={this.displayNormal} automate={this.state.displayAutomationPopup && this.state.automation}/>
+            <br/>
+            {/*The Automation Adaptation*/this.state.displayAutomationPopup && this.state.automation && <AutomationBoilerplate action = {this.state.action} context = {this.state.context} label={this.state.label_Auto} onClickOK_Auto={this.onClickOk_Auto} onClickUnDo_Auto = {this.onClickUndo_Auto}/>
+        }
 
         </div>
          <hr/>

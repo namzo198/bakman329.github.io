@@ -10,7 +10,7 @@ export function HighlightBoilerplate (props) {
    var event = { 
        action:`User concurs with the Highlight for ${props}`,
         details:props,
-        object:'Alex Doe',
+        object:'Highlight Adaptation',
         session:localStorage.session_id
    }
       

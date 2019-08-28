@@ -1,9 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Button from '../Button.jsx'
-import {getParsed,addToLocalStorageObject} from '../../utilities.js'
+import {getParsed,addToLocalStorageObject, registerEvent} from '../../utilities.js'
 import NameFriendList from './NameFriendList.jsx'
 import {HighlightBoilerplate} from '../../adaptations/Highlight/HighlightBoilerplate.jsx';
+import ReactTooltip from 'react-tooltip';
 
 
 class Friends extends React.Component {
@@ -32,6 +33,7 @@ class Friends extends React.Component {
         this.addCheck = this.addCheck.bind(this);
         this.addNewList = this.addNewList.bind(this);
         this.input = this.input.bind(this);
+        this.unfriend = this.unfriend.bind(this);
     }
     
     
@@ -139,6 +141,13 @@ class Friends extends React.Component {
         }
     }
     
+    unfriend () {
+        
+      registerEvent("Clicked on UnFriend", "Tried to Unfriend "+this.props.friendName, "Timeline: Friends Dropdown ");
+        //unFollowUser(this.props.friendName)
+       // console.log("I have been clicked")
+    }
+    
     input() {
         
         this.setState({
@@ -157,7 +166,8 @@ class Friends extends React.Component {
                         <div className="dropdown-content">
                            {!this.state.renderCreateList?
                               <div>
-                                 <a href="#">Get Notifications </a> 
+                                 <a href="#" data-tip="Not Implemented" data-place="top" data-event="click">Get Notifications </a>
+                                 
                                  <hr></hr>
                                  <a href="#">Close friends</a>
                                  <a href="#">Acquaintances</a>
@@ -165,7 +175,9 @@ class Friends extends React.Component {
                                  <span className={this.state.highlight1 && (this.props.friendName === "sasha_riley")?"high1":null} ><Button onClick={this.handleClick}>Add to another list </Button></span> 
                                   
                                 <hr></hr>
-                                 <a href="#">Unfriend</a>
+                                 <span data-tip="Not Implemented"  data-event="click">
+                                   <Button onClick={this.unfriend}  >Unfriend</Button>
+                                 </span>
                                 </div>:
                             
                                  <div>

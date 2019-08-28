@@ -1,6 +1,7 @@
 import React from 'react';
 import ScenarioFeature from './ScenarioFeature.jsx';
 import ProfileLink from '../ProfileLink.jsx';
+import ExitExperiment from './ExitExperiment.jsx';
 import classNames from 'classnames'
 
 class Scenario extends React.Component {
@@ -133,10 +134,12 @@ class Scenario extends React.Component {
                           <label>Block and/or report abusive friends</label>
                           <span className="tooltiptext">If you are being harassed online, is best not to engage. Instead, block and/or report the abusive friend</span>
                       </li>
-                      
                     </ol>
-                </div>
-            
+                    
+                     <div id="experiment-done">
+                       <ExitExperiment />
+                     </div>
+                </div> 
         )
         
     }

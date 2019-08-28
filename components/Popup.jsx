@@ -84,8 +84,9 @@ class Popup extends React.Component {
           <div className="popup-footer">
             <Button type="cancel" onClick={() => {this.props.cancel();  this.props.destroy(true)}}>Cancel</Button>
             <Button type="confirm"
-              onClick={() => {this.props.okay(); this.props.destroy();}}
-              isDisabled={this.props.confirmDisabled}>{this.props.okButtonName != undefined? this.props.okButtonName:Okay}</Button>
+               onClick={() => {this.props.okay(); this.props.destroy();}}
+               isDisabled={this.props.confirmDisabled} routeTo = {this.props.routeTo != undefined?this.props.routeTo:null}>    {this.props.okButtonName != undefined? this.props.okButtonName:Okay}
+            </Button>
           </div>;
       }
        

@@ -1,5 +1,5 @@
 import React from 'react'
-import {resetChat} from '../utilities.js'
+import {resetChat,registerEvent} from '../utilities.js'
 import Button from './Button.jsx'
 import ProfileLink from './ProfileLink.jsx';
 
@@ -10,6 +10,7 @@ class ChatWindow extends React.Component {
 
        this.onKeyPress = this.onKeyPress.bind(this);
        this.destroyWindow = this.destroyWindow.bind(this);
+       this.registerClick = this.registerClick.bind(this);
    }
 
    onKeyPress(e) {
@@ -31,14 +32,17 @@ class ChatWindow extends React.Component {
                localStorage.outgoing_messages = JSON.stringify(outgoing_messages_list);
            }
 
-           this.setState({value: ''});
+           registerEvent('Entered this chat message "'+ this.state.value +'"',' for '+ this.props.name, "In Chat Window");
        }
    }
-
+   registerClick() {
+    registerEvent('Clicked on '+this.props.name+", '\s profile link to visit their profile page", " From Chat Window");   
+   }
+    
    destroyWindow() {
-       var event = {action : 'Closed Chat',
+       var event = {action : 'Closed Chat Window for '+this.props.name,
                     context : 'From NewsFeed', // state.context,
-                    name : this.props.name};
+                   };
        this.props.destroy(this.props.name);
        return event;
    }
@@ -68,7 +72,7 @@ class ChatWindow extends React.Component {
          <div id='chat-window'>
             <div id='chat-header'>
                {/* TODO: Add option to turn chat back on from here */}
-               <ProfileLink name={this.props.name} />
+               <ProfileLink name={this.props.name}  onClick={this.registerClick}/>
                <Button id='chat-close' onClick={this.destroyWindow}>&#10005;</Button>
             </div>
             <div id='chat-content'>

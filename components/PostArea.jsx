@@ -33,13 +33,11 @@ class PostArea extends React.Component {
           let render = true;
          
           if (this.props.name) {
-               
-              render = (post.name === this.props.name) || (post.target_friend === this.props.name);
               
-              } else {
-                render = (post.new || post.name != "Alex Doe");
-                  
-              }
+              render = (post.name === this.props.name) || (post.target_friend === this.props.name);
+            } else {
+                render = (post.new || post.name !== "Alex Doe" && post.target_friend !== "Alex Doe");
+            }
           
           
          out[index] = React.createElement(Post,
@@ -70,11 +68,9 @@ class PostArea extends React.Component {
      hideAllPostsfromNewsFeed(name) {
         unFollowUser(name);
          this.update();
-    
      }
 
    update() {
-      
       this.forceUpdate();
    }
 

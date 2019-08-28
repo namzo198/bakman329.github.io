@@ -84,24 +84,14 @@ class App extends React.Component {
     });
       
     localStorage.setItem("adaptations", JSON.stringify(adaptations));
-      
-    
      
     if (update) {
       window.location.href = "/";
     }
       
-      
-      console.log("TODO: Begin time counter to understand how long user stays within the platform");
-      
   }
     
-    componentWillUnmount() {
-        
-        console.log("TODO: Stop timer and send time taken to DB");
-      //  window.addEventListener("beforeunload",alert("TODO: Stop timer and send time taken to DB"));
-       
-    }
+    
 
   // Turn the querystring into a JSON object
   urlqueryStringToJSON() {
@@ -169,11 +159,8 @@ class App extends React.Component {
        
         <BrowserRouter>
           <div>
-           <Scenario/> 
-            <div id="experiment-done">
-                <ExitExperiment />
-             </div>
             <Header />
+            <Scenario/> 
             <Switch>
               <Route exact path='/' component={NewsFeed} />
               <Route path='/profile/:user' component={Profile} />

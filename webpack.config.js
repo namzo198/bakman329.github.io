@@ -8,6 +8,8 @@ var config = {
 	
    devServer: {
       historyApiFallback:true,
+      contentBase: './',
+      hot: true,
       inline: true,
       port: 8080
    },

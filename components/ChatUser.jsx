@@ -13,9 +13,9 @@ class ChatUser extends React.Component {
     }
 
     onClickName() {
-        var event = {action : 'Clicked Chat User', // state.action,
-                     context : 'From NewsFeed', // state.context,
-                     name : this.props.name};
+        var event = {action : 'Clicked on Chat User  '+this.props.name, // state.action,
+                     context : 'To Open ChatWindow', // state.context,
+                    };
         var added = this.props.chat.addChat(this.props.name);
         return ((added) ? event : null);
     }

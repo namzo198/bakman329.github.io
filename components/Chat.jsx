@@ -46,7 +46,7 @@ class Chat extends React.Component {
             
         //Chat Suggest Adaptation
         chatSuggestion: !adaptationVisited ["Chat_Offline"]["suggestion"]&& (adaptations["chat_Offline"] === "sugst"),
-        label_Sugst:"Hi Alex- Would you like to turn off Active Status on Chat. Your friends and contacts will no longer see when you're online on FriendBook.",
+        label_Sugst:"Hi Alex - You have been ignoring chat messages lately. Do you want to turn off Active Status on Chat? Your friends and contacts will no longer see when you're online on FriendBook.",
             
         };
        

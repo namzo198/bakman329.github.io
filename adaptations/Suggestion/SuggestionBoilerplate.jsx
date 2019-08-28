@@ -26,7 +26,7 @@ class SuggestionBoilerplate extends Component{
         var event={
             action: `Followed and agreed with the Suggestion for ${this.props.action}`,
             context: this.props.context,
-            name: 'Alex_Doe'
+            name: 'Suggestion Adaptation'
         };
         
         this.props.agree();
@@ -39,7 +39,7 @@ class SuggestionBoilerplate extends Component{
         var event = {
             action: origin+` the Suggestion for ${this.props.context}`,
             context:this.props.context,
-            name:'Alex_doe'
+            name:'Suggestion Adaptation'
         };
         
         this.visited(this.props.context, "suggestion");

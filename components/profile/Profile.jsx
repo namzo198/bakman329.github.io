@@ -9,6 +9,7 @@ import About from "./settings/About.jsx"
 import FriendSubscription from "./FriendSubscription.jsx"
 import BlockFriend from "./BlockFriend.jsx"
 import Friends from "./Friends.jsx"
+import ReactTooltip from 'react-tooltip'
 
 class Profile extends React.Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class Profile extends React.Component {
         unsubscribe_automation:!adaptationVisited ["Unsubscribe_Friend"]["automation"]&& (adaptation["unsubscribe_Friend"] === "auto"),
         unsubscribe_action:"Unsubscribe_Friend, Check to see if the suggested audience for the post was followed/not followed (for Undo_Automation)",
         unsubscribe_displayAutomationPopup:true,
-        unsubscribe_label_Auto: "You were automatically unsubscribed from following Jack Scout",
+        unsubscribe_label_Auto: "Jack Scout was automatically unfollowed.",
         unsubscribe_context: "Unsubscribe_Friend",
         
         //Categorize Friend:Automation
@@ -51,16 +52,13 @@ class Profile extends React.Component {
         categorize_action:"Unsubscribe_Friend, Check to see if the suggested audience for the post was followed/not followed (for Undo_Automation)",
         categorize_displayAutomationPopup:true,
         auto_CategorizeAccept: false,
-        categorize_label_Auto: " Sasha Riley was automatically added to the \"Family\" friends list",
+        categorize_label_Auto: " Sasha Riley was automatically added to the \"Recruiters\" friends list",
         categorize_context: "Categorize_Friend",
       }
 
       this.changeStyle = this.changeStyle.bind(this);
       
-        /* Unsubscribe Friend Suggestion Adaptation 
-      
-        this.onClickDestroyUnsubscribeSuggestion = this.onClickDestroyUnsubscribeSuggestion.bind(this);
-        this.onClickOK_UnsubscribeSuggestion = this.onClickOK_UnsubscribeSuggestion.bind(this);*/
+  
       
          /*Automation Unsubscribe Adaptation*/
       this.onClickOk_Auto = this.onClickOk_Auto.bind(this);
@@ -97,14 +95,10 @@ class Profile extends React.Component {
     }
     
    onClickUndo_CategorizeAuto(){
-    
-       //console.log("Undo Automation has been clicked"); 
-       
        this.setState({
                  categorize_displayAutomationPopup:false,
             })
        
-      
     }    
     
     
@@ -122,8 +116,6 @@ class Profile extends React.Component {
     }
     
    onClickUndo_Auto(){
-    
-       //console.log("Undo Automation has been clicked"); 
        followUser(this.props.match.params.user);
        this.setState({
                unsubscribe_displayAutomationPopup:false,
@@ -167,23 +159,25 @@ render() {
         <div id="profile-content">
           <div className="top_container">
             <div className="cover_photo">
-              {this.props.match.params.user == "Alex_doe"?
+              {this.props.match.params.user === "alex_doe"?
               <div>
              <div className="dropdown">
-             <button className="dropbtn">Update info </button>
+             <button className="dropbtn" data-tip="Not Implemented">Update info </button>
+              
            </div>
 
            <div className="dropdown_1">
-             <button className="dropbtn_1">Activity log </button>
-              <button className="btn">...</button>
+             <button className="dropbtn_1" data-tip="Not Implemented">Activity log </button>
+              <button className="btn" data-tip="Not Implemented">...</button>
             </div>
           </div>
            :<div>
            
             <Friends friendName={this.props.match.params.user} auto = {this.state.auto_CategorizeAccept}/> 
+            
             <FriendSubscription friendName = {this.props.match.params.user} auto ={this.state.unsubscribe_automation} sugst={this.state.suggestAgree}/>
             
-            <BlockFriend friendName = {this.props.match.params.user}  />
+            <BlockFriend friendName = {this.props.match.params.user} />
             
           
            </div>
@@ -194,9 +188,20 @@ render() {
               <ul className = "nav_top_options">
                 <li><Link to={"/profile/" + this.props.match.params.user}>Timeline</Link></li>
                 <li style={this.state.highlight}><Link to={"/profile/" + this.props.match.params.user + "/about/overview"} onClick={this.changeStyle}>About</Link></li>
-                <li><a href="#">Friends</a></li>
-                <li><a href="#">Photos</a></li>
-                <li><a href="#">More</a></li>
+                <li>
+                   <a href="#" data-tip="Not Implemented">Friends</a>
+                    <ReactTooltip place="bottom" type="dark" effect="float"/>
+                </li>
+                
+                <li>
+                   <a href="#" data-tip="Not Implemented">Photos</a>
+                    
+                </li>
+                
+                <li>
+                <a href="#" data-tip="Not Implemented">More</a>
+                </li>
+                
               </ul>
             </div>
 
@@ -216,7 +221,6 @@ render() {
               {/*The Categorization Automation Adaptation Popup*/ 
                 (this.props.match.params.user === "sasha_riley") && this.state.categorize_displayAutomationPopup && this.state.categorize_automation && <AutomationBoilerplate action = {this.state.categorize_action} context = {this.state.categorize_context} label={this.state.categorize_label_Auto} onClickOK_Auto={this.onClickOk_CategorizeAuto} onClickUnDo_Auto = {this. onClickUndo_CategorizeAuto}/>
             }
-             
            
           </div>
            <Switch>

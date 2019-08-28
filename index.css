@@ -459,6 +459,10 @@ background-position: -250px -330px;
     background-color:rgb(255,255,153) ;
 }
 
+.block_high1 {
+    background-color: #FFD662FF;
+}
+
 
 .addtoList {
     color:gray;
@@ -472,7 +476,8 @@ background-position: -250px -330px;
     background-clip: padding-box;
     border:1px solid rgba(0,0,0, .15);
     box-shadow:0 3px 8px rgba(0,0,0, .3);
-    
+    height:250px;
+    overflow: scroll;
 }
 
 #dropdown_header:after {
@@ -637,6 +642,12 @@ color: #ffffff;}
     #chat-area {
         background-color: #000;
         display: none;
+    }
+}
+
+@media (max-height: 800px) {
+    #scenario-area {
+     overflow-y: scroll; 
     }
 }
 
@@ -871,7 +882,7 @@ color: #ffffff;}
 }
 .popup-content_altHeight{
     background-color: #ffffff;
-    padding: 10px 20px 10px 20px;
+    padding: 5px 5px 5px 5px;
     overflow: scroll;
 }
 
@@ -1214,13 +1225,15 @@ Edit_Icon_pos{
   position: absolute;
   top:42px;
   width: 100%;
-margin-left: 291px;
+  margin-left: 291px;
+  z-index: -1;
   /*height: 100%;*/
 }
 
 #profile-content {
  /* margin-left: 21%;*/
     margin-left:4%;
+    width: fit-content;
 }
 
 #profile-content h2 {
@@ -2177,8 +2190,8 @@ text-align: center;
  #scenario-area {
     position:fixed;
     width: 275px;
-    height: 98%;
-    top: 10px;
+    height: 84%;
+    top: 50px;
     left: 8px;
     background-color:#efeff4; /*e0e0e0*/
     border-radius: 10px;
@@ -2286,6 +2299,7 @@ text-align: center;
 .scenario-menu-item:hover .tooltiptext{
     visibility: visible;
 }
+
 
 .tooltiptext::after {
   content: " ";
@@ -2417,10 +2431,10 @@ text-align: center;
 }
 
 #experiment-done {
-    position:fixed;
+    position:relative;
     bottom:15px;
     left:85px;
-    margin-top: 10px;
+    margin-top: 30px;
 }
 
 .finish-button {

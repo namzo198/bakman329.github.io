@@ -23,7 +23,7 @@ class AutomationBoilerplate extends Component {
         var event = {
             action: `User concurs with the Automation for ${this.props.action}`,
             context:  this.props.context,
-            name: 'Alex Doe'
+            name: 'Automation Adaptation'
         }
 
         this.props.onClickOK_Auto();
@@ -35,7 +35,7 @@ class AutomationBoilerplate extends Component {
         var event = {
             action: `User Undid the Automation for ${this.props.action}`,
             context:this.props.context,
-            name: 'Alex Doe'
+            name: 'Automation Adaptation'
         }
 
         this.props.onClickUnDo_Auto();

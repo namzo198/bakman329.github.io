@@ -1,5 +1,21 @@
-import React from 'react'
-import ProfileLink from './components/ProfileLink.jsx'
+import React from 'react';
+import ProfileLink from './components/ProfileLink.jsx';
+import {CreateEvent} from './controller/databaseFunctions.js';
+
+
+
+export function registerEvent(action, details, object) {
+    
+    let  event = {
+        action: action,
+        details: details,
+        object:object,
+        session:localStorage.session_id
+    };
+    
+    CreateEvent(event)
+}
+
 
 export function indexPosts() {
    var posts = JSON.parse(localStorage.getItem('posts'));
@@ -13,6 +29,15 @@ export function indexPosts() {
 export function resetPosts() {
  localStorage.setItem('posts', JSON.stringify(
     [
+    {"name":"Trevin Noushy",
+        "content":"Haha I didn’t know your birthday was 4/20 🤪. Hope you get to smoke some good weed today, bro! 😏 ",
+         "comments":[],
+         "hidden":false,
+         "key":42,
+         "audience":"public",
+         "time": "Just now",
+         "target_friend":"Alex Doe"},
+        
     {"name":"Ira Slipan",
          "content":"Alex Doe, you are a fucking cunt.",
          "comments":[],
@@ -435,7 +460,7 @@ export function resetUsers() {
      friend:true,
      follow:true},
      {name:"VICE News",
-      profile_pic:'vice_profile_img.png',
+      profile_pic:'vice_profile_img.jpg',
       friend:false,
       follow:true},
      {name:"The Coca-Cola Company",
@@ -443,7 +468,7 @@ export function resetUsers() {
       friend:false,
       follow:true},
      {name:"Starbucks",
-      profile_pic:'starbucks_profile_img.png',
+      profile_pic:'starbucks_profile_img.jpg',
       friend:false,
       follow:true},
       {name:"Bill Gates",
@@ -638,10 +663,14 @@ export function resetAdaptationDisplay(){
 }
 
 export function blockFriend(name) {
-    
     //Add to Blocked Users list
-    var BlockedUsers = getParsed('blockedUsers');
-     BlockedUsers.push(linkToName(name));
+    let BlockedUsers = getParsed('blockedUsers');
+    let friendName = linkToName(name);
+    
+     if(BlockedUsers.indexOf(friendName)){
+         BlockedUsers.push(friendName)
+      };
+    
     addToLocalStorageObject('blockedUsers',BlockedUsers)
     
     
@@ -669,9 +698,7 @@ export function blockFriend(name) {
 }
 
 export function resetBlockedUsers(){
-    
-    
-    localStorage.setItem('blockedUsers',JSON.stringify(Array.from(new Set(["Richard Roe", "Jane Appleeseed"]))))
+  localStorage.setItem('blockedUsers',JSON.stringify(["Richard Roe", "Jane Appleeseed"]))
 }
 
 export function resetBlockedApps(){

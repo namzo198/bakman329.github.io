@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {registerEvent} from '../utilities.js';
 
 class NewCommentArea extends React.Component {
    constructor(props) {
@@ -44,7 +45,9 @@ class NewCommentArea extends React.Component {
             posts[post_index].comments.push({'name': 'Alex Doe', 'img': './assets/users/alex_profile_img.jpg', 'content': content});
             localStorage.posts = JSON.stringify(posts);
          }
-
+        
+       
+          
          this.setState({value: ''});
          this.props.post.forceUpdate();
 
@@ -52,6 +55,8 @@ class NewCommentArea extends React.Component {
             this.props.parent.setState({render_reply_area: false});
             this.props.parent.forceUpdate();
          }
+          
+        registerEvent('Entered this comment "'+ content +'" for', this.props.name +' Post '+ this.props.index, (this.props.forTimeline?"Timeline":"NewsFeed"));
       }
    }
 

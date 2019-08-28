@@ -5,7 +5,7 @@ import Button from './Button.jsx'
 import AudienceMenu from './AudienceMenu.jsx'
 import PostArea from './PostArea.jsx'
 import UploadPopup from './UploadPopup.jsx'
-import{addToLocalStorageObject,getParsed,saveVisitedAdaptation,getCurrentFriendLists} from '../utilities.js';
+import{addToLocalStorageObject,getParsed,saveVisitedAdaptation,getCurrentFriendLists,registerEvent} from '../utilities.js';
 import AutomationBoilerplate from '../adaptations/Automation/AutomationBoilerplate.jsx'
 import SuggestionBoilerplate from '../adaptations/Suggestion/SuggestionBoilerplate.jsx'
 import {highLight,highLightExtended,No_highLight} from '../adaptations/Highlight.js';
@@ -134,8 +134,11 @@ class NewPostArea extends React.Component {
      localStorage.setItem('posts', JSON.stringify([post].concat(posts)));
      indexPosts();
      this.props.postarea.update();
+       
+    registerEvent("Created new Post ","it reads: "+this.state.value, (this.props.forTimeline?"Timeline":"NewsFeed"));
      this.setState({value: '', photo: '', renderUploadPopup: false});
-     return event;
+    
+    
    }
     
    onClick() {

@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Button from '../Button.jsx'
 import {Link} from 'react-router-dom';
-import {getParsed} from '../../utilities.js';
+import {getParsed,registerEvent} from '../../utilities.js';
 
 
 
@@ -19,6 +19,7 @@ class Settingsdropdown extends React.Component {
         
         this.handleClick = this.handleClick.bind(this);
         this.handleHighlight = this.handleHighlight.bind(this);
+        this.registerEvent = this.registerEvent.bind(this);
     }
     
     handleClick(){
@@ -28,12 +29,16 @@ class Settingsdropdown extends React.Component {
         
     }
     
-   handleHighlight(){
-       
-       
+    
+   handleHighlight(){  
         this.setState({
             highlight:false,
         })
+    }
+    
+    registerEvent(){
+       registerEvent("Finished", "Exiting the prototype and heading to the Suvery", "Logout_Settings Dropdown");
+       location.href='https://clemson.ca1.qualtrics.com/jfe/form/SV_4OYW85t2VedzdCR';  
     }
     
     render(){
@@ -50,7 +55,7 @@ class Settingsdropdown extends React.Component {
                       <li className={this.state.highlight?"high1":null}><Link className="settings_options_b" to={{
                               pathname:'/settings_general/GeneralSettings',
                               state:{fromHeader:true}}} onClick={this.handleClick}>Settings</Link></li>
-                     <li><a className="settings_options_b" href="https://clemson.ca1.qualtrics.com/jfe/form/SV_4OYW85t2VedzdCR">Log Out</a></li>
+                     <li className="settings_options_b"><Button onClick={this.registerEvent}>Log Out</Button></li>
                </ul>  
             </div>
         )

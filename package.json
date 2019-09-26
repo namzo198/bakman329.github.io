@@ -1,0 +1,43 @@
+{
+  "name": "react-proj",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack-dev-server --hot"
+  },
+  "author": "moses",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "express": "^4.15.3",
+    "history": "^1.17.0",
+    "http-server": "^0.11.1",
+    "jquery": "^3.4.1",
+    "mysql": "^2.13.0",
+    "nodemon": "^1.11.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-draggable": "^3.3.2",
+    "react-hotjar": "^2.0.0",
+    "react-popup": "^0.9.3",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.3.1",
+    "react-visibility-sensor": "^5.1.0",
+    "webpack": "^2.5.1"
+  },
+  "devDependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "classnames": "^2.2.6",
+    "eslint": "^4.0.0",
+    "polyfills": "^2.1.1",
+    "react-tooltip": "^3.10.0",
+    "webpack": "^2.7.0",
+    "webpack-dev-server": "^2.11.5"
+  },
+ 
+    "homepage":"./"
+}

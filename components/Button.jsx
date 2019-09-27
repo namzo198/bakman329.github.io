@@ -5,13 +5,6 @@ import  PropTypes from 'prop-types';
 import {highLight,highLightExtended,No_highLight } from '../adaptations/Highlight.js';
 import {Link} from 'react-router-dom'
 
-//Get the hashId session index.htm/:sessionid=theidisthisone
-
-/**http://fakebook.usabart.nl/?session_id=a09eb84d555bb8d55510ef28a56a6f3d&changesub=auto&unsubstatus=auto&reportspam=auto&requestphoto=auto&timelinevisibility=auto&restrictuser=auto&blockevent=auto&chatoffline=auto&withholdcellphone=auto&withholdotherphone=auto&withholdim=auto&withholdstreet=auto&withholdinterest=auto&withholdreligion=auto&withholdpolitical=auto
-*/
-
-
-
 class Button extends React.Component {
   constructor(props) {
     super(props);
@@ -22,17 +15,7 @@ class Button extends React.Component {
      }
   }
 
-  /*componentWillMount(){
-    // Initialize the adaptation method 
-     let adaptationMethod = this.props.adapt;
-     console.log("The button adaptation Method is " + adaptationMethod)
-      if (adaptationMethod === 'high'){
-          this.setState({
-              highlight:true,
-          })
-      }
-      
-  }*/
+
 
 
   onClick() {
@@ -48,10 +31,6 @@ class Button extends React.Component {
                   session: localStorage.session
                 };
     
-     //console.log("The Button session is",localStorage.session_id );
-    // console.log("The Button newsfeed is", this.context.NewsFeed);
-    // console.log("The Button timeline is", this.context.Timeline);
-     
     CreateEvent(event);
   }
 
@@ -63,6 +42,7 @@ class Button extends React.Component {
       <Link id={this.props.id} onClick={this.onClick} to={this.props.routeTo} className={"button"  + ' ' + (this.props.type ? this.props.type : "default")}>{inner}</Link>
       )
     }
+      
     // Type prop is one of {default, cancel, confirm}
     return (
      <a

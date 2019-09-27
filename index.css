@@ -46,7 +46,7 @@ a {
 
 input[type=text] {
     font: inherit;
-    padding: 1px 0px 1px 3px;
+    padding: 3px 0px 5px 9px;
 }
 
 textarea {
@@ -83,6 +83,7 @@ textarea {
     line-height: 42px;
     display: inline;
     font-weight: bold;
+    padding:0 5px;
 }
 
 #logo {
@@ -112,6 +113,7 @@ textarea {
     position: relative;
     top: 50%;
     transform: translateY(-50%);
+    
 }
 
 header .popup-content {
@@ -695,7 +697,8 @@ color: #ffffff;}
     }
 }
 
-@media (max-width: 1036px) {
+/*1036*/
+@media (max-width: 1362px) {
     #chat-area {
         background-color: #000;
         display: none;
@@ -915,7 +918,7 @@ color: #ffffff;}
   border-style: solid;
   border-width: 1px;
   background-color: white;    
-  z-index: 100;
+  z-index: 200;
 }
 
 .popup-header {
@@ -1033,7 +1036,7 @@ color: #ffffff;}
   width: 22%;
     /*height: 13%;*/
   border:4px #b2b2b2 solid;
-  z-index: 1;    
+  z-index: 100;    
   vertical-align: middle;
   border-radius: 3px;
   animation-name: example;
@@ -1348,7 +1351,7 @@ header #logo {
   background-color: #fff;
   margin-bottom : 10px;
   border: 1px solid #ccc;
-  z-index: 99;
+  z-index: 1;
 }
 
 .top_options ul li {
@@ -1443,6 +1446,7 @@ header #logo {
   background-color: #ffff;
   width: 851px;
   border: 1px solid #ccc;
+  margin-bottom: 100px;
 }
 
 #info_left {

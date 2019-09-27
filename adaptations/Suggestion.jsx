@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Button from '../components/Button.jsx'
 import Chat from '../components/Chat.jsx'
+import Draggable from 'react-draggable';
 
 class SuggestionPopup extends React.Component{
   constructor(props){
@@ -35,7 +36,7 @@ destroy() {
 
   render(){
     return(
-        
+     <Draggable enableUserSelectHack={false} cancel=".not-draggable">
       <div id="suggestPopup">
         <div className="popup-header">{this.props.title}</div>
         <a className="suggestPopupCloseButton" href="javascript:void(0)" onClick={() => this.props.destroy("Dismissed")}>X</a>
@@ -47,6 +48,7 @@ destroy() {
         </div>
         </div>
       </div>
+    </Draggable>
     )
   }
 }

@@ -165,6 +165,9 @@ class TimelineandTagging extends Component {
 
 
 render(){
+  let visited = JSON.parse(localStorage.featuresVisited);
+  visited.audience.restrict_timeline = true;
+  localStorage.setItem("featuresVisited", JSON.stringify(visited));
 
   return (
       <div id="wrapper_right">

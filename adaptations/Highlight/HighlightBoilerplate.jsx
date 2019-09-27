@@ -18,7 +18,4 @@ export function HighlightBoilerplate (props) {
         
     CreateEvent(event);
    
-    
-   /// return event;
-
 }

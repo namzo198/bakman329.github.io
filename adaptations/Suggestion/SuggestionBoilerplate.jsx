@@ -59,7 +59,7 @@ class SuggestionBoilerplate extends Component{
     
     render(){
         return(
-            <SuggestionPopupBox okay={this.okay} destroy={this.destroy}  routeTo= {this.props.routeTo != undefined?this.props.routeTo:null} label = {this.label()} />
+            <SuggestionPopupBox okay={this.okay} destroy={this.destroy}  routeTo= {this.props.routeTo !== undefined?this.props.routeTo:null} label = {this.label()} />
         )
     }
 

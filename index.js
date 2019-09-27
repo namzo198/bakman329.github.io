@@ -12253,9 +12253,7 @@ var CompletionPopup = function (_React$Component) {
                 }); */
             var sc = this.score((0, _utilities.getParsed)("featuresUsed"), (0, _utilities.getParsed)("featuresVisited"));
             if (sc < this.MIN_SCORE_TO_PROCEED) {
-
                 (0, _utilities.registerEvent)("Tracker_Completion Popup", 'Held by the tracker with score ' + sc, "Scenario Area");
-
                 return;
             } else {
                 if (this.props.logout) {

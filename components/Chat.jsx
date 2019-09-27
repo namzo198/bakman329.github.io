@@ -236,10 +236,10 @@ class Chat extends React.Component {
         ////setting == "allContacts"
           //#chat-user a .allContacts
        // console.log('settings: '+setting )
-        if ((setting == "allContactsExcept" && !except_contacts_includes)
+        /* if ((setting == "allContactsExcept" && !except_contacts_includes)
           || (setting == "someContacts" && some_contacts_includes)) {
           return;
-        }
+        } */
         
         friend_names.push(name);
         friends.push(<ChatUser key={index} chat={this} name={name} allContacts={setting === "allContacts" && setting != "turnOnActiveStatus" || this.state. chatAutomation? true:false}/>);

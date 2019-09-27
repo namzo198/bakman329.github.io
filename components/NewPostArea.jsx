@@ -134,6 +134,13 @@ class NewPostArea extends React.Component {
                  time: "Just now",
                  new: true};
 
+    console.log(this.state.audience);
+     if (!["public", "friends", "friends_expect", "only_me", "specific_friends"].includes(this.state.audience)) {
+         let used = JSON.parse(localStorage.featuresUsed);
+         used.custom_lists.post_custom = true;
+         localStorage.setItem("featuresUsed", JSON.stringify(used));
+     }
+
      if (this.props.forTimeline && this.props.name != "Alex Doe") post.target_friend = this.props.name;
        
      localStorage.setItem('posts', JSON.stringify([post].concat(posts)));

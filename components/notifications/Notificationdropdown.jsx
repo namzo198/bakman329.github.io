@@ -4,12 +4,28 @@ import Button from '../Button.jsx'
 import {Link} from 'react-router-dom';
 import Menu from '../Menu.jsx'
 
-
-
 class Notificationdropdown extends React.Component {
     constructor(props){
         super(props);
+
+        this.onClick = this.onClick.bind(this);
         this.handleClick = this.handleClick.bind(this);
+    }
+
+    componentWillMount() {
+        document.addEventListener('click', this.onClick);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('click', this.onClick);
+    }
+
+    onClick(e) {
+        //console.log(e.target.closest("#notification_container"), this);
+        if (e.target.closest("#notification_container")) { // this.dropdownMenu.contains(e.target)) {
+          return;
+        }
+        this.props.destroy();
     }
     
     handleClick(){

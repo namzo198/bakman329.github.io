@@ -195,7 +195,11 @@ class AudienceMenu extends React.Component {
       {(this.state.render_friends_except) ? friends_except_popup : null}
       {(this.state.render_specific_friends) ? specific_friends_popup : null}
       {(this.state.render_custom) ? custom_popup : null}
-      <Menu icon="current" current={() => {return audienceText(this.state.audience) + " ▼"}} onClose={() => {this.setState({more: false, see_all: false})}} expandButtons={[this.more_button, this.see_all_button]} style={this.props.highlight} changeStyle={this.props.removeHighlightOnClick}>
+      <Menu icon="current" current={() => {return audienceText(this.state.audience) + " ▼"}} onOpen={() => {
+         let visited = JSON.parse(localStorage.featuresVisited);
+         visited.custom_lists.post_custom = true;
+         localStorage.setItem("featuresVisited", JSON.stringify(visited));
+      }} onClose={() => {this.setState({more: false, see_all: false})}} expandButtons={[this.more_button, this.see_all_button]} style={this.props.highlight} changeStyle={this.props.removeHighlightOnClick}>
         {title}
         {subtitle}
         {this.generateButtons()}

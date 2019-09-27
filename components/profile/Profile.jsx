@@ -1,6 +1,6 @@
 import React from 'react'
 import {BrowserRouter, Link, Switch, Route} from 'react-router-dom'
-import {linkToName,getParsed,addToLocalStorageObject,AddfriendList,unFollowUser,followUser} from '../../utilities.js'
+import {linkToName,getParsed,addToLocalStorageObject,AddfriendList,unFollowUser,followUser,registerEvent} from '../../utilities.js'
 import {highLight,noHighLight} from '../../adaptations/Highlight.js';
 import AutomationBoilerplate from '../../adaptations/Automation/AutomationBoilerplate.jsx'
 import SuggestionBoilerplate from '../../adaptations/Suggestion/SuggestionBoilerplate.jsx'
@@ -19,6 +19,7 @@ class Profile extends React.Component {
 
     let adaptation = getParsed("adaptations")
     let adaptationVisited = getParsed("visited");
+      
 
     this.state = {
         
@@ -30,6 +31,7 @@ class Profile extends React.Component {
         
         displayBasicInfoSuggestion: !adaptationVisited["Basic_Info"]["suggestion"]&& (adaptation["basic_Info"] === "sugst"),
         
+      
         //Suggestion: Unsubscribe from friend
         unsubscribe_suggestion:!adaptationVisited ["Unsubscribe_Friend"]["suggestion"]&& (adaptation["unsubscribe_Friend"] === "sugst"),
         unsubcribe_displaySuggestionPopup:true,
@@ -132,18 +134,30 @@ class Profile extends React.Component {
     }
     
    componentWillReceiveProps(nextProps){
-       if(this.state.displayContactInfoSuggestion !== (this.state.adaptationVisited["Contact_Info"]["suggestion"]&&this.state.adaptation["contact_Info"] === "sugst")){
-
+       
+        let adaptationVisited = getParsed("visited");
+       
+       if (adaptationVisited["Contact_Info"]["suggestion"]) {
+          
            this.setState({
-               displayContactInfoSuggestion: this.state.adaptationVisited["Contact_Info"]["suggestion"]
+               displayContactInfoSuggestion: false,
            })
-
-           //console.log("The visited state of suggestion in components will receive props" + this.state.displayContactInfoSuggestion)
        }
+       
+       if (adaptationVisited["Basic_Info"]["suggestion"] ) {
+           
+            this.setState({
+               displayBasicInfoSuggestion: false,
+           })
+        }
+               
    }
     
     changeStyle(){
-        if(!this.state.adaptationVisited["Contact_Info"]['highlight'] || !this.state.adaptationVisited["Basic_Info"]['highlight'] ){
+        
+        registerEvent("About_Button", `Clicked on About button on profile page of ${this.props.match.params.user } to see their contact Information`,"About Page");
+        
+        if(this.props.match.params.user === "alex_doe" &&(!this.state.adaptationVisited["Contact_Info"]['highlight'] || !this.state.adaptationVisited["Basic_Info"]['highlight']) ){
             this.setState({
              highlight:noHighLight
             })
@@ -153,7 +167,7 @@ class Profile extends React.Component {
 
 
 render() {
-    
+
     return (
         
 
@@ -188,7 +202,7 @@ render() {
             <div className = "top_options">
               <ul className = "nav_top_options">
                 <li><Link to={"/profile/" + this.props.match.params.user}>Timeline</Link></li>
-                <li style={this.state.highlight}><Link to={"/profile/" + this.props.match.params.user + "/about/overview"} onClick={this.changeStyle}>About</Link></li>
+                <li style={this.props.match.params.user === 'alex_doe'?this.state.highlight:null}><Link to={"/profile/" + this.props.match.params.user + "/about/overview"} onClick={this.changeStyle}>About</Link></li>
                 <li>
                    <a href="#" data-tip="Not Implemented">Friends</a>
                     <ReactTooltip place="bottom" type="dark" effect="float"/>

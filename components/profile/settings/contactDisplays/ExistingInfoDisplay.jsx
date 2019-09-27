@@ -10,6 +10,7 @@ class ExistingInfoDisplay extends Component{
             'response':true,
             'high1':this.props.adapt
         })
+        
         return(
             <div className = "details_2">
               <div className = "edit">

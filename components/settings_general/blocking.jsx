@@ -8,6 +8,10 @@ import BlockEventInvites from './blocking_features/blockEventInvites.jsx'
 class Blocking extends React.Component {
     
     render(){
+        let visited = JSON.parse(localStorage.featuresVisited);
+        visited.block.app = true;
+        visited.block.user = true;
+        localStorage.setItem("featuresVisited", JSON.stringify(visited));
         return (
             
            <div id="wrapper_right">

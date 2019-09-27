@@ -37,7 +37,5 @@
     "react-tooltip": "^3.10.0",
     "webpack": "^2.7.0",
     "webpack-dev-server": "^2.11.5"
-  },
- 
-    "homepage":"./"
+  }
 }

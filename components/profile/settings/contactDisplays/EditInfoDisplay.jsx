@@ -15,11 +15,11 @@ class EditInfoDisplay extends Component{
                   value={this.props.value}
                />
                
-              <Button href='javascript:void(0);'
+              <Button type="confirm" style={{display:"inline-block", margin:"5px"}} href='javascript:void(0);'
                   onClick = {this.props.onClickSave}
                   className = "saveButton">Save Changes</Button>
 
-             <Button href='javacript:void(0);'
+             <Button type="cancel"  style={{display:"inline-block", margin:"5px"}}  href='javacript:void(0);'
                   onClick = {this.props.onClickCancel}
                   >Cancel</Button> 
         </div>

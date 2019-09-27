@@ -85,7 +85,11 @@ class BlockApp extends React.Component {
     
     onEnter(app){
       var event; 
-      this.state.blockedAppsList.push(app)
+      // this.state.blockedAppsList.push(app)
+      this.setState({blockedAppsList: this.state.blockedAppsList.concat([app])})
+      let used = JSON.parse(localStorage.featuresUsed);
+      used.block.app = true;
+      localStorage.setItem("featuresUsed", JSON.stringify(used));
       this.setLocalStorage(); 
       
          event = {

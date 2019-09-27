@@ -11,7 +11,7 @@ class AddInfoDisplay extends Component{
         return(
             <div className = "details_2">
                 <li>
-                    <Button href="#" onClick ={this.props.onClickToggle} adapt= {this.props.adapt}>{this.props.add_request} </Button>
+                    <Button href="javascript:void(0)" onClick ={this.props.onClickToggle} adapt= {this.props.adapt}>{this.props.add_request} </Button>
                 </li>
             </div>
             )

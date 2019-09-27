@@ -567,7 +567,8 @@ export function resetContactInfo(){
         email:'ladiesman69@yahoo.com',
         dob:'01 January',
         year:'1979',
-        gender:'Gender-Neutral'
+        gender:'Gender-Neutral',
+        political:"Moderate"
         },
         
        jack_scout:{
@@ -807,7 +808,7 @@ export function resetFeaturesVisited() {
     friends: {unfollow: false},
     notifications: {app: false, event: false},
     posts: {delete: false, hide: false},
-    withhold_info: {address: false, political: false}, // TODO
+    withhold_info: {address: false, political: false}, //DONE
     // custom_lists: {create_custom: false, post_custom: false, photo_custom: false}, // TODO
     custom_lists: {post_custom: false},
     block: {app: false, user: false},
@@ -1013,6 +1014,16 @@ export function addToLocalStorageObject (name,value){
     
     return localStorage.setItem(name, JSON.stringify(value));   
 }
+
+export function saveContactInfo (name, info, value){
+
+   var contacts_Info = getParsed('contactInfo');
+   var user_Info =  contacts_Info[name];
+    
+    user_Info[info] = value
+    localStorage.setItem('contactInfo', JSON.stringify(contacts_Info));
+}
+
 
 export function saveVisitedAdaptation (feature, adaptationName){
     let adaptationVisited = getParsed("visited")

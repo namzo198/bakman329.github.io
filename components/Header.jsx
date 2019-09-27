@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import {getParsed,registerEvent} from '../utilities.js';
 import Button from './Button.jsx'
 import Settingsdropdown from './settings_general/Settingsdropdown.jsx'
-import Notificationsdropdown from './notifications/Notificationdropdown.jsx'
+import Notificationdropdown from './notifications/Notificationdropdown.jsx'
 
 class Header extends React.Component {
     constructor(props) {
@@ -110,9 +110,9 @@ class Header extends React.Component {
                    </Button>
               </p>
               
-               {this.state.renderSettings?<Settingsdropdown SettingsdropDown={this.settingsdropDown} changeIcon={this.changeIcon}/>:null}
+               {this.state.renderSettings?<Settingsdropdown SettingsdropDown={this.settingsdropDown} destroy={() => this.setState({renderSettings: false})} changeIcon={this.changeIcon}/>:null}
              
-               {this.state.renderNotification?<Notificationsdropdown notification={this.notification}/> :null}
+               {this.state.renderNotification?<Notificationdropdown notification={this.notification} destroy={() => this.setState({renderNotification: false})} /> :null}
             
           </div>
         </div>

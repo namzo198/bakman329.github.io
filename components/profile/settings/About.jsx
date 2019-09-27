@@ -1,6 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {linkToName,getParsed,addToLocalStorageObject,nameToLink} from '../../../utilities.js'
+import {linkToName,getParsed,addToLocalStorageObject,nameToLink, registerEvent} from '../../../utilities.js'
 import {highLight,noHighLight} from '../../../adaptations/Highlight.js';
 import ReactTooltip from 'react-tooltip'
 import ContactInfo from './ContactInfo.jsx';
@@ -25,7 +25,10 @@ class About extends React.Component {
   }
 
     changeStyle(){
-        if(!this.state.adaptationVisited["Contact_Info"]['highlight'] || !this.state.adaptationVisited["Basic_Info"]['highlight']  ){
+        
+        registerEvent("Contact_Info & Basic_Info Button", `Clicked to visit contact information page of ${this.props.match.params.user }`,"About Page");
+
+        if(!this.state.adaptationVisited["Contact_Info"]['highlight'] || !this.state.adaptationVisited["Basic_Info"]['highlight'] && this.props.match.params.user  === 'alex_doe' ){
             this.setState({
              highlight:noHighLight
             })    
@@ -37,7 +40,7 @@ class About extends React.Component {
           <li id="selector" data-tip="Not Implemented"><Link to={'/profile/' + this.props.match.params.user + '/about/overview'}>Overview</Link></li>
           <li data-tip="Not Implemented" ><a href="javascript:void(0)">Work and education</a></li>
           <li data-tip="Not Implemented" ><a href="javascript:void(0)">Places you've lived</a></li>
-          <li style={this.state.highlight}><Link to={'/profile/' + this.props.match.params.user + '/about/contact'} onClick = {this.changeStyle}>Contact and basic info</Link></li>
+          <li style={this.props.match.params.user  === 'alex_doe'? this.state.highlight:null}><Link to={'/profile/' + this.props.match.params.user + '/about/contact'} onClick = {this.changeStyle}>Contact and basic info</Link></li>
           <li data-tip="Not Implemented" ><a href="javascript:void(0)">Details about you</a></li>
           <li data-tip="Not Implemented" ><a href="javascript:void(0)">Life events </a></li>
         </ul>
@@ -60,7 +63,7 @@ class About extends React.Component {
         <div id="info_wrapper">
           <div className="title">
             <img src='https://static.xx.fbcdn.net/rsrc.php/v3/yZ/r/dp8LigpKyOw.png'/>
-            <a href ="#">About</a>
+            <a href ="javascript.void(0)">About</a>
           </div>
           {this.overview()}
           {this.getSection()}

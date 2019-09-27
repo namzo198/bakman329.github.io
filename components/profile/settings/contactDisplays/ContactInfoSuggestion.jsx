@@ -57,7 +57,7 @@ class ContactInfoSuggestion extends Component {
         
         return(
             
-            <SuggestionPopupBox okay={this.okay} destroy={this.destroy} routeTo={"/profile/" +nameToLink(this.props.username) + "/about/contact"}  label = {this.label()}/>
+            <SuggestionPopupBox okay={this.okay} destroy={this.destroy} routeTo={`/profile/${nameToLink(this.props.username)}/about/contact`}  label = {this.label()}/>
             
         )
     }

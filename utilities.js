@@ -33,6 +33,14 @@ export function indexPosts() {
 export function resetPosts() {
  localStorage.setItem('posts', JSON.stringify(
     [
+    
+    {"name":"Sasha Riley",
+     "img":"/assets/sasha_profile_img.jpg",
+     "content":"Looking to fill our open project manager role at RBW. Got any friends who you think would be interested, send them my way!",
+     "key":44,
+     "comments":[],
+     "audience":"public",
+     "time":"Yesterday"},
         
      {"name":"Esther Rorgash",
         "content":"I am good friends with Alex Doe",
@@ -227,7 +235,7 @@ export function resetPosts() {
      "key":21,
      "comments":[],
      "audience":"public",
-     "time":"Yesterday"},  
+     "time":"1 June"},  
         
     { "name":"Kyle Parker",
       "img": "/assets/kyle_profile_img.jpg",
